@@ -30,6 +30,9 @@
 ]}
 ]}
 </script>
+<script>
+(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t);}catch(e){}})();
+</script>
 <style>
 /* Layout: one calm column of sections on near-white. A single teal accent marks every action and every "you only pay for results" moment. */
 :root{
@@ -79,7 +82,7 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 var(--f-sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 h1,h2,h3{margin:0;color:var(--ink);text-wrap:balance}
-h1{font-size:clamp(2.5rem,1.45rem + 4.5vw,4.75rem);line-height:1.02;font-weight:650;letter-spacing:-.045em}
+h1{font-size:clamp(2.5rem,1.3rem + 3.6vw,4.25rem);line-height:1.03;font-weight:650;letter-spacing:-.045em}
 h2{font-size:clamp(2rem,1.45rem + 2.2vw,3.125rem);line-height:1.08;font-weight:620;letter-spacing:-.035em}
 h3{font-size:1.1875rem;line-height:1.3;font-weight:600;letter-spacing:-.015em}
 p{margin:0}
@@ -118,7 +121,10 @@ img,svg{max-width:100%}
 @media (max-width:720px){.top{position:relative;top:auto}}
 
 /* Hero */
-.hero{position:relative;overflow:clip;padding-block:clamp(36px,6vw,84px) clamp(16px,3vw,40px)}
+.hero{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(36px,6vw,84px) clamp(40px,5vw,72px)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background-image:radial-gradient(var(--line-2) 1px,transparent 1.2px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 70% 30%,#000 10%,transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at 70% 30%,#000 10%,transparent 75%);opacity:.7}
+.hero::after{content:"";position:absolute;z-index:-1;width:min(900px,90vw);aspect-ratio:1;right:-18%;top:-30%;background:radial-gradient(closest-side,var(--accent-glow),transparent 70%);filter:blur(10px);pointer-events:none}
+@media (max-width:560px){.cta-row .btn{width:100%}}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(40px,5vw,80px);align-items:center}
 @media (max-width:960px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
 .hello{display:inline-flex;align-items:center;gap:10px;max-width:100%;padding:5px 14px 5px 5px;margin-bottom:28px;border:1px solid var(--line);border-radius:999px;background:var(--surface);box-shadow:var(--shadow-sm);font-size:.875rem;color:var(--muted);white-space:nowrap}
@@ -127,7 +133,7 @@ img,svg{max-width:100%}
 .hello .sep{width:1px;height:14px;background:var(--line-2)}
 @media (max-width:400px){.hello .sep,.hello .more{display:none}}
 .accent-line{display:block;color:var(--accent)}
-h1.long{font-size:clamp(2.25rem,1.35rem + 3.3vw,3.875rem)}
+h1.long{font-size:clamp(2.25rem,1.3rem + 2.8vw,3.5rem)}
 .lede{font-size:clamp(1.125rem,1.03rem + .35vw,1.3125rem);line-height:1.6;color:var(--muted);max-width:34em;margin-block:24px 32px}
 .cta-row{display:flex;flex-wrap:wrap;gap:12px}
 .ticks{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px 24px;font-size:.9375rem;color:var(--muted)}
@@ -183,7 +189,8 @@ h1.long{font-size:clamp(2.25rem,1.35rem + 3.3vw,3.875rem)}
 .sec.alt{background:var(--alt)}
 .sec.flush{padding-top:0}
 .sec-head{max-width:44rem;margin-bottom:clamp(32px,4.5vw,56px)}
-.kicker{margin:0 0 14px;font-size:.875rem;font-weight:600;color:var(--accent)}
+.kicker{display:inline-flex;align-items:center;gap:8px;margin:0 0 16px;padding:5px 12px 5px 10px;border-radius:999px;background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent-line);font-size:.8125rem;font-weight:600;letter-spacing:.01em;color:var(--accent)}
+.kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .sub{margin-top:16px;max-width:38em;font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem);color:var(--muted)}
 .after-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:clamp(32px,4vw,44px)}
 .after-cta span{font-size:.9375rem;color:var(--muted)}
@@ -420,21 +427,125 @@ input[type="range"]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 6px var(--a
 .done .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
 /* Footer + mobile bar */
-footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375rem;color:var(--muted)}
+footer{padding-block:56px 32px;border-top:1px solid var(--line);font-size:.9375rem;color:var(--muted)}
 .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px}
 .foot b{font-weight:600;color:var(--ink)}
 .foot-links{display:flex;flex-wrap:wrap;gap:8px 20px}
-.foot a{text-decoration:none;color:var(--ink-2);overflow-wrap:anywhere;transition:color .2s}
-.foot a:hover{color:var(--accent)}
+footer a:not(.logo){text-decoration:none;color:var(--ink-2);overflow-wrap:anywhere;transition:color .2s}
+footer a:not(.logo):hover{color:var(--accent)}
 .stick{position:fixed;left:0;right:0;bottom:0;z-index:45;display:none;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--glass);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .35s var(--ease)}
 .stick.show{transform:none}
 .stick .btn{flex:1}
 .stick .call{flex:none;width:50px;padding:0}
 @media (max-width:720px){.stick{display:flex}footer{padding-bottom:104px}}
 
+/* Header extras: progress, active link, theme toggle, mobile menu */
+.progress{position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(var(--sp,0));pointer-events:none}
+.links a{position:relative}
+.links a.active{color:var(--ink)}
+.links a.active::after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:2px;border-radius:2px;background:var(--accent)}
+.nav-end{display:flex;align-items:center;gap:8px}
+.icon-btn{display:grid;place-items:center;width:40px;height:40px;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink-2);cursor:pointer;transition:background-color .2s,border-color .2s,color .2s}
+.icon-btn:hover{background:var(--alt);border-color:var(--line-2);color:var(--ink)}
+.icon-btn .i{width:18px;height:18px}
+.theme .moon{display:none}
+:root[data-theme="dark"] .theme .sun{display:none}
+:root[data-theme="dark"] .theme .moon{display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .theme .sun{display:none}:root:not([data-theme="light"]) .theme .moon{display:block}}
+.menu-btn{display:none}
+.menu-btn .bar{display:block;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform .3s var(--ease),opacity .2s}
+.menu-btn .bars-wrap{display:grid;gap:4px}
+.menu-btn[aria-expanded="true"] .bar:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] .bar:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] .bar:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.sheet{position:absolute;left:0;right:0;top:100%;padding:8px var(--gutter) 20px;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 24px 40px -24px rgba(11,20,22,.25);animation:sheetIn .3s var(--ease)}
+@keyframes sheetIn{from{opacity:0;transform:translateY(-8px)}}
+.sheet ul{list-style:none;margin:0;padding:0;display:grid}
+.sheet li+li{border-top:1px solid var(--line)}
+.sheet a:not(.btn){display:flex;align-items:center;justify-content:space-between;padding:15px 4px;font-size:1.0625rem;font-weight:500;text-decoration:none}
+.sheet a:not(.btn) .i{width:16px;height:16px;color:var(--faint)}
+.sheet .btn{width:100%;margin-top:12px}
+@media (max-width:880px){.menu-btn{display:grid}.nav .btn-sm.nav-cta{display:none}}
+@media (min-width:881px){.sheet{display:none!important}}
+
+/* Hero inbox: a new lead arriving */
+.lead.new{background:var(--accent-soft);animation:arrive .7s var(--ease) both}
+.lead.new .lead-ico{background:var(--accent);color:var(--on-accent)}
+@keyframes arrive{from{opacity:0;transform:translateY(-12px) scale(.98)}}
+.lead.new.settled{background:transparent;transition:background-color 1.6s}
+.lead.new.settled .lead-ico{background:var(--accent-soft);color:var(--accent);transition:background-color 1.6s,color 1.6s}
+.toast{position:absolute;z-index:2;right:12px;top:12px;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--ink);color:var(--bg);font-size:.8125rem;font-weight:600;box-shadow:var(--shadow);opacity:0;transform:translateY(6px);transition:opacity .35s var(--ease),transform .35s var(--ease);pointer-events:none}
+.toast.show{opacity:1;transform:none}
+.toast .i{width:14px;height:14px}
+.count{display:inline-block;font-variant-numeric:tabular-nums}
+.count.bump{animation:bump .5s var(--ease)}
+@keyframes bump{40%{transform:scale(1.35);color:var(--accent)}}
+
+/* Promise strip */
+.strip{border-block:1px solid var(--line);background:var(--surface)}
+.strip-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.strip-item{display:flex;align-items:center;gap:14px;min-width:0;padding:24px clamp(12px,2vw,24px)}
+.strip-item+.strip-item{border-left:1px solid var(--line)}
+.strip-item .svc-ico{margin:0;width:42px;height:42px}
+.strip-item b{display:block;font-size:1.0625rem;font-weight:620;letter-spacing:-.02em;line-height:1.25}
+.strip-item span{display:block;font-size:.875rem;line-height:1.4;color:var(--muted)}
+@media (max-width:980px){.strip-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.strip-item:nth-child(3){border-left:0}.strip-item:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (max-width:520px){.strip-grid{grid-template-columns:minmax(0,1fr)}.strip-item+.strip-item{border-left:0;border-top:1px solid var(--line)}.strip-item{padding:16px 0}}
+.trades{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;padding-block:22px;border-top:1px solid var(--line);font-size:.875rem;color:var(--muted)}
+.trades a{padding:5px 12px;border-radius:999px;border:1px solid var(--line);text-decoration:none;color:var(--ink-2);font-weight:500;transition:border-color .2s,color .2s,background-color .2s}
+.trades a:hover{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent)}
+
+/* Calculator: compare with a quote */
+.quote{margin-top:22px;padding:16px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--accent-line)}
+.quote .field-row{margin-bottom:0}
+.quote label{font-size:.9375rem;font-weight:500;color:var(--ink-2)}
+.quote-out{margin-top:12px;font-size:.9375rem;line-height:1.5;color:var(--muted)}
+.quote-out b{color:var(--ink);font-weight:620;font-variant-numeric:tabular-nums}
+.roi{display:inline-flex;align-items:center;margin-left:4px;padding:2px 8px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:.8125rem;font-weight:650;font-variant-numeric:tabular-nums}
+.roi.low{background:var(--alt);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
+
+/* Risk-free band */
+.band{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:28px 48px;padding:clamp(32px,5vw,64px);border-radius:28px;background:#0b1416;color:#edf2f1}
+.band::before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(600px circle at 90% 0%,rgba(53,208,182,.28),transparent 60%),radial-gradient(500px circle at 0% 120%,rgba(53,208,182,.14),transparent 60%)}
+.band::after{content:"";position:absolute;z-index:-1;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.2px);background-size:22px 22px}
+:root[data-theme="dark"] .band{background:#10201d;box-shadow:inset 0 0 0 1px #1f4b43}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .band{background:#10201d;box-shadow:inset 0 0 0 1px #1f4b43}}
+.band h2{color:#fff}
+.band p{margin-top:14px;max-width:34em;font-size:1.0625rem;color:#a9b8b6}
+.band .kicker{background:rgba(53,208,182,.12);box-shadow:inset 0 0 0 1px rgba(53,208,182,.3);color:#35d0b6}
+.band-cta{display:grid;gap:10px;justify-items:stretch}
+.band .btn{background:#35d0b6;color:#04201b;box-shadow:0 10px 30px -10px rgba(53,208,182,.6)}
+.band .btn:hover{background:#62dcc7}
+.band .btn-ghost{background:transparent;color:#edf2f1;border-color:rgba(255,255,255,.2);box-shadow:none}
+.band .btn-ghost:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.4)}
+@media (max-width:760px){.band{grid-template-columns:minmax(0,1fr)}}
+
+/* Form validation */
+.txt[aria-invalid="true"]{border-color:var(--danger);box-shadow:0 0 0 4px color-mix(in srgb,var(--danger) 14%,transparent)}
+.tiles.invalid .tile span{border-color:var(--danger)}
+.saved{margin-top:10px;font-size:.8125rem;text-align:center;color:var(--faint)}
+
+/* Footer */
+.foot-grid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,1fr));gap:32px;padding-bottom:28px}
+@media (max-width:720px){.foot-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.foot-brand{grid-column:1/-1}}
+.foot-brand p{margin-top:12px;max-width:26em}
+.foot-col h3{margin-bottom:12px;font-size:.8125rem;font-weight:600;color:var(--faint);letter-spacing:.02em}
+.foot-col ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot-bottom{padding-top:20px;border-top:1px solid var(--line)}
+.to-top{position:fixed;right:20px;bottom:20px;z-index:44;opacity:0;transform:translateY(10px);pointer-events:none;box-shadow:var(--shadow);transition:opacity .3s var(--ease),transform .3s var(--ease),background-color .2s}
+.to-top.show{opacity:1;transform:none;pointer-events:auto}
+.to-top .i{transform:rotate(-90deg)}
+@media (max-width:720px){.to-top{display:none}}
+
+/* Scroll reveal (only when JS is running) */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+@media print{.js .rv{opacity:1;transform:none}.top,.stick,.to-top{display:none}}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rv{opacity:1;transform:none}
 }
 </style>
 </head>
@@ -449,6 +560,12 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
 </svg>
 
@@ -465,8 +582,24 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
         <li><a href="#faq">FAQ</a></li>
       </ul>
     </nav>
-    <a class="btn btn-sm" href="#contact" data-cta="nav">Get my lead price</a>
+    <div class="nav-end">
+      <button class="icon-btn theme" type="button" id="theme-btn" aria-label="Switch to dark theme"><svg class="i sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <a class="btn btn-sm nav-cta" href="#contact" data-cta="nav">Get my lead price</a>
+      <button class="icon-btn menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><span class="bars-wrap" aria-hidden="true"><span class="bar"></span><span class="bar"></span><span class="bar"></span></span></button>
+    </div>
   </div>
+  <div class="sheet" id="sheet" hidden>
+    <nav aria-label="Mobile">
+      <ul>
+        <li><a href="#how">How it works <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><a href="#pricing">Pricing <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><a href="#worth">Lead value calculator <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><a href="#faq">FAQ <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      </ul>
+      <a class="btn" href="#contact" data-cta="menu">Get my price per lead <svg class="i arr" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </nav>
+  </div>
+  <span class="progress" id="progress" aria-hidden="true"></span>
 </header>
 
 <main id="main">
@@ -502,7 +635,8 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
           <label class="chip"><input type="radio" name="heroTrade" id="ht-insurance" value="insurance"><span>Insurance</span></label>
         </div>
       </fieldset>
-      <div class="inbox">
+      <div class="inbox" id="inbox">
+        <p class="toast" id="toast" aria-hidden="true"><svg class="i" aria-hidden="true"><use href="#i-bell"/></svg>New lead just came in</p>
         <div class="inbox-head">
           <p class="inbox-title"><span class="live" aria-hidden="true"></span>Lead inbox <small>Today</small></p>
           <span class="tag neutral">Example</span>
@@ -512,10 +646,24 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
           <div class="lead"><span class="lead-ico"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><div class="lead-body"><p class="lead-title">New AC system estimate</p><p class="lead-meta">Booked · Thu 10:00 AM</p></div><span class="status">Booked</span></div>
           <div class="lead free"><span class="lead-ico"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></span><div class="lead-body"><p class="lead-title">Repeat call from the same number</p><p class="lead-meta">Duplicate · not billed</p></div><span class="status">Free</span></div>
         </div>
-        <div class="inbox-foot"><span>You pay for <b>2</b> of 3 leads</span><span>1 free</span></div>
+        <div class="inbox-foot"><span>You pay for <b class="count" id="paid-n">2</b> of <span class="count" id="all-n">3</span> leads</span><span>1 free</span></div>
       </div>
       <p class="demo-note">Example inbox. Every real lead shows where it came from, so you can check it.</p>
     </div>
+  </div>
+</section>
+
+<section class="strip" aria-label="The deal in short">
+  <div class="wrap">
+    <div class="strip-grid">
+      <div class="strip-item rv"><span class="svc-ico"><svg class="i" aria-hidden="true"><use href="#i-wallet"/></svg></span><div><b>$0 retainer</b><span>You pay per lead, not per month</span></div></div>
+      <div class="strip-item rv" style="--d:.06s"><span class="svc-ico"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span><div><b>Bad leads are free</b><span>Spam, duplicates, wrong area</span></div></div>
+      <div class="strip-item rv" style="--d:.12s"><span class="svc-ico"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span><div><b>One person</b><span>You deal with me directly</span></div></div>
+      <div class="strip-item rv" style="--d:.18s"><span class="svc-ico"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg></span><div><b>1 minute</b><span>To ask for your lead price</span></div></div>
+    </div>
+    <p class="trades"><span>Built for</span>
+      <a href="?trade=roofing#top" data-trade-link="roofing">Roofing</a><a href="?trade=hvac#top" data-trade-link="hvac">HVAC</a><a href="?trade=plumbing#top" data-trade-link="plumbing">Plumbing</a><a href="?trade=solar#top" data-trade-link="solar">Solar</a><a href="?trade=medspa#top" data-trade-link="medspa">Med spas</a><a href="?trade=law#top" data-trade-link="law">Law firms</a><a href="?trade=realestate#top" data-trade-link="realestate">Real estate</a><a href="?trade=insurance#top" data-trade-link="insurance">Insurance</a>
+    </p>
   </div>
 </section>
 
@@ -709,6 +857,13 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
           <div><b id="f-jobs">4.5</b><span>new jobs</span></div>
           <div><b id="f-rev">$22,500</b><span>new revenue a month</span></div>
         </div>
+        <div class="quote">
+          <div class="field-row">
+            <label for="quote-num">Got a quote? Price per lead</label>
+            <span class="money"><span aria-hidden="true">$</span><input type="number" id="quote-num" inputmode="numeric" min="0" max="100000" step="5" placeholder="e.g. 150"></span>
+          </div>
+          <p class="quote-out" id="quote-out">Type any price per lead to see what you'd get back for every dollar.</p>
+        </div>
         <p class="fine">Example numbers to start. Revenue is before your costs.</p>
         <a class="btn" href="#contact" data-cta="calculator">See my price per lead <svg class="i arr" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
@@ -731,6 +886,22 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
     <div class="after-cta">
       <a class="btn" href="#contact" data-cta="how">Start with step one <svg class="i arr" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <span>No retainer. No long contract.</span>
+    </div>
+  </div>
+</section>
+
+<section class="sec flush" aria-labelledby="band-title">
+  <div class="wrap">
+    <div class="band rv">
+      <div>
+        <p class="kicker">Low-risk start</p>
+        <h2 id="band-title">No leads, no bill. Try it with a small test.</h2>
+        <p>We agree what a qualified lead is and what it costs, in writing. You check every lead yourself. If it doesn't work for you, you stop.</p>
+      </div>
+      <div class="band-cta">
+        <a class="btn btn-lg" href="#contact" data-cta="band">Get my price per lead <svg class="i arr" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost btn-lg" data-email href="mailto:ctoma0915@gmail.com">ctoma0915@gmail.com</a>
+      </div>
     </div>
   </div>
 </section>
@@ -759,13 +930,13 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
       <p class="sub">Something else on your mind? Email me at <a data-email href="mailto:ctoma0915@gmail.com">ctoma0915@gmail.com</a> and I'll give you a straight answer.</p>
     </div>
     <div>
-      <details class="qa"><summary>Who do you work with?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Local service businesses where one new customer is worth a lot: roofing, HVAC, plumbing, solar, med spas, law firms, real estate and insurance.</p></details>
-      <details class="qa"><summary>How much does a lead cost?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>It depends on your trade, your area and what a customer is worth to you. I quote a fixed price per lead before we start, and you only pay it for leads that qualify. The calculator above shows what a lead is worth to you, so you can judge any price I quote.</p></details>
-      <details class="qa"><summary>What counts as a qualified lead?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>A real person inside your service area who asked for the service you sell and gave a working phone number or email. We write this definition down before we start. Duplicates, spam and wrong-area calls don't count.</p></details>
-      <details class="qa"><summary>How do I know the leads are real?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Every lead comes through a tracked phone number or form, and you can see the source of each one.</p></details>
-      <details class="qa"><summary>Is there a contract?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>A simple written agreement that defines a lead, the price and how we track it. No long lock-in.</p></details>
-      <details class="qa"><summary>What if the leads aren't good?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Tell me. Leads that don't match our written definition aren't billed. If the test doesn't work for you, you stop, and you've only paid for leads that qualified.</p></details>
-      <details class="qa"><summary>What do you need from me?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Your service area, the jobs you want more of, and someone to answer the phone. Leads go cold fast, so the quicker you call back, the more jobs you close.</p></details>
+      <details class="qa" name="faq"><summary>Who do you work with?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Local service businesses where one new customer is worth a lot: roofing, HVAC, plumbing, solar, med spas, law firms, real estate and insurance.</p></details>
+      <details class="qa" name="faq"><summary>How much does a lead cost?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>It depends on your trade, your area and what a customer is worth to you. I quote a fixed price per lead before we start, and you only pay it for leads that qualify. The calculator above shows what a lead is worth to you, so you can judge any price I quote.</p></details>
+      <details class="qa" name="faq"><summary>What counts as a qualified lead?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>A real person inside your service area who asked for the service you sell and gave a working phone number or email. We write this definition down before we start. Duplicates, spam and wrong-area calls don't count.</p></details>
+      <details class="qa" name="faq"><summary>How do I know the leads are real?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Every lead comes through a tracked phone number or form, and you can see the source of each one.</p></details>
+      <details class="qa" name="faq"><summary>Is there a contract?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>A simple written agreement that defines a lead, the price and how we track it. No long lock-in.</p></details>
+      <details class="qa" name="faq"><summary>What if the leads aren't good?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Tell me. Leads that don't match our written definition aren't billed. If the test doesn't work for you, you stop, and you've only paid for leads that qualified.</p></details>
+      <details class="qa" name="faq"><summary>What do you need from me?<span class="pm" aria-hidden="true"><svg class="i"><use href="#i-plus"/></svg></span></summary><p>Your service area, the jobs you want more of, and someone to answer the phone. Leads go cold fast, so the quicker you call back, the more jobs you close.</p></details>
     </div>
   </div>
 </section>
@@ -845,7 +1016,7 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
             <button class="back" type="button" data-back><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg>Back</button>
             <button class="btn" type="submit" id="send">Get my price per lead</button>
           </div>
-          <p class="privacy">I only use your details to reply to you.</p>
+          <p class="privacy">I only use your details to reply to you. No spam, no sharing.</p>
         </fieldset>
 
         <p class="err" id="form-err" role="alert"></p>
@@ -871,11 +1042,38 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <span><b data-name>Toma</b>. Pay-per-lead marketing for local service businesses.</span>
-    <span class="foot-links"><a data-email href="mailto:ctoma0915@gmail.com">ctoma0915@gmail.com</a><a data-phone data-phone-wrap href="tel:0738049791">0738049791</a><span>&copy; <span id="yr">2026</span></span></span>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="logo" href="#main"><span class="logo-mark" aria-hidden="true" data-initial>T</span><span data-name>Toma</span></a>
+        <p>Pay-per-lead marketing for local service businesses. You only pay for customers who actually show up.</p>
+      </div>
+      <nav class="foot-col" aria-label="Footer">
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#worth">Lead value calculator</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="foot-col">
+        <h3>Contact</h3>
+        <ul>
+          <li><a data-email href="mailto:ctoma0915@gmail.com">ctoma0915@gmail.com</a></li>
+          <li data-phone-wrap><a data-phone href="tel:0738049791">0738049791</a></li>
+          <li><a href="#contact">Ask for your lead price</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot foot-bottom">
+      <span>&copy; <span id="yr">2026</span> <span data-name>Toma</span>. All rights reserved.</span>
+      <a href="#top">Back to top</a>
+    </div>
   </div>
 </footer>
+
+<button class="icon-btn to-top" type="button" id="to-top" aria-label="Back to top" tabindex="-1"><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
 
 <div class="stick" id="stick" aria-hidden="true" inert>
   <a class="btn" href="#contact" data-cta="sticky">Get my price per lead</a>
@@ -973,6 +1171,35 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
       row('', 'phone', d.t[0], 'Call · 4m 12s · ' + where, 'Qualified') +
       row('', 'calendar', d.t[1], 'Booked · Thu 10:00 AM', 'Booked') +
       row('free', 'x', d.t[2][1], d.t[2][0] + ' · not billed', 'Free');
+    setCounts(2, 3, false);
+    queueArrival(d, where);
+  }
+  var NEW_LEADS = {
+    roofing: 'Storm damage, needs inspection', hvac: 'Furnace not turning on', plumbing: 'Clogged main line',
+    solar: 'Wants to cut a $300 power bill', medspa: 'Botox consultation', law: 'Slip and fall, free review',
+    realestate: 'First-time buyer, pre-approved', insurance: 'Switching home insurance'
+  };
+  var arrivalTimer, settleTimer;
+  function setCounts(paid, all, bump) {
+    var p = $('#paid-n'), a = $('#all-n');
+    p.textContent = paid; a.textContent = all;
+    if (bump && !reduceMotion) [p, a].forEach(function (n) { n.classList.remove('bump'); void n.offsetWidth; n.classList.add('bump'); });
+  }
+  function queueArrival(d, where) {
+    clearTimeout(arrivalTimer); clearTimeout(settleTimer);
+    $('#toast').classList.remove('show');
+    arrivalTimer = setTimeout(function () {
+      var title = NEW_LEADS[state.trade] || 'Burst pipe in the basement';
+      var wrap = document.createElement('div');
+      wrap.innerHTML = row('new', 'phone', title, 'Call · just now · ' + where, 'Qualified');
+      var el = wrap.firstChild, list = $('#tickets');
+      list.insertBefore(el, list.firstChild);
+      setCounts(3, 4, true);
+      if (!reduceMotion) {
+        var t = $('#toast'); t.classList.add('show');
+        settleTimer = setTimeout(function () { t.classList.remove('show'); el.classList.add('settled'); }, 2600);
+      } else el.classList.add('settled');
+    }, reduceMotion ? 0 : 2400);
   }
   function setTrade(key, source) {
     if (!TRADES[key]) return;
@@ -987,7 +1214,7 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
 
   $('#hero-pick').addEventListener('change', function (e) { setTrade(e.target.value, 'hero'); });
   var urlTrade = (params.get('trade') || '').toLowerCase().replace(/[^a-z]/g, '');
-  if (TRADES[urlTrade]) setTrade(urlTrade, 'url'); else if (city) render();
+  if (TRADES[urlTrade]) setTrade(urlTrade, 'url'); else render();
   if (city) $('#area').value = city;
 
   /* ---------- Hover spotlight on cards ---------- */
@@ -1026,7 +1253,17 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
     $('#f-jobs').textContent = (Math.round(jobs * 10) / 10).toLocaleString('en-US');
     $('#f-rev').textContent = revenue >= 100000 ? moneyShort.format(revenue) : money.format(revenue);
     [jobRange, close, leads].forEach(fill);
+    quote(perLead, n, revenue);
   }
+  var quoteNum = $('#quote-num');
+  function quote(perLead, n, revenue) {
+    var q = parseFloat(quoteNum.value), out = $('#quote-out');
+    if (!(q > 0)) { out.textContent = 'Type any price per lead to see what you\'d get back for every dollar.'; return; }
+    var x = perLead / q, spend = q * n;
+    out.innerHTML = 'At <b>' + money.format(q) + '</b> a lead, ' + n + ' leads cost <b>' + money.format(spend) + '</b> a month and bring in about <b>' +
+      money.format(revenue) + '</b>. <span class="roi' + (x < 2 ? ' low' : '') + '">' + (x >= 10 ? Math.round(x) : x.toFixed(1)) + '× back</span>';
+  }
+  quoteNum.addEventListener('input', function () { calc(); calcUsed(); });
   var calcTracked = false;
   function calcUsed() { if (!calcTracked) { calcTracked = true; track('calculator_use'); } }
   jobRange.addEventListener('input', function () { jobNum.value = jobRange.value; calc(); calcUsed(); });
@@ -1054,11 +1291,12 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
   function valid(i) {
     if (i === 0) {
       var t = form.querySelector('input[name=trade]:checked');
-      if (!t) { err('Pick your trade to continue.'); return false; }
+      if (!t) { err('Pick your trade to continue.'); $('.tiles', steps[0]).classList.add('invalid'); return false; }
       if (t.value === 'other' && !$('#trade-other').value.trim()) { err('Tell me what you sell to continue.'); $('#trade-other').focus(); return false; }
       return true;
     }
-    var bad = $$('.txt[required]', steps[i]).filter(function (x) { return !x.checkValidity(); })[0];
+    var bad = $$('.txt[required]', steps[i]).filter(function (x) { return !x.checkValidity() || !x.value.trim(); })[0];
+    $$('.txt[required]', steps[i]).forEach(function (x) { x.setAttribute('aria-invalid', (!x.checkValidity() || !x.value.trim()) ? 'true' : 'false'); });
     if (bad) {
       err(bad.type === 'email' && bad.value ? 'Check your email address. It looks incomplete.' : 'Fill in the highlighted field to continue.');
       bad.focus();
@@ -1066,8 +1304,30 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
     }
     return true;
   }
+  form.addEventListener('input', function (e) {
+    if (e.target.getAttribute('aria-invalid') === 'true' && e.target.checkValidity() && e.target.value.trim()) { e.target.setAttribute('aria-invalid', 'false'); err(''); }
+    saveDraft();
+  });
+  var DRAFT = 'leadFormDraft';
+  function saveDraft() {
+    try {
+      var g = form.querySelector('input[name=goal]:checked');
+      localStorage.setItem(DRAFT, JSON.stringify({ area: $('#area').value, goal: g ? g.id : '', biz: $('#biz').value, email: $('#email').value, phone: $('#phone').value, other: $('#trade-other').value }));
+    } catch (x) {}
+  }
+  try {
+    var dr = JSON.parse(localStorage.getItem(DRAFT) || 'null');
+    if (dr) {
+      if (dr.area && !city) $('#area').value = dr.area;
+      ['biz', 'email', 'phone'].forEach(function (k) { if (dr[k]) $('#' + k).value = dr[k]; });
+      if (dr.other) $('#trade-other').value = dr.other;
+      if (dr.goal && $('#' + dr.goal)) $('#' + dr.goal).checked = true;
+    }
+  } catch (x) {}
   form.addEventListener('change', function (e) {
+    if (e.target.name === 'goal') saveDraft();
     if (e.target.name !== 'trade') return;
+    $('.tiles', steps[0]).classList.remove('invalid');
     var other = e.target.value === 'other';
     $('#other-wrap').hidden = !other;
     err('');
@@ -1112,6 +1372,7 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
     var title = $('#done-title'), text = $('#done-text'), ico = $('#done-ico');
     ico.className = 'done-ico' + (mode === 'sent' ? '' : ' neutral');
     ico.innerHTML = icon(mode === 'sent' ? 'check' : 'mail');
+    if (mode !== 'failed') { try { localStorage.removeItem(DRAFT); } catch (x) {} }
     if (mode === 'sent') {
       title.textContent = 'Thanks' + (d.business ? ', ' + d.business : '') + '. Your message is in.';
       text.innerHTML = 'I\'ll reply personally to <b>' + esc(d.email) + '</b> with a lead definition and a price for ' + esc(d.area || 'your area') + '.';
@@ -1183,9 +1444,103 @@ footer{padding-block:32px 40px;border-top:1px solid var(--line);font-size:.9375r
     if (e.target.closest('a[href^="mailto:"]')) track('email_click');
   });
 
+  /* ---------- Theme toggle ---------- */
+  var root = document.documentElement, themeBtn = $('#theme-btn');
+  var darkMq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : { matches: false };
+  function isDark() { var t = root.getAttribute('data-theme'); return t ? t === 'dark' : darkMq.matches; }
+  function syncTheme() {
+    var dark = isDark();
+    themeBtn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    $$('meta[name="theme-color"]').forEach(function (m) { m.content = dark ? '#0a0f10' : '#fbfcfc'; m.removeAttribute('media'); });
+  }
+  themeBtn.addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (x) {}
+    syncTheme();
+  });
+  syncTheme();
+
+  /* ---------- Mobile menu ---------- */
+  var menuBtn = $('#menu-btn'), sheet = $('#sheet');
+  function menu(open) {
+    sheet.hidden = !open;
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  menuBtn.addEventListener('click', function () { menu(sheet.hidden); });
+  sheet.addEventListener('click', function (e) { if (e.target.closest('a')) menu(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sheet.hidden) { menu(false); menuBtn.focus(); } });
+  document.addEventListener('click', function (e) { if (!sheet.hidden && !e.target.closest('.top')) menu(false); });
+
+  /* ---------- "Built for" links personalize the page in place ---------- */
+  $$('[data-trade-link]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      setTrade(a.dataset.tradeLink, 'strip');
+      try { history.replaceState(null, '', '?trade=' + a.dataset.tradeLink + (city ? '&city=' + encodeURIComponent(city) : '')); } catch (x) {}
+      $('.hero').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  });
+
+  /* ---------- Scroll reveal ---------- */
+  var revealSel = '.sec-head, .cmp, .def > .card, .after-cta, .svc-item, .plans, .promise, .calc, .steps li, .about, .faq-side, .qa, .contact-copy > *, .form';
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var groups = new Map();
+    $$(revealSel).forEach(function (el) {
+      var n = groups.get(el.parentNode) || 0;
+      groups.set(el.parentNode, n + 1);
+      el.classList.add('rv');
+      if (n) el.style.setProperty('--d', Math.min(n * 0.06, 0.36) + 's');
+    });
+    var rio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        el.classList.add('in');
+        rio.unobserve(el);
+        // Hand transitions back to the element's own hover styles once it's in place.
+        setTimeout(function () { el.classList.remove('rv', 'in'); el.style.removeProperty('--d'); }, 1200);
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    $$('.rv').forEach(function (el) { rio.observe(el); });
+  } else $$('.rv').forEach(function (el) { el.classList.add('in'); });
+
+  /* ---------- Active section in the nav ---------- */
+  var navLinks = $$('.links a');
+  if ('IntersectionObserver' in window) {
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        navLinks.forEach(function (a) {
+          var on = a.getAttribute('href') === '#' + en.target.id;
+          a.classList.toggle('active', on);
+          if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    navLinks.forEach(function (a) { var t = $(a.getAttribute('href')); if (t) sio.observe(t); });
+    sio.observe($('.hero')); // clears the highlight back at the top
+  }
+
+  /* ---------- Back to top ---------- */
+  var toTop = $('#to-top');
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }); $('.logo').focus({ preventScroll: true }); });
+
   /* ---------- Header border + mobile sticky button ---------- */
   var top = $('#top'), stick = $('#stick');
-  window.addEventListener('scroll', function () { top.classList.toggle('scrolled', window.scrollY > 8); }, { passive: true });
+  var prog = $('#progress'), ticking = false;
+  function onScroll() {
+    ticking = false;
+    var y = window.scrollY, max = document.documentElement.scrollHeight - innerHeight;
+    top.classList.toggle('scrolled', y > 8);
+    prog.style.setProperty('--sp', max > 0 ? Math.min(y / max, 1) : 0);
+    var showTop = y > innerHeight * 1.5;
+    toTop.classList.toggle('show', showTop);
+    toTop.tabIndex = showTop ? 0 : -1;
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
   if ('IntersectionObserver' in window) {
     var heroSeen = true, contactSeen = false;
     var io = new IntersectionObserver(function (entries) {
