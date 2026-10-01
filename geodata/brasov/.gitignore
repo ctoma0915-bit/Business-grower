@@ -1,0 +1,5 @@
+# download cache and intermediates (rebuilt by scripts/run_all.sh)
+_raw
+_work
+*.aux.xml
+__pycache__/
