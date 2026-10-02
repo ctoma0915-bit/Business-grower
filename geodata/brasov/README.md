@@ -18,14 +18,41 @@ with print layouts. Every layer is rebuilt from open data by the scripts in `scr
 
 ## Open it
 
-* **QGIS 3.34 LTR or newer** (built with 3.44): open `brasov_county.qgz`. Layers are grouped (Administrative,
-  Transport & infrastructure, Buildings, Water & hydrology, Topography, Soil, Land use & land
-  cover, Imagery, Online basemaps). Four ready-made **A3 layouts** are under
-  *Project → Layouts*: overview, water and flood susceptibility, soils, land cover.
-  Styles are also stored *inside* each GeoPackage and as `.qml` files next to each raster, so
-  layers keep their symbology when you drag them into another project.
+### Option 1: one file, `brasov_county_qgis.gpkg` (375 MB)
+
+Everything in a single GeoPackage: all 26 vector layers and tables, all 18 rasters, the styles
+and the complete QGIS project with its four A3 layouts. It is too large for GitHub (100 MB per
+file limit), so it is not in this repository. Get it from the chat, or rebuild it with
+`python scripts/11_single_gpkg.py` (about 2 minutes once `data/` exists).
+
+1. Save the file **without renaming it**. The embedded project finds its layers by this file
+   name, so `brasov_county_qgis (1).gpkg` breaks the links. If that happens, rename it back,
+   or use *Auto-Find* in QGIS's "Handle Unavailable Layers" dialog.
+2. In QGIS (3.34 LTR or newer), open the **Browser** panel, navigate to the file, expand it,
+   and double-click **Brasov County** (the project, listed under the GeoPackage).
+   Or: *Project → Open From → GeoPackage*, pick the file, choose *Brasov County*.
+3. To use single layers in your own project instead, drag the `.gpkg` onto the map. Vector
+   layers come in with their styles (stored in the file); rasters arrive unstyled.
+
+In this file the float rasters (DEM, slope, ruggedness, HAND, wetness) are stored as 16-bit
+tiles at a fixed precision (DEM ±5 cm, slope ±0.025°, TWI ±0.005), far below the source
+accuracy. Upstream area and all categorical layers are lossless.
+
+### Option 2: this folder, `brasov_county.qgz` + `data/`
+
+* **QGIS:** open `brasov_county.qgz`. Layers are grouped (Administrative, Transport &
+  infrastructure, Buildings, Water & hydrology, Topography, Soil, Land use & land cover,
+  Imagery, Online basemaps). Four ready-made **A3 layouts** are under *Project → Layouts*:
+  overview, water and flood susceptibility, soils, land cover. Styles are also stored *inside*
+  each GeoPackage and as `.qml` files next to each raster, so layers keep their symbology when
+  you drag them into another project. Keep `data/` next to the `.qgz`.
 * **ArcGIS Pro, Global Mapper, FME, AutoCAD Map 3D, etc.:** add the `.gpkg` and `.tif` files
   directly. They are standard OGC GeoPackages and Cloud Optimized GeoTIFFs. Styles are QGIS-only.
+
+### Either way
+
+* **Soil styles:** the soil layer has a second saved style. In *Layer Properties → Style →
+  Load Style → From database*, pick "hydrologic soil group" to switch to the A-D runoff view.
 * **3D view:** in QGIS use *View → 3D Map View*, then *Terrain → DEM (raster layer)* with
   `Elevation (DEM) 25 m`, and drape the Sentinel-2 imagery or any thematic layer.
 * **Spreadsheet:** `data/uat_planning_statistics.csv` has one row per UAT.

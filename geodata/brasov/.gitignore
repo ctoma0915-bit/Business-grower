@@ -3,3 +3,5 @@ _raw
 _work
 *.aux.xml
 __pycache__/
+# one-file package (375 MB, over GitHub's 100 MB limit) - rebuild with scripts/11_single_gpkg.py
+brasov_county_qgis.gpkg

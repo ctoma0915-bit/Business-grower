@@ -1,6 +1,9 @@
 """Build the ready-to-open QGIS project (brasov_county.qgz) with grouped, styled layers, an A3
 print layout, optional online basemaps, and preview renders in docs/.
 
+With `--single <file.gpkg>` (called by 11_single_gpkg.py) every layer is read from that one
+GeoPackage instead, and the project is stored inside it rather than written as a .qgz.
+
 Styles are also saved as defaults next to the data (GeoPackage `layer_styles` table for vectors,
 `<raster>.qml` side-cars for rasters), so layers look the same when added to any other project.
 """
@@ -32,6 +35,9 @@ app.initQgis()
 DOCS = ROOT / "docs"
 DOCS.mkdir(exist_ok=True)
 PROJECT_FILE = ROOT / "brasov_county.qgz"
+SINGLE = sys.argv[sys.argv.index("--single") + 1] if "--single" in sys.argv else None
+PROJECT_NAME = "Brasov County"
+PROJECT_URI = f"geopackage:{SINGLE}?projectName={PROJECT_NAME}" if SINGLE else str(PROJECT_FILE)
 
 TITLES = {layer: title for _, layer, _, title, _, _ in VECTORS}
 RTITLES = {f: title for f, _, title, _, _ in RASTERS}
@@ -41,7 +47,7 @@ project.clear()
 project.setCrs(QgsCoordinateReferenceSystem("EPSG:3844"))
 project.setTitle("Județul Brașov - geospatial base (topography, soil, water)")
 project.setFilePathStorage(Qgis.FilePathType.Relative)
-project.setFileName(str(PROJECT_FILE))
+project.setFileName(PROJECT_URI)
 root = project.layerTreeRoot()
 
 
@@ -60,13 +66,15 @@ def pc(c: str) -> str:
 
 
 def vec(stem: str, layer: str) -> QgsVectorLayer:
-    lyr = QgsVectorLayer(f"{DATA / (stem + '.gpkg')}|layername={layer}", TITLES[layer], "ogr")
+    path = SINGLE or DATA / (stem + ".gpkg")
+    lyr = QgsVectorLayer(f"{path}|layername={layer}", TITLES[layer], "ogr")
     assert lyr.isValid(), layer
     return lyr
 
 
 def ras(fname: str) -> QgsRasterLayer:
-    lyr = QgsRasterLayer(str(RASTER / fname), RTITLES[fname])
+    src = f"GPKG:{SINGLE}:{fname.rsplit('.', 1)[0]}" if SINGLE else str(RASTER / fname)
+    lyr = QgsRasterLayer(src, RTITLES[fname])
     assert lyr.isValid(), fname
     return lyr
 
@@ -176,7 +184,7 @@ def save_default_style(lyr):
             lyr.saveStyleToDatabaseV2("default", "brasov pipeline", True, "")
         except AttributeError:
             lyr.saveStyleToDatabase("default", "brasov pipeline", True, "")
-    else:
+    elif not SINGLE:  # raster styles travel in the project when everything is one GeoPackage
         lyr.saveNamedStyle(str(RASTER / (lyr.source().rsplit("/", 1)[1].rsplit(".", 1)[0]
                                           + ".qml")))
 
@@ -364,7 +372,7 @@ lnl.setRenderer(QgsSingleSymbolRenderer(line("#6b4423", 0.3)))
 
 hs = ras("topo_hillshade.tif")
 g = QgsSingleBandGrayRenderer(hs.dataProvider(), 1)
-ce = QgsContrastEnhancement(Qgis.DataType.Byte)
+ce = QgsContrastEnhancement(hs.dataProvider().dataType(1))
 ce.setContrastEnhancementAlgorithm(QgsContrastEnhancement.ContrastEnhancementAlgorithm.StretchToMinimumMaximum)
 ce.setMinimumValue(40)
 ce.setMaximumValue(255)
@@ -482,8 +490,14 @@ for grp in (g_infra, g_bld, g_soil, g_land, g_img, g_web):
 
 # ---------------------------------------------------------------- default styles + view
 for lyr in project.mapLayers().values():
-    if lyr.providerType() in ("ogr", "gdal"):
+    if lyr.providerType() in ("ogr", "gdal") and lyr is not hsg:
         save_default_style(lyr)
+# Same table as the soil layer: stored as an alternative (non-default) style, selectable in
+# Layer Properties > Style > Load Style > From database.
+try:
+    hsg.saveStyleToDatabaseV2("hydrologic soil group", "brasov pipeline", False, "")
+except AttributeError:
+    hsg.saveStyleToDatabase("hydrologic soil group", "brasov pipeline", False, "")
 
 ext = county.extent()
 ext.grow(3000)
@@ -592,8 +606,11 @@ lay3 = make_layout("A3 - Soils (HWSD v2)", "Județul Brașov - soils (WRB 2022, 
 lay4 = make_layout("A3 - Land cover (ESA WorldCover 2021)",
                    "Județul Brașov - land cover 2021", [county, uat, sett, wc])
 
-ok = project.write(str(PROJECT_FILE))
-print("project written:", ok, PROJECT_FILE)
+ok = project.write(PROJECT_URI)
+print("project written:", ok, PROJECT_URI)
+if SINGLE:
+    app.exitQgis()
+    sys.exit(0 if ok else 1)
 
 # ---------------------------------------------------------------- previews
 for lay, fn in ((lay1, "overview"), (lay2, "water"), (lay3, "soil"), (lay4, "landcover")):

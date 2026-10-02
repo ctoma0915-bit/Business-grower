@@ -18,3 +18,4 @@ $REMOTE python 06_water_landcover.py # JRC surface water history, ESA WorldCover
 $REMOTE python 07_imagery.py # Sentinel-2 cloud-free true-colour mosaic
 python 09_package.py         # thematic GeoPackages, UAT statistics, LAYERS.md
 python 10_qgis_project.py    # QGIS project, default styles, A3 layouts, previews
+python 11_single_gpkg.py     # one-file package: everything + project in brasov_county_qgis.gpkg
