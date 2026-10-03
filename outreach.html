@@ -379,6 +379,10 @@ const TRADES = {
   law:        { label: 'Law firm',    trade: 'law',           businesses: 'law firms',          jobs: 'new cases',                    search: 'personal injury lawyer', tag: 'lawyer',        high: true },
   realestate: { label: 'Real estate', trade: 'real estate',   businesses: 'real estate agents', jobs: 'listing appointments',         search: 'real estate agent',      tag: 'realtor',       high: true },
   insurance:  { label: 'Insurance',   trade: 'insurance',     businesses: 'insurance agencies', jobs: 'policy quotes',                search: 'insurance agency',       tag: 'insurance',     high: false },
+  dental:     { label: 'Dental clinic', trade: 'dental',      businesses: 'dental clinics',     jobs: 'implant consultations',        search: 'dental implant clinic',  tag: 'dentist',       high: true },
+  windows:    { label: 'Windows',     trade: 'window',        businesses: 'window installers',  jobs: 'window replacements',          search: 'window installer',       tag: 'windows',       high: true },
+  construction: { label: 'Construction', trade: 'construction', businesses: 'builders',         jobs: 'new builds and renovations',   search: 'home builder',           tag: 'construction',  high: true },
+  furniture:  { label: 'Custom furniture', trade: 'furniture', businesses: 'furniture makers',  jobs: 'custom kitchens',              search: 'custom kitchen maker',   tag: 'customfurniture', high: true },
   other:      { label: 'Other',       trade: 'local service', businesses: 'local businesses',   jobs: 'new customers',                search: 'local business',         tag: 'smallbusiness', high: false }
 };
 const PLAT_ORDER = ['wa', 'ig', 'fb', 'tt'];
@@ -766,7 +770,7 @@ function messageFor(p, bump) {
 const draftKey = (p) => p.id + ':' + (p.step || 0);
 function draftFor(p) {
   const k = draftKey(p);
-  if (!state.drafts.has(k)) state.drafts.set(k, { text: messageFor(p, 0), bump: 0 });
+  if (!state.drafts.has(k)) state.drafts.set(k, { text: (!(p.step || 0) && p.msg) ? String(p.msg) : messageFor(p, 0), bump: 0 });
   return state.drafts.get(k);
 }
 
@@ -1208,7 +1212,7 @@ function sourcesFor(f) {
   const slug = city0.toLowerCase().replace(/[^a-z0-9]/g, '');
   const tagWord = f.trade === 'other' ? (f.term || 'smallbusiness').toLowerCase().replace(/[^a-z0-9]/g, '') : t.tag;
   const tag = (slug + tagWord) || tagWord;
-  const country = state.settings.cc === '1' ? 'US' : 'ALL';
+  const country = ({ '1': 'US', '40': 'RO', '44': 'GB' })[state.settings.cc] || 'ALL';
   const q = (parts) => parts.filter(Boolean).join(' ');
   return [
     { name: 'Google Maps', plat: '', url: 'https://www.google.com/maps/search/' + enc(term + (c ? ' in ' + c : '')), tip: 'Open listings with 5 to 50 reviews. They show a phone number and often link their Instagram or Facebook.' },
