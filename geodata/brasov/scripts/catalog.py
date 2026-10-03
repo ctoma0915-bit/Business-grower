@@ -14,6 +14,8 @@ SRC = {
     "gsw": ("EC JRC Global Surface Water v1.4, 1984-2021 (Pekel et al. 2016)",
             "Free, attribution required"),
     "wc": ("ESA WorldCover 10 m 2021 v200", "CC BY 4.0"),
+    "chm": ("Meta & WRI High Resolution Canopy Height Maps (Tolan et al. 2024), ~1 m source",
+            "CC BY 4.0"),
     "s2": ("Copernicus Sentinel-2 L2A, {s2date} (AWS sentinel-cogs)",
            "Copernicus open licence (contains modified Copernicus Sentinel data)"),
 }
@@ -42,8 +44,9 @@ VECTORS = [
      "Ridges, cliffs and other linear natural features.", "ov"),
 
     ("brasov_water", "hydro_streams", "hydrology", "Stream network (DEM-derived)",
-     "D8 channels with >= 1 km2 upstream area; Strahler & Shreve order, upstream area at the "
-     "segment outlet, mean gradient. Upstream area is complete (whole Olt basin modelled).",
+     "D8 channels with >= 1 km2 upstream area, routed on a DEM with the mapped OSM waterways "
+     "burned in (95 % of mapped river length within 25 m). Strahler & Shreve order, upstream "
+     "area at the segment outlet, mean gradient. Upstream area is complete (whole Olt basin).",
      "demd"),
     ("brasov_water", "hydro_subbasins", "hydrology", "Sub-catchments",
      "One catchment per stream link of the >= 10 km2 network (planning-scale catchments).",
@@ -132,6 +135,10 @@ RASTERS = [
      "1 permanent, 2 new permanent, 3 lost permanent, 4 seasonal, 5 new seasonal, 6 lost "
      "seasonal, 7 seasonal->permanent, 8 permanent->seasonal, 9 ephemeral permanent, "
      "10 ephemeral seasonal.", "gsw"),
+    ("canopy_height_5m.vrt", "Land cover", "Tree canopy height 5 m",
+     "Mean height (m) of tree canopy >= 2 m in each 5 m cell where canopy covers >= 50 % of it; "
+     "0 = no canopy. From a ~1 m canopy height model of Maxar imagery (c. 2010-2020). "
+     "VRT over 4 COG quadrants (canopy_height_5m_{nw,ne,sw,se}.tif).", "chm"),
     ("landcover_worldcover_10m.tif", "Land cover", "Land cover 10 m (ESA WorldCover 2021)",
      "10 trees, 20 shrubland, 30 grassland, 40 cropland, 50 built-up, 60 bare/sparse, "
      "70 snow/ice, 80 water, 90 herbaceous wetland, 100 moss/lichen.", "wc"),

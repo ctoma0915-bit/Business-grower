@@ -1,5 +1,9 @@
 """DEM-derived hydrology with WhiteboxTools on the wide hydrology window (whole upstream Olt basin).
 
+Mapped watercourses and water bodies (OpenStreetMap via Overture) are burned into the DEM before
+flow routing, so the derived channels follow the real, surveyed channels instead of wandering
+up to a few cells off them on the 25 m grid. HAND is then measured on the *unburned* DEM.
+
 Outputs (clipped to the AOI):
   raster: hydro_flow_dir_d8.tif (ESRI D8 codes), hydro_upstream_area_km2.tif,
           hydro_hand_m.tif (height above nearest drainage), hydro_twi.tif (topographic wetness),
@@ -10,12 +14,18 @@ Outputs (clipped to the AOI):
 import geopandas as gpd
 import numpy as np
 import rasterio
-from rasterio.features import shapes
+from rasterio.features import rasterize, shapes
 import shapely
+
+from pathlib import Path
 
 from common import COG_BYTE_CAT, COG_INT, CRS, RASTER, RES, WORK, aoi_path, run, stage_gpkg, warp_to_aoi
 
 STREAM_KM2 = 1.0      # channel initiation threshold for the stream network & HAND
+# Burn depth (m) per mapped water class: deep enough to capture flow, graded so main channels
+# win where mapped features touch.
+BURN_M = {"river": 10.0, "canal": 8.0, "stream": 5.0, "drain": 2.0, "ditch": 2.0}
+BURN_AREA_M = 3.0     # lakes, reservoirs, riverbanks
 SUBBASIN_KM2 = 10.0   # stream links used to delineate planning sub-catchments
 CELL_KM2 = RES * RES / 1e6
 
@@ -33,11 +43,82 @@ def cog_lerc(max_err):
             "-co", "BLOCKSIZE=512", "-co", "OVERVIEWS=AUTO"]
 
 
+def burn_mapped_water(dem: Path) -> Path:
+    """Lower the DEM along mapped watercourses / water bodies (stream burning)."""
+    with rasterio.open(dem) as src:
+        z = src.read(1)
+        prof = src.profile
+        nd = src.nodata
+    lines = gpd.read_file(stage_gpkg("overture"), layer="water_lines")
+    areas = gpd.read_file(stage_gpkg("overture"), layer="water_areas")
+    burn = np.zeros(z.shape, "float32")
+    shp = dict(out_shape=z.shape, transform=prof["transform"], dtype="float32")
+    if len(areas):
+        burn = np.maximum(burn, rasterize(((g, BURN_AREA_M) for g in areas.geometry), **shp))
+    for cls, depth in sorted(BURN_M.items(), key=lambda kv: kv[1]):
+        sel = lines[lines["class"] == cls]
+        if len(sel):
+            # all_touched keeps diagonal lines 8-connected on the grid
+            burn = np.maximum(burn, rasterize(((g, depth) for g in sel.geometry),
+                                              all_touched=True, **shp))
+    zb = np.where(z == nd, nd, z - burn).astype("float32")
+    out = W / "dem_burn.tif"
+    prof.update(compress="deflate", tiled=True)
+    with rasterio.open(out, "w", **prof) as dst:
+        dst.write(zb, 1)
+    print(f"burned {np.count_nonzero(burn)} cells ({len(lines)} lines, {len(areas)} areas)")
+    return out
+
+
+def hand_from_pointer(esri_d8: Path, streams: Path, dem: Path, out: Path) -> None:
+    """Height above nearest drainage: elevation (unburned DEM) minus the elevation of the stream
+    cell each cell drains to along the D8 path. Uses pointer jumping, O(N log L)."""
+    with rasterio.open(esri_d8) as src:
+        d8 = src.read(1).astype("int32")
+        prof = src.profile
+    with rasterio.open(streams) as src:
+        s = src.read(1)
+        is_stream = (s > 0) & (s != src.nodata)
+    with rasterio.open(dem) as src:
+        z = src.read(1).astype("float64")
+        znd = src.nodata
+    nr, nc = d8.shape
+    # ESRI codes -> (drow, dcol)
+    step = {1: (0, 1), 2: (1, 1), 4: (1, 0), 8: (1, -1), 16: (0, -1), 32: (-1, -1),
+            64: (-1, 0), 128: (-1, 1)}
+    idx = np.arange(nr * nc, dtype=np.int64).reshape(nr, nc)
+    nxt = idx.copy()
+    rows, cols = np.indices((nr, nc))
+    for code, (dr, dc) in step.items():
+        m = d8 == code
+        r2, c2 = rows[m] + dr, cols[m] + dc
+        ok = (r2 >= 0) & (r2 < nr) & (c2 >= 0) & (c2 < nc)
+        tgt = np.where(ok, r2.clip(0, nr - 1) * nc + c2.clip(0, nc - 1), idx[m])
+        nxt[m] = tgt
+    del rows, cols
+    nxt = nxt.ravel()
+    flat_stream = is_stream.ravel()
+    nxt[flat_stream] = np.flatnonzero(flat_stream)  # streams absorb
+    for _ in range(40):  # 2^40 steps >> any flow path
+        nn = nxt[nxt]
+        if np.array_equal(nn, nxt):
+            break
+        nxt = nn
+    zf = z.ravel()
+    reached = flat_stream[nxt] & (zf != znd)
+    hand = np.full(zf.shape, -9999.0, "float32")
+    hand[reached] = np.maximum(zf[reached] - zf[nxt[reached]], 0)
+    prof.update(dtype="float32", nodata=-9999, compress="deflate")
+    with rasterio.open(out, "w", **prof) as dst:
+        dst.write(hand.reshape(nr, nc), 1)
+
+
 def main() -> None:
     dem = WORK / "dem_hydro.tif"
-    # 1. Hydrological conditioning: least-cost breaching (handles bridges/dams in the DSM),
-    #    then fill whatever remains.
-    wbt("BreachDepressionsLeastCost", dem=dem, output="dem_breach.tif", dist=200, fill=True)
+    # 1. Stream burning, then hydrological conditioning: least-cost breaching (handles
+    #    bridges/dams in the DSM), then fill whatever remains.
+    dem_burn = burn_mapped_water(dem)
+    wbt("BreachDepressionsLeastCost", dem=dem_burn, output="dem_breach.tif", dist=200, fill=True)
     wbt("FillDepressions", dem="dem_breach.tif", output="dem_cond.tif", fix_flats=True)
 
     # 2. D8 routing.
@@ -52,12 +133,13 @@ def main() -> None:
     wbt("ShreveStreamMagnitude", d8_pntr="d8.tif", streams="streams.tif", output="shreve.tif")
     wbt("RasterStreamsToVector", streams="strahler.tif", d8_pntr="d8.tif", output="streams.shp")
 
-    # 4. HAND + flood susceptibility classes.
-    wbt("ElevationAboveStream", dem="dem_cond.tif", streams="streams.tif", output="hand.tif")
+    # 4. HAND on the real (unburned) surface, routed along the burned-DEM flow paths.
+    hand_from_pointer(W / "d8_esri.tif", W / "streams.tif", dem, W / "hand.tif")
 
-    # 5. Topographic wetness index from D-infinity specific contributing area.
+    # 5. Topographic wetness index: D-infinity specific contributing area from the conditioned
+    #    DEM, local slope from the unburned DEM.
     wbt("DInfFlowAccumulation", i="dem_cond.tif", output="sca.tif", out_type="sca")
-    wbt("Slope", dem="dem_cond.tif", output="slope_cond.tif", units="degrees")
+    wbt("Slope", dem=dem, output="slope_cond.tif", units="degrees")
     wbt("WetnessIndex", sca="sca.tif", slope="slope_cond.tif", output="twi.tif")
 
     # 6. Planning sub-catchments: one per stream link of the >=10 km2 network.
@@ -110,7 +192,7 @@ def main() -> None:
     # that cell already carries the receiving river's flow. Upstream area and Shreve magnitude
     # are therefore sampled one vertex upstream of the outlet; the drop uses the outlet itself.
     with rasterio.open(W / "upstream_km2.tif") as a, rasterio.open(W / "shreve.tif") as sh, \
-            rasterio.open(W / "dem_cond.tif") as z:
+            rasterio.open(WORK / "dem_hydro.tif") as z:
         lines = []
         for g in st.geometry:
             line = g if g.geom_type == "LineString" else shapely.line_merge(g)

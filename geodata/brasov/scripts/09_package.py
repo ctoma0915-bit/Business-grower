@@ -26,7 +26,7 @@ def zonal(uat: gpd.GeoDataFrame) -> pd.DataFrame:
     r = {k: rasterio.open(RASTER / f) for k, f in {
         "dem": "topo_dem_25m.tif", "slope": "topo_slope_deg.tif",
         "scls": "topo_slope_classes.tif", "flood": "hydro_flood_susceptibility.tif",
-        "wc": "landcover_worldcover_10m.tif"}.items()}
+        "wc": "landcover_worldcover_10m.tif", "chm": "canopy_height_5m.vrt"}.items()}
 
     def vals(key, geom):
         a, _ = mask(r[key], [geom], crop=True, filled=False)
@@ -34,7 +34,8 @@ def zonal(uat: gpd.GeoDataFrame) -> pd.DataFrame:
         return a.compressed()
 
     for g in uat.geometry:
-        dem, slope, scls, flood, wc = (vals(k, g) for k in ("dem", "slope", "scls", "flood", "wc"))
+        dem, slope, scls, flood, wc, chm = (vals(k, g) for k in ("dem", "slope", "scls", "flood",
+                                                                "wc", "chm"))
         n_wc = max(len(wc), 1)
         rows.append({
             "elev_min_m": round(float(dem.min()), 1), "elev_mean_m": round(float(dem.mean()), 1),
@@ -50,6 +51,9 @@ def zonal(uat: gpd.GeoDataFrame) -> pd.DataFrame:
             "pct_cropland": round(100 * (wc == 40).sum() / n_wc, 1),
             "pct_built_up": round(100 * (wc == 50).sum() / n_wc, 1),
             "pct_water": round(100 * (wc == 80).sum() / n_wc, 1),
+            "pct_tree_canopy": round(100 * (chm > 0).mean(), 1),
+            "mean_canopy_height_m": round(float(chm[chm > 0].mean()), 1) if (chm > 0).any()
+            else 0.0,
         })
     for v in r.values():
         v.close()
@@ -140,7 +144,8 @@ def main() -> None:
               "`admin_uat` (and `uat_planning_statistics.csv`) carry, per UAT: elevation "
               "min/mean/max, mean slope, % area by slope band (<5, 5-15, 15-25, >25 %), % area "
               "with very high/high flood susceptibility (HAND < 3 m), % forest / grassland / "
-              "cropland / built-up / water (WorldCover), dominant soil and % hydrologic soil "
+              "cropland / built-up / water (WorldCover), % tree canopy and mean canopy height "
+              "(5 m canopy model), dominant soil and % hydrologic soil "
               "group D, building count and footprint, road length (excl. paths/tracks) and "
               "DEM stream density.", ""]
     (DATA / "LAYERS.md").write_text("\n".join(lines))

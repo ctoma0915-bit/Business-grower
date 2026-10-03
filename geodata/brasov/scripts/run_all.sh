@@ -16,6 +16,7 @@ python 05_soil.py            # HWSD v2 soil units + full horizon tables
 # python 05b_soilgrids_optional.py   # SoilGrids 250 m (needs access to files.isric.org)
 $REMOTE python 06_water_landcover.py # JRC surface water history, ESA WorldCover
 $REMOTE python 07_imagery.py # Sentinel-2 cloud-free true-colour mosaic
+python 08_canopy.py          # 5 m tree canopy height from the ~1 m Meta/WRI model (5 GB download)
 python 09_package.py         # thematic GeoPackages, UAT statistics, LAYERS.md
 python 10_qgis_project.py    # QGIS project, default styles, A3 layouts, previews
 python 11_single_gpkg.py     # one-file package: everything + project in brasov_county_qgis.gpkg
