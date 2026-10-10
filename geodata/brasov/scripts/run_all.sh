@@ -17,6 +17,10 @@ python 05_soil.py            # HWSD v2 soil units + full horizon tables
 $REMOTE python 06_water_landcover.py # JRC surface water history, ESA WorldCover
 $REMOTE python 07_imagery.py # Sentinel-2 cloud-free true-colour mosaic
 python 08_canopy.py          # 5 m tree canopy height from the ~1 m Meta/WRI model (5 GB download)
+python 12_topo_layers.py     # topographic sheet index, unmapped streams, spot heights
 python 09_package.py         # thematic GeoPackages, UAT statistics, LAYERS.md
 python 10_qgis_project.py    # QGIS project, default styles, A3 layouts, previews
+python 13_topo_project.py    # topographic QGIS project, 29 sheets 1:50,000 (PDF), overview 1:200,000
+python 14_3d_sections.py     # 3D terrain blocks (GLB) for every sheet + county overview
+python 15_3d_viewer.py       # 3D viewer (offline + web page) and preview renders
 python 11_single_gpkg.py     # one-file package: everything + project in brasov_county_qgis.gpkg

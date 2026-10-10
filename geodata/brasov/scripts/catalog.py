@@ -91,6 +91,19 @@ VECTORS = [
     ("brasov_landuse_infrastructure", "places_poi", "overture", "Points of interest",
      "Businesses, public services, schools, health, tourism (confidence >= 0.5).", "ovp"),
 
+    ("brasov_topographic", "topo_sheet_index_50k", "topo", "Topographic sheet index 1:50,000",
+     "29 sheets of 20 x 15 km on a round Stereo 70 km grid (A2 at 1:50,000), named after the "
+     "main locality or highest peak; also the footprints of the 3D sections.", "demd"),
+    ("brasov_topographic", "topo_streams_unmapped", "topo", "Streams not mapped in OSM",
+     "DEM-derived channels with no mapped waterway within 30 m: the rest of the drainage "
+     "network, drawn dashed on the topographic map.", "demd"),
+    ("brasov_topographic", "topo_spot_heights", "topo", "Spot heights (DEM summits)",
+     "Highest DEM cell within ~1 km with >= 40 m local relief, not already a named peak.",
+     "demd"),
+    ("brasov_topographic", "topo_peaks_labelled", "topo", "Named peaks with elevation",
+     "OSM peaks/saddles with elev_label = OSM elevation, or the DEM value where OSM has none "
+     "(elev_source).", "ov"),
+
     ("brasov_buildings", "buildings", "overture", "Building footprints",
      "All building footprints (OSM + Microsoft ML) with class, height/floors where known.",
      "ov"),
@@ -135,10 +148,9 @@ RASTERS = [
      "1 permanent, 2 new permanent, 3 lost permanent, 4 seasonal, 5 new seasonal, 6 lost "
      "seasonal, 7 seasonal->permanent, 8 permanent->seasonal, 9 ephemeral permanent, "
      "10 ephemeral seasonal.", "gsw"),
-    ("canopy_height_5m.vrt", "Land cover", "Tree canopy height 5 m",
+    ("canopy_height_5m.tif", "Land cover", "Tree canopy height 5 m",
      "Mean height (m) of tree canopy >= 2 m in each 5 m cell where canopy covers >= 50 % of it; "
-     "0 = no canopy. From a ~1 m canopy height model of Maxar imagery (c. 2010-2020). "
-     "VRT over 4 COG quadrants (canopy_height_5m_{nw,ne,sw,se}.tif).", "chm"),
+     "0 = no canopy. From a ~1 m canopy height model of Maxar imagery (c. 2010-2020).", "chm"),
     ("landcover_worldcover_10m.tif", "Land cover", "Land cover 10 m (ESA WorldCover 2021)",
      "10 trees, 20 shrubland, 30 grassland, 40 cropland, 50 built-up, 60 bare/sparse, "
      "70 snow/ice, 80 water, 90 herbaceous wetland, 100 moss/lichen.", "wc"),

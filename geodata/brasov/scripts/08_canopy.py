@@ -8,8 +8,7 @@ heights honest (a plain average would halve the height of a half-covered cell):
 Aggregation runs in the source grid (6x6 pixels of 1.194 m Web Mercator = ~5.0 m on the ground
 at 45.7 N), then the result is placed on the 5 m Stereo 70 grid by nearest neighbour.
 
-Output: raster/canopy_height_5m.vrt -> four COG quadrants canopy_height_5m_{nw,ne,sw,se}.tif
-(split so each file stays far below GitHub's 100 MB limit). Values are metres, 255 = outside AOI.
+Output: raster/canopy_height_5m.tif (COG). Values are metres, 0 = no canopy, 255 = outside AOI.
 """
 import json
 import urllib.request
@@ -91,24 +90,12 @@ def main() -> None:
          "-r", "near", "-cutline", aoi_path(), "-dstnodata", NODATA, "-multi",
          "-wo", "NUM_THREADS=ALL_CPUS", "-co", "COMPRESS=ZSTD", "-co", "TILED=YES",
          "-co", "BIGTIFF=YES", agg_vrt, full])
-    with rasterio.open(full) as src:
-        width, height = src.width, src.height
 
-    # Four quadrant COGs + a VRT that QGIS opens as one layer.
-    half_w, half_h = width // 2, height // 2
-    quads = {"nw": (0, 0, half_w, half_h), "ne": (half_w, 0, width - half_w, half_h),
-             "sw": (0, half_h, half_w, height - half_h),
-             "se": (half_w, half_h, width - half_w, height - half_h)}
-    parts = []
-    for name, (xo, yo, xs, ys) in quads.items():
-        p = RASTER / f"canopy_height_5m_{name}.tif"
-        run(["gdal_translate", "-q", "-srcwin", xo, yo, xs, ys, "-of", "COG",
-             "-co", "COMPRESS=ZSTD", "-co", "PREDICTOR=2", "-co", "LEVEL=19",
-             "-co", "BLOCKSIZE=512", "-co", "OVERVIEWS=AUTO", "-co", "RESAMPLING=AVERAGE",
-             full, p])
-        parts.append(p.name)
-    run(["gdalbuildvrt", "-overwrite", RASTER / "canopy_height_5m.vrt", *parts],
-        cwd=RASTER)
+    # One COG (~67 MB, under GitHub's 100 MB limit). A VRT over quadrant files was tried first:
+    # GDAL reads it fine but QGIS 3.44 renders it blank, so keep a single file.
+    run(["gdal_translate", "-q", "-of", "COG", "-co", "COMPRESS=ZSTD", "-co", "PREDICTOR=2",
+         "-co", "LEVEL=19", "-co", "BLOCKSIZE=512", "-co", "OVERVIEWS=AUTO",
+         "-co", "RESAMPLING=AVERAGE", "-co", "BIGTIFF=NO", full, RASTER / "canopy_height_5m.tif"])
 
     # Acquisition dates of the source imagery over the county (for the documentation).
     with rasterio.open(f"/vsicurl/{BASE}/CHM_acquisition_date.tif") as src:

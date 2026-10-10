@@ -5,6 +5,10 @@ terrain, hydrology, soils, surface water, land cover, transport, buildings and a
 units, all in the national projection **EPSG:3844 (Stereo 70)**, plus a styled QGIS project
 with print layouts. Every layer is rebuilt from open data by the scripts in `scripts/`.
 
+Built on the same data: a **topographic map series** (29 sheets at 1:50,000, georeferenced PDF,
+plus a 1:200,000 county overview) and **3D relief models** of the same 29 sheets
+([2D](#topographic-map-2d) · [3D](#3d-relief-models)).
+
 | | |
 |---|---|
 | Area | 5,361 km² (county) + 1 km context ring |
@@ -12,7 +16,7 @@ with print layouts. Every layer is rebuilt from open data by the scripts in `scr
 | Elevation range | 401 m (Olt valley at Ucea) to 2,502 m (Bucegi massif, Bran UAT) on the 25 m DEM |
 | CRS | EPSG:3844 Pulkovo 1942(58) / Stereo70, metres |
 | Terrain grid | 25 m (land cover and imagery 10 m), all rasters cell-aligned |
-| Size | about 320 MB; largest single file 75 MB (buildings) |
+| Size | data about 360 MB (largest file 75 MB, buildings); finished maps 310 MB (PDF sheets 130 MB, 3D models 180 MB) |
 
 ![Overview](docs/layout_overview.png)
 
@@ -60,6 +64,77 @@ accuracy. Upstream area and all categorical layers are lossless.
 * **3D view:** in QGIS use *View → 3D Map View*, then *Terrain → DEM (raster layer)* with
   `Elevation (DEM) 25 m`, and drape the Sentinel-2 imagery or any thematic layer.
 * **Spreadsheet:** `data/uat_planning_statistics.csv` has one row per UAT.
+
+## Topographic map (2D)
+
+A classic topographic map of the whole county, drawn from the same layers as `brasov_county.qgz`.
+The county is cut into **29 sheets of 20 × 15 km** on a round Stereo 70 kilometre grid, named
+after the main locality on each sheet (or the highest peak on mountain sheets).
+
+![Topographic sheet BV50-E4 Brașov](docs/topo_sheet_BV50-E4.png)
+
+| File | What it is |
+|---|---|
+| `maps/topo_50k/BV50-<sheet>_<name>.pdf` | one sheet each, **1:50,000 on A2** (map face 400 × 300 mm), 1–8 MB |
+| `maps/brasov_topographic_overview_200k.pdf` | whole county on A1 at 1:200,000, with the sheet index |
+| `brasov_topographic.qgz` | the QGIS project behind them: the map, an **atlas layout** for the 29 sheets and the A1 overview |
+| `data/brasov_topographic.gpkg` | the extra layers it uses: sheet index, DEM streams not in OSM, spot heights, labelled peaks |
+
+**On each sheet:** 20 m contours with labelled 100 m index contours; hillshading; forest and
+scrub from the 5 m canopy model; rivers, streams (DEM-derived streams that OSM lacks are
+dashed), lakes, wetlands; roads by class with DN/DJ numbers, railways, power lines; building
+footprints; county, UAT and protected-area boundaries; place names, named peaks and spot heights.
+In the margin: Stereo 70 km grid (2 km) with a zebra frame, latitude/longitude ticks every
+5′, scale bar, legend, locator map, adjoining sheets, sources and projection notes.
+
+| Sheets | | | | | |
+|---|---|---|---|---|---|
+| | A2 Bunești | A3 Cața | A4 Jimbor | | |
+| B1 Seliștat | B2 Jibert | B3 Rupea | B4 Racoș | | |
+| C1 Cincu | C2 Făgăraș | C3 Șercaia | C4 Măieruș | | |
+| D1 Victoria | D2 Recea | D3 Șinca Nouă | D4 Codlea | D5 Hărman | D6 Pilișca |
+| E1 Urlea | E2 Berivoiul Mare | E3 Zărnești | E4 Brașov | E5 Săcele | E6 Vama Buzăului |
+| | | F3 Bran | F4 Predeal | F5 Babarunca | F6 Bratocea din Jos |
+| | | G3 Muntele Clăbucetul | G4 Bucșa | | |
+
+* **Printing:** print the PDFs on A2 at **100 % / actual size** (no "fit to page") to keep the
+  1:50,000 scale. On A3 they print at about 1:70,000; the scale bar stays correct.
+* **Georeferenced PDF:** QGIS, ArcGIS, Global Mapper and Avenza Maps (phone, offline GPS
+  position) read the sheets' coordinates. In QGIS, drag a PDF onto the map.
+* **Other extents or scales:** open `brasov_topographic.qgz`, *Project → Layouts → Topographic
+  map 1:50,000 (A2 atlas)*, and use the atlas toolbar to preview or export any sheet. The map
+  itself is ordinary QGIS layers, so it also works on screen at any zoom.
+
+![County overview 1:200,000](docs/topo_overview_200k.png)
+
+## 3D relief models
+
+The terrain of each sheet as a **3D block**: the same 20 × 15 km footprint, 50 m mesh, true
+scale (no vertical exaggeration), draped with the topographic map at about 5 m per pixel, with
+side walls and a base like a physical relief model. A whole-county model (200 m mesh) gives the
+overview.
+
+![3D section BV50-F3 Bran](docs/3d/BV50-F3.jpg)
+
+* **On the web:** [Brașov 3D Relief](https://claude.ai/artifact/N9CdJ5qugVGERLmctNcA2m).
+  Pick a sheet on the index, orbit, zoom, switch between topographic and satellite drapes, set
+  the vertical exaggeration; pointing at the terrain gives elevation and Stereo 70 and
+  latitude/longitude coordinates. The page is private until you share it from its Share menu.
+* **Model files:** `maps/3d/sections/BV50-<sheet>.glb` (4–8 MB each) and `BV-overview.glb`.
+  glTF 2.0 binary (compact, with `KHR_mesh_quantization`). Opens in Blender (*File → Import →
+  glTF 2.0*), online viewers such as the three.js editor or the Babylon.js Sandbox, and game
+  engines; for 3D printing, import into Blender and export STL. `BV50-<sheet>_satellite.jpg`
+  is a Sentinel-2 drape for the same footprint.
+* **Viewer on your computer:** run `python -m http.server -d maps/3d` and open
+  <http://localhost:8000/viewer.html> (browsers do not load models from a plain file path).
+  It works offline; three.js and proj4 are included in `maps/3d/lib`.
+* **Coordinates:** model units are metres. X = easting − west edge, −Z = northing − north edge,
+  Y = elevation (EGM2008). Each model stores its sheet, CRS and origin in the glTF node's
+  `extras`, and `maps/3d/index.json` lists bounds and elevation ranges for all of them.
+* **Previews:** `docs/3d/<sheet>.jpg` for every sheet, `docs/3d_sections.jpg` for all of them
+  on one page.
+
+![All 3D sections](docs/3d_sections.jpg)
 
 ## Close zoom: what you see when you zoom in
 
@@ -178,8 +253,12 @@ buildings and their footprint; road length (excluding paths and tracks); stream 
 ```bash
 mamba env create -f environment.yml && conda activate brasov-geo
 export PYTHONPATH=$CONDA_PREFIX/share/qgis/python   # for 10_qgis_project.py
-bash scripts/run_all.sh                              # about 30 min on 4 cores, ~6 GB download
+bash scripts/run_all.sh                              # about 1 hour on 4 cores, ~6 GB download
 ```
+
+Steps 12–15 build the topographic series and the 3D models. `15_3d_viewer.py` installs three.js
+and proj4 with npm on first run and uses Playwright with Chromium for the preview renders
+(`--no-shots` skips them).
 
 Downloads are cached in `_raw/` and intermediates in `_work/` (both git-ignored). Region and
 parameters live in `scripts/common.py`: buffer, grid size, hydrology window. Stream and

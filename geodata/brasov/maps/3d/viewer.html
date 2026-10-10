@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Brașov 3D Relief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one-screen instrument. Index + controls rail on the left, relief block fills the rest;
+   on phones the relief stacks on top and the rail follows. */
+:root {
+  --paper: #eef1ee;        /* survey-office neutral, slightly green */
+  --panel: #f9faf8;
+  --ink: #1b2420;
+  --muted: #59655e;
+  --rule: #d2d8d3;
+  --contour: #96562a;      /* index-contour brown: the accent */
+  --water: #2c74b3;
+  --sky-top: #d7e1e4;
+  --sky-low: #f1f3ef;
+  --alert: #a8261d;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #101512; --panel: #161c19; --ink: #e2e8e4; --muted: #95a199; --rule: #29312d;
+    --contour: #d9995f; --water: #6aaee8; --sky-top: #0b1012; --sky-low: #1b221f; --alert: #f2b8b5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #101512; --panel: #161c19; --ink: #e2e8e4; --muted: #95a199; --rule: #29312d;
+  --contour: #d9995f; --water: #6aaee8; --sky-top: #0b1012; --sky-low: #1b221f; --alert: #f2b8b5;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--paper); color: var(--ink); font: 14px/1.45 var(--body); }
+.app { display: grid; grid-template-columns: minmax(272px, 330px) minmax(0, 1fr); height: 100%; }
+.rail {
+  background: var(--panel); border-right: 1px solid var(--rule); overflow-y: auto;
+  padding-block: 18px 22px; padding-inline: 16px; display: flex; flex-direction: column; gap: 18px;
+}
+.eyebrow { font: 500 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  font: 600 30px/1 var(--display); letter-spacing: .04em; text-transform: uppercase; margin: 6px 0 8px;
+  text-wrap: balance;
+}
+.lede { margin: 0; color: var(--muted); max-width: 34ch; }
+.label { font: 600 13px/1.2 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.index svg { width: 100%; height: auto; display: block; }
+.index .sheet { fill: transparent; stroke: var(--rule); stroke-width: 300; cursor: pointer; transition: fill .15s; }
+.index .sheet:hover, .index .sheet:focus-visible { fill: color-mix(in srgb, var(--contour) 14%, transparent); outline: none; }
+.index .sheet.on { fill: color-mix(in srgb, var(--contour) 30%, transparent); stroke: var(--contour); stroke-width: 500; }
+.index .county { fill: color-mix(in srgb, var(--ink) 6%, transparent); stroke: var(--ink); stroke-width: 450; pointer-events: none; }
+.index text { font: 500 2600px var(--mono); fill: var(--muted); pointer-events: none; text-anchor: middle; dominant-baseline: middle; }
+.index text.on { fill: var(--contour); font-weight: 600; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+select, button {
+  font: 500 13px/1 var(--body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 9px 11px; cursor: pointer;
+}
+select { flex: 1 1 160px; min-width: 0; }
+button:hover, select:hover { border-color: var(--muted); }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--contour); outline-offset: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; background: transparent; padding: 9px 12px; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
+.sheetcard { display: grid; gap: 2px; padding-block: 12px; border-block: 1px solid var(--rule); }
+.sheetcard .code { font: 500 12px/1 var(--mono); color: var(--contour); letter-spacing: .04em; }
+.sheetcard .name { font: 600 26px/1.05 var(--display); letter-spacing: .02em; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 8px 0 0; font-size: 13px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.slider { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; }
+.slider input { width: 100%; accent-color: var(--contour); }
+.slider output { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; min-width: 4ch; text-align: right; }
+.hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+.sources { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin-top: auto; }
+.sources p { margin: 0 0 6px; }
+.stage { position: relative; min-width: 0; min-height: 320px; background: linear-gradient(180deg, var(--sky-top), var(--sky-low) 70%); }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.readout {
+  position: absolute; left: 14px; bottom: 14px; max-width: calc(100% - 28px);
+  background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 10px 12px; font: 12.5px/1.5 var(--mono); font-variant-numeric: tabular-nums; backdrop-filter: blur(6px);
+  display: grid; grid-template-columns: auto auto; gap: 0 12px;
+}
+.readout .k { color: var(--muted); }
+.readout .elev { color: var(--contour); font-weight: 500; }
+.compass {
+  position: absolute; right: 14px; top: 14px; width: 46px; height: 46px; border-radius: 50%;
+  background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--rule);
+  display: grid; place-items: center;
+}
+.compass svg { width: 34px; height: 34px; transition: transform .05s linear; }
+.loading {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+}
+.loading .box {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; min-width: 220px;
+  font-size: 13px; display: grid; gap: 8px;
+}
+.bar { height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--contour); transition: width .2s; }
+.err { color: var(--alert); }
+body.shot .rail, body.shot .readout, body.shot .loading, body.shot .compass { display: none !important; }
+body.shot .app { grid-template-columns: 1fr; }
+@media (max-width: 760px) {
+  .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: 56vh auto; height: auto; }
+  .stage { order: -1; }
+  .rail { border-right: 0; border-top: 1px solid var(--rule); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<script src="lib/proj4.js"></script>
+<script type="importmap">
+{"imports": {"three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/"}}
+</script>
+</head>
+<body>
+
+
+<div class="app">
+  <aside class="rail" aria-label="Sections and controls">
+    <header>
+      <div class="eyebrow">Județul Brașov · Stereo 70 · true scale</div>
+      <h1>3D relief sections</h1>
+      <p class="lede">29 terrain blocks, one for each sheet of the 1:50 000 topographic series, draped with the topographic map or satellite imagery.</p>
+    </header>
+
+    <section class="index" aria-label="Sheet index">
+      <p class="label">Sheet index</p>
+      <svg id="indexmap" role="group" aria-label="Sheet index map of Brașov County"></svg>
+      <div class="row" style="margin-top:10px">
+        <select id="pick" aria-label="Choose a section"></select>
+        <button id="overview" type="button">Whole county</button>
+      </div>
+    </section>
+
+    <section class="sheetcard" aria-live="polite">
+      <span class="code" id="code">BV50-E4</span>
+      <span class="name" id="name">Brașov</span>
+      <dl class="facts">
+        <dt>Elevation</dt><dd id="f-elev">–</dd>
+        <dt>Footprint</dt><dd id="f-size">20 × 15 km</dd>
+        <dt>Terrain mesh</dt><dd id="f-mesh">50 m grid</dd>
+        <dt id="f-file-k">Model file</dt><dd id="f-file">–</dd>
+      </dl>
+    </section>
+
+    <section>
+      <p class="label">Drape</p>
+      <div class="seg" role="group" aria-label="Surface">
+        <button id="t-topo" type="button" aria-pressed="true">Topographic map</button>
+        <button id="t-sat" type="button" aria-pressed="false">Satellite</button>
+      </div>
+    </section>
+
+    <section>
+      <p class="label"><label for="exag">Vertical exaggeration</label></p>
+      <div class="slider">
+        <input id="exag" type="range" min="1" max="3" step="0.25" value="1">
+        <output id="exag-out" for="exag">1.0×</output>
+      </div>
+      <p class="hint">Drag to orbit · right-drag or two fingers to pan · scroll or pinch to zoom.</p>
+      <div class="row" style="margin-top:10px"><button id="reset" type="button">Reset view</button></div>
+    </section>
+
+    <footer class="sources">
+      <p>Terrain: Copernicus DEM GLO-30 (surface model, EGM2008 heights). Drape: topographic map built from OpenStreetMap / Overture Maps (ODbL), Meta &amp; WRI canopy, Sentinel-2 L2A 26 July 2025.</p>
+      <p>Coordinates are Stereo 70 (EPSG:3844); latitude/longitude WGS84. Same grid as sheets BV50-A2…G4.</p>
+    </footer>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="compass" aria-hidden="true"><svg viewBox="-20 -20 40 40" id="needle">
+      <polygon points="0,-15 5,2 0,-2 -5,2" fill="var(--contour)"></polygon>
+      <polygon points="0,15 5,2 0,-2 -5,2" fill="var(--muted)" opacity=".5"></polygon>
+      <text x="0" y="-17.5" text-anchor="middle" font-size="7" font-family="var(--mono)" fill="var(--ink)">N</text>
+    </svg></div>
+    <div class="readout" id="readout" aria-live="off">
+      <span class="k">Point at the terrain</span><span></span>
+    </div>
+    <div class="loading" id="loading"><div class="box">
+      <span id="load-msg">Loading section…</span>
+      <div class="bar"><i id="load-bar"></i></div>
+    </div></div>
+  </main>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const $ = (id) => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const SHOT = params.has('shot');
+if (SHOT) document.body.classList.add('shot');
+
+if (window.proj4) {
+  proj4.defs('EPSG:3844', '+proj=sterea +lat_0=46 +lon_0=25 +k=0.99975 +x_0=500000 +y_0=500000 '
+    + '+ellps=krass +towgs84=2.329,-147.042,-92.08,-0.309,0.325,0.497,5.69 +units=m +no_defs');
+}
+
+// ---------------------------------------------------------------- renderer & scene
+const stage = $('stage');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: SHOT });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+stage.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, 1, 10, 1e6);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = !SHOT;
+controls.maxPolarAngle = Math.PI * 0.495;
+controls.screenSpacePanning = false;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8c8272, 1.35));
+const sun = new THREE.DirectionalLight(0xffffff, 1.45);
+sun.position.set(-1, 1.15, -1).multiplyScalar(1e5);   // from the north-west, like the map's shading
+scene.add(sun);
+
+let needsRender = true;
+const requestRender = () => { needsRender = true; };
+controls.addEventListener('change', requestRender);
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / Math.max(h, 1);
+  camera.updateProjectionMatrix();
+  requestRender();
+}
+new ResizeObserver(resize).observe(stage);
+
+// ---------------------------------------------------------------- state
+let index = null, entry = null, root = null, node = null, terrain = [], topoTex = null;
+let tex = params.get('tex') === 'sat' ? 'sat' : 'topo', exag = Number(params.get('exag') || 1);
+const satCache = new Map();
+const loader = new GLTFLoader();
+const texLoader = new THREE.TextureLoader();
+
+function fmt(n) { return Math.round(n).toLocaleString('en-US').replace(/,/g, ' '); }
+
+function dispose(obj) {
+  obj.traverse((o) => {
+    if (o.geometry) o.geometry.dispose();
+    if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); }
+  });
+}
+
+function setLoading(on, msg, frac) {
+  $('loading').hidden = !on;
+  if (msg) $('load-msg').textContent = msg;
+  $('load-bar').style.width = `${Math.round((frac || 0) * 100)}%`;
+}
+
+function fitCamera(azDeg = Number(params.get('az') ?? 0), elDeg = Number(params.get('el') ?? 32)) {
+  const box = new THREE.Box3().setFromObject(root);
+  const c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3());
+  const d = Math.max(s.x, s.z) * (SHOT ? 0.92 : 1.0) * Number(params.get('dist') || 1);
+  const az = THREE.MathUtils.degToRad(azDeg), el = THREE.MathUtils.degToRad(elDeg);
+  controls.target.copy(c);
+  camera.position.set(c.x + d * Math.sin(az) * Math.cos(el), c.y + d * Math.sin(el), c.z + d * Math.cos(az) * Math.cos(el));
+  camera.near = d / 400; camera.far = d * 20; camera.updateProjectionMatrix();
+  controls.update();
+  requestRender();
+}
+
+function applyExag() {
+  if (!node) return;
+  node.scale.y = node.userData.baseY * exag;
+  node.updateMatrixWorld(true);
+  $('exag-out').textContent = `${exag.toFixed(exag % 1 ? 2 : 1).replace(/0$/, '')}×`;
+  requestRender();
+}
+
+function applyTexture() {
+  $('t-topo').setAttribute('aria-pressed', tex === 'topo');
+  $('t-sat').setAttribute('aria-pressed', tex === 'sat');
+  if (!terrain.length) return;
+  const set = (map) => { for (const m of terrain) { m.material.map = map; m.material.needsUpdate = true; } requestRender(); };
+  if (tex === 'topo' || !entry.satellite) return set(topoTex);
+  const url = entry.satellite;
+  if (satCache.has(url)) return set(satCache.get(url));
+  texLoader.load(url, (t) => {
+    t.flipY = false; t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    satCache.set(url, t);
+    if (tex === 'sat') set(t);
+  });
+}
+
+function showFacts(e) {
+  $('code').textContent = e.sheet === 'BV-overview' ? 'Whole county' : e.sheet;
+  $('name').textContent = e.name;
+  $('f-elev').textContent = `${fmt(e.elev_min_m)} – ${fmt(e.elev_max_m)} m`;
+  const w = (e.bounds[2] - e.bounds[0]) / 1000, h = (e.bounds[3] - e.bounds[1]) / 1000;
+  $('f-size').textContent = `${w} × ${h} km`;
+  $('f-mesh').textContent = `${e.mesh_step_m} m grid`;
+  $('f-file-k').textContent = e.height ? 'Download' : 'Model file';
+  $('f-file').textContent = `${(e.height ? e.web_mb : e.glb_mb).toFixed(1)} MB`;
+  document.querySelectorAll('#indexmap .sheet').forEach((r) => r.classList.toggle('on', r.dataset.id === e.sheet));
+  document.querySelectorAll('#indexmap text').forEach((t) => t.classList.toggle('on', t.dataset.id === e.sheet));
+  $('pick').value = e.sheet;
+}
+
+function show(e, group) {
+  if (entry !== e) { dispose(group); return; }
+  if (root) { scene.remove(root); dispose(root); topoTex.dispose(); }
+  for (const t of satCache.values()) t.dispose();   // drapes are per section
+  satCache.clear();
+  root = group;
+  node = root.children[0];
+  node.userData.baseY = node.userData.baseY ?? node.scale.y;
+  terrain = [];
+  root.traverse((o) => { if (o.isMesh && o.material.map) { terrain.push(o); topoTex = o.material.map; o.material.roughness = 1; } });
+  topoTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  scene.add(root);
+  applyExag();
+  fitCamera();
+  applyTexture();
+  setLoading(false);
+  requestAnimationFrame(() => requestAnimationFrame(() => { window.__ready = true; }));
+}
+
+function failed(err) {
+  setLoading(true, 'Could not load this section. Check your connection and choose it again.', 0);
+  $('load-msg').classList.add('err');
+  console.error(err);
+}
+
+// GET with download progress; sizes = { url: bytes } so several files share one bar
+async function fetchBlob(url, onBytes) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+  if (!r.body) { const b = await r.blob(); onBytes(b.size); return b; }
+  const reader = r.body.getReader(), parts = [];
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    parts.push(value); onBytes(value.length);
+  }
+  return new Blob(parts);
+}
+
+// Web build: the block is rebuilt from a lossless height PNG (elevation in decimetres,
+// R = high byte, G = low byte; the same values as the GLB) and the topographic drape.
+async function buildFromHeight(e) {
+  let got = 0;
+  const total = e.web_bytes || 1;
+  const tick = (n) => { got += n; if (entry === e) setLoading(true, null, Math.min(got / total, 1)); };
+  const [hBlob, tBlob] = await Promise.all([fetchBlob(e.height, tick), fetchBlob(e.topo, tick)]);
+  const opts = { colorSpaceConversion: 'none', premultiplyAlpha: 'none' };
+  const [hBmp, tBmp] = await Promise.all([createImageBitmap(hBlob, opts), createImageBitmap(tBlob)]);
+  const [nx, ny] = [hBmp.width, hBmp.height], step = e.mesh_step_m;
+  const cv = document.createElement('canvas');
+  cv.width = nx; cv.height = ny;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(hBmp, 0, 0);
+  const px = ctx.getImageData(0, 0, nx, ny).data;
+  hBmp.close();
+  const z = new Float32Array(nx * ny);
+  for (let i = 0; i < z.length; i++) z[i] = (px[4 * i] * 256 + px[4 * i + 1]) / 10;
+
+  // terrain: X = east of the west edge, Z = south of the north edge, Y = elevation (m)
+  const pos = new Float32Array(nx * ny * 3), uv = new Float32Array(nx * ny * 2);
+  for (let r = 0, i = 0; r < ny; r++) for (let c = 0; c < nx; c++, i++) {
+    pos.set([c * step, z[i], r * step], 3 * i);
+    uv.set([c / (nx - 1), r / (ny - 1)], 2 * i);
+  }
+  const idx = new Uint32Array((nx - 1) * (ny - 1) * 6);
+  for (let r = 0, k = 0; r < ny - 1; r++) for (let c = 0; c < nx - 1; c++) {
+    const a = r * nx + c, b = a + 1, cc = a + nx, d = cc + 1;
+    idx.set([a, cc, b, b, cc, d], k); k += 6;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  g.setIndex(new THREE.BufferAttribute(idx, 1));
+  g.computeVertexNormals();
+  const map = new THREE.Texture(tBmp);
+  map.flipY = false; map.colorSpace = THREE.SRGBColorSpace; map.needsUpdate = true;
+  const terrainMesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ map, roughness: 1, metalness: 0 }));
+
+  // side walls and base plate, like the GLB block
+  const wp = [], wi = [], base = e.base_m, W = (nx - 1) * step, H = (ny - 1) * step;
+  const wall = (pts) => {
+    const k0 = wp.length / 3;
+    for (const [x, y, zz] of pts) wp.push(x, y, zz, x, base, zz);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = k0 + 2 * i;
+      wi.push(a, a + 1, a + 2, a + 2, a + 1, a + 3);
+    }
+  };
+  const col = (c) => Array.from({ length: ny }, (_, r) => [c * step, z[r * nx + c], r * step]);
+  const row = (r) => Array.from({ length: nx }, (_, c) => [c * step, z[r * nx + c], r * step]);
+  wall(row(0)); wall(row(ny - 1)); wall(col(0)); wall(col(nx - 1));
+  const k0 = wp.length / 3;
+  wp.push(0, base, 0, W, base, 0, 0, base, H, W, base, H);
+  wi.push(k0, k0 + 1, k0 + 2, k0 + 1, k0 + 3, k0 + 2);
+  const wg = new THREE.BufferGeometry();
+  wg.setAttribute('position', new THREE.Float32BufferAttribute(wp, 3));
+  wg.setIndex(wi);
+  wg.computeVertexNormals();
+  const walls = new THREE.Mesh(wg, new THREE.MeshStandardMaterial({
+    color: new THREE.Color().setRGB(0.56, 0.47, 0.38, THREE.SRGBColorSpace), roughness: 1, metalness: 0,
+    side: THREE.DoubleSide }));
+
+  const n = new THREE.Group();
+  n.name = `${e.sheet} ${e.name}`;
+  n.add(terrainMesh, walls);
+  const group = new THREE.Group();
+  group.add(n);
+  return group;
+}
+
+function load(e) {
+  entry = e;
+  showFacts(e);
+  const mb = e.height ? e.web_mb : e.glb_mb;
+  setLoading(true, `Loading ${e.sheet === 'BV-overview' ? 'county overview' : e.sheet + ' ' + e.name} · ${mb.toFixed(1)} MB`, 0);
+  $('load-msg').classList.remove('err');
+  window.__ready = false;
+  if (e.height) {
+    buildFromHeight(e).then((group) => show(e, group)).catch(failed);
+  } else {
+    loader.load(e.glb, (gltf) => show(e, gltf.scene),
+      (p) => { if (p.total) setLoading(true, null, p.loaded / p.total); }, failed);
+  }
+}
+
+// ---------------------------------------------------------------- index map & pickers
+function buildIndex() {
+  const [x0, y0, x1, y1] = index.grid_bounds;
+  const svg = $('indexmap');
+  const pad = 1500;
+  svg.setAttribute('viewBox', `${x0 - pad} ${-(y1 + pad)} ${x1 - x0 + 2 * pad} ${y1 - y0 + 2 * pad}`);
+  const ns = 'http://www.w3.org/2000/svg';
+  const county = document.createElementNS(ns, 'path');
+  county.setAttribute('d', 'M' + index.county_outline.map(([x, y]) => `${x},${-y}`).join('L') + 'Z');
+  county.setAttribute('class', 'county');
+  for (const s of index.sections) {
+    const [a, b, c, d] = s.bounds;
+    const r = document.createElementNS(ns, 'rect');
+    Object.entries({ x: a, y: -d, width: c - a, height: d - b, class: 'sheet', tabindex: 0, role: 'button' })
+      .forEach(([k, v]) => r.setAttribute(k, v));
+    r.dataset.id = s.sheet;
+    r.setAttribute('aria-label', `${s.sheet} ${s.name}`);
+    const go = () => { if (entry !== s) { load(s); history.replaceState(null, '', '#' + s.sheet); } };
+    r.addEventListener('click', go);
+    r.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); go(); } });
+    const t = document.createElementNS(ns, 'text');
+    t.setAttribute('x', (a + c) / 2); t.setAttribute('y', -(b + d) / 2);
+    t.dataset.id = s.sheet; t.textContent = s.sheet.slice(5);
+    svg.append(r, t);
+  }
+  svg.append(county);
+  const pick = $('pick');
+  for (const s of index.sections) pick.add(new Option(`${s.sheet} · ${s.name}`, s.sheet));
+  pick.add(new Option('Whole county (overview)', 'BV-overview'));
+  pick.addEventListener('change', () => {
+    const s = pick.value === 'BV-overview' ? index.overview : index.sections.find((x) => x.sheet === pick.value);
+    load(s); history.replaceState(null, '', '#' + s.sheet);
+  });
+}
+
+// ---------------------------------------------------------------- hover readout
+const ray = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+let hoverPending = false;
+renderer.domElement.addEventListener('pointermove', (ev) => {
+  const r = renderer.domElement.getBoundingClientRect();
+  ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  hoverPending = true;
+});
+renderer.domElement.addEventListener('pointerleave', () => { $('readout').innerHTML = '<span class="k">Point at the terrain</span><span></span>'; });
+
+function readout() {
+  hoverPending = false;
+  if (!terrain.length) return;
+  ray.setFromCamera(ndc, camera);
+  const hit = ray.intersectObjects(terrain, false)[0];
+  if (!hit) return;
+  const p = node.worldToLocal(hit.point.clone());
+  const xy = node.scale.x;
+  const E = entry.bounds[0] + p.x * xy, N = entry.bounds[3] - p.z * xy, Z = p.y * node.userData.baseY;
+  let ll = '';
+  if (window.proj4) {
+    const [lon, lat] = proj4('EPSG:3844', 'EPSG:4326', [E, N]);
+    ll = `<span class="k">Lat / Lon</span><span>${lat.toFixed(5)}° N  ${lon.toFixed(5)}° E</span>`;
+  }
+  $('readout').innerHTML = `<span class="k">Elevation</span><span class="elev">${fmt(Z)} m</span>`
+    + `<span class="k">E (Stereo 70)</span><span>${fmt(E)} m</span><span class="k">N (Stereo 70)</span><span>${fmt(N)} m</span>${ll}`;
+}
+
+// ---------------------------------------------------------------- controls
+$('t-topo').onclick = () => { tex = 'topo'; applyTexture(); };
+$('t-sat').onclick = () => { tex = 'sat'; applyTexture(); };
+$('exag').value = exag;
+$('exag').oninput = (ev) => { exag = Number(ev.target.value); applyExag(); };
+$('reset').onclick = () => fitCamera();
+$('overview').onclick = () => { load(index.overview); history.replaceState(null, '', '#BV-overview'); };
+
+const needle = $('needle');
+renderer.setAnimationLoop(() => {
+  controls.update();
+  if (hoverPending) readout();
+  if (needsRender) {
+    renderer.render(scene, camera);
+    needsRender = false;
+    const az = Math.atan2(camera.position.x - controls.target.x, camera.position.z - controls.target.z);
+    needle.style.transform = `rotate(${THREE.MathUtils.radToDeg(az)}deg)`;
+  }
+});
+
+fetch('index.json').then((r) => r.json()).then((data) => {
+  index = data;
+  buildIndex();
+  const want = params.get('s') || location.hash.slice(1) || 'BV50-E4';
+  const start = want === 'BV-overview' ? index.overview : (index.sections.find((s) => s.sheet === want) || index.sections[0]);
+  load(start);
+}).catch(() => setLoading(true, 'The section list could not be loaded.', 0));
+</script>
+
+</body>
+</html>

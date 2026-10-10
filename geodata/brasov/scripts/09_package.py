@@ -26,7 +26,7 @@ def zonal(uat: gpd.GeoDataFrame) -> pd.DataFrame:
     r = {k: rasterio.open(RASTER / f) for k, f in {
         "dem": "topo_dem_25m.tif", "slope": "topo_slope_deg.tif",
         "scls": "topo_slope_classes.tif", "flood": "hydro_flood_susceptibility.tif",
-        "wc": "landcover_worldcover_10m.tif", "chm": "canopy_height_5m.vrt"}.items()}
+        "wc": "landcover_worldcover_10m.tif", "chm": "canopy_height_5m.tif"}.items()}
 
     def vals(key, geom):
         a, _ = mask(r[key], [geom], crop=True, filled=False)
