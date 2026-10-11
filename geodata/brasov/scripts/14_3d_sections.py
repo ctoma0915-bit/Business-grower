@@ -9,9 +9,14 @@ For each sheet of topo_sheet_index_50k (same 20 x 15 km footprints as the 2D map
   maps/3d/sections/BV-overview.glb        whole county, 200 m grid
   maps/3d/index.json                      catalogue used by the viewer (origin, bounds, heights)
 
+Infrastructure (infra3d.py) is added as extra nodes "infra:<layer>": bridges with piers, tunnels
+inside the ground with portals, power lines, cable cars / ski lifts, dams - each part tagged with
+a feature index (_FEATURE_ID) into the node's `extras.features`.
+
 glTF details: Y up, X = easting - west edge, Z = north edge - northing (north = -Z), metres.
-Positions are int16 with KHR_mesh_quantization (Y stored in decimetres, node scale 0.1); the
-node's `extras` carry the Stereo 70 (EPSG:3844) origin so coordinates can be recovered.
+Terrain positions are int16 with KHR_mesh_quantization (Y stored in decimetres, node scale 0.1);
+infrastructure positions are float32 metres. The terrain node's `extras` carry the Stereo 70
+(EPSG:3844) origin so coordinates can be recovered.
 """
 import io
 import json
@@ -32,6 +37,8 @@ from qgis.core import (QgsApplication, QgsContrastEnhancement, QgsMapRendererPar
                        QgsRectangle)
 
 from common import DATA, RASTER, ROOT, WORK, aoi_path, run
+from infra3d import MATERIALS, build_all, srgb_to_linear
+from structures import Surface
 
 OUT = ROOT / "maps" / "3d"
 SEC = OUT / "sections"
@@ -188,7 +195,7 @@ def wall_prim(z, step, base, xy=1):
 
 
 # ---------------------------------------------------------------- GLB writer
-def write_glb(path, prims, jpeg, name, extras, xy=1):
+def write_glb(path, prims, jpeg, name, extras, xy=1, infra=()):
     binbuf = bytearray()
     views, accessors = [], []
 
@@ -230,27 +237,58 @@ def write_glb(path, prims, jpeg, name, extras, xy=1):
                       count=len(idx), type="SCALAR")
         gl_prims.append({"attributes": attrs, "indices": ia, "material": p["material"]})
     img_view = view(jpeg)
+    materials = [
+        {"name": "topographic map", "pbrMetallicRoughness": {
+            "baseColorTexture": {"index": 0}, "metallicFactor": 0, "roughnessFactor": 1}},
+        {"name": "block sides", "pbrMetallicRoughness": {
+            "baseColorFactor": [*WALL_RGB, 1], "metallicFactor": 0, "roughnessFactor": 1}}]
+    meshes = [{"name": name, "primitives": gl_prims}]
+    nodes = [{"mesh": 0, "name": name, "scale": [xy, Y_SCALE, xy], "extras": extras}]
+    mat_index = {}
+    for layer in infra:
+        prims_gl = []
+        for p in layer["prims"]:
+            if p["material"] not in mat_index:
+                hexc, emissive, double = MATERIALS[p["material"]]
+                lin = srgb_to_linear(hexc)
+                materials.append({"name": p["material"], "doubleSided": double,
+                                  "emissiveFactor": [round(c * emissive, 4) for c in lin],
+                                  "pbrMetallicRoughness": {"baseColorFactor": [*lin, 1],
+                                                           "metallicFactor": 0,
+                                                           "roughnessFactor": 0.8}})
+                mat_index[p["material"]] = len(materials) - 1
+            pos = p["pos"]
+            attrs = {"POSITION": accessor(bufferView=view(pos.tobytes(), 34962), componentType=5126,
+                                          count=len(pos), type="VEC3",
+                                          min=pos.min(0).tolist(), max=pos.max(0).tolist())}
+            if p["nrm"] is not None:
+                attrs["NORMAL"] = accessor(bufferView=view(p["nrm"].tobytes(), 34962),
+                                           componentType=5126, count=len(pos), type="VEC3")
+            attrs["_FEATURE_ID"] = accessor(bufferView=view(p["fid"].tobytes(), 34962),
+                                            componentType=5126, count=len(pos), type="SCALAR")
+            prim = {"attributes": attrs, "mode": p["mode"], "material": mat_index[p["material"]]}
+            if p["idx"] is not None:
+                prim["indices"] = accessor(bufferView=view(p["idx"].tobytes(), 34963),
+                                           componentType=5125, count=len(p["idx"]), type="SCALAR")
+            prims_gl.append(prim)
+        meshes.append({"name": layer["name"], "primitives": prims_gl})
+        nodes.append({"mesh": len(meshes) - 1, "name": layer["name"], "extras": layer["extras"]})
     gltf = {
         "asset": {"version": "2.0", "generator": "brasov geodata pipeline (14_3d_sections.py)",
                   "copyright": "Copernicus DEM GLO-30 (DLR/Airbus); OpenStreetMap contributors / "
                                "Overture Maps (ODbL); Meta & WRI canopy (CC BY 4.0)"},
         "extensionsUsed": ["KHR_mesh_quantization"],
         "extensionsRequired": ["KHR_mesh_quantization"],
-        "scene": 0, "scenes": [{"nodes": [0], "name": name}],
-        "nodes": [{"mesh": 0, "name": name, "scale": [xy, Y_SCALE, xy], "extras": extras}],
-        "meshes": [{"name": name, "primitives": gl_prims}],
-        "materials": [
-            {"name": "topographic map", "pbrMetallicRoughness": {
-                "baseColorTexture": {"index": 0}, "metallicFactor": 0, "roughnessFactor": 1}},
-            {"name": "block sides", "pbrMetallicRoughness": {
-                "baseColorFactor": [*WALL_RGB, 1], "metallicFactor": 0, "roughnessFactor": 1}}],
+        "scene": 0, "scenes": [{"nodes": list(range(len(nodes))), "name": name}],
+        "nodes": nodes, "meshes": meshes, "materials": materials,
         "textures": [{"sampler": 0, "source": 0}],
         "samplers": [{"magFilter": 9729, "minFilter": 9987, "wrapS": 33071, "wrapT": 33071}],
         "images": [{"bufferView": img_view, "mimeType": "image/jpeg"}],
         "accessors": accessors, "bufferViews": views,
         "buffers": [{"byteLength": len(binbuf)}],
     }
-    js = json.dumps(gltf, separators=(",", ":")).encode()
+    js = json.dumps(gltf, separators=(",", ":"), ensure_ascii=False,
+                    default=lambda o: o.item() if hasattr(o, "item") else str(o)).encode()
     js += b" " * (-len(js) % 4)
     while len(binbuf) % 4:
         binbuf.append(0)
@@ -263,9 +301,12 @@ def write_glb(path, prims, jpeg, name, extras, xy=1):
 
 # ---------------------------------------------------------------- main
 def build(sid, title, rect, step, tex_size, dpi, topo_layers, sat_layers, outside, sat=True,
-          xy=1):
-    """xy = horizontal storage unit (m); int16 covers +-32 km at 1 m, so the overview uses 10."""
+          xy=1, infra_src=None, surf=None):
+    """xy = horizontal storage unit (m); int16 covers +-32 km at 1 m, so the overview uses 10.
+    surf = surface the infrastructure stands on (defaults to this section's own mesh)."""
     z = heights(rect, step)
+    surf = surf or Surface(z, rect[0], rect[3], step)
+    infra = build_all(*infra_src, rect, surf, overview=sid == "BV-overview") if infra_src else []
     base = float(np.floor((z.min() - BASE_BELOW) / 10) * 10)
     prims = terrain_prims(z, step, xy) + [wall_prim(z, step, base, xy)]
     jpeg = render(topo_layers + [outside], rect, tex_size, dpi)
@@ -275,16 +316,18 @@ def build(sid, title, rect, step, tex_size, dpi, topo_layers, sat_layers, outsid
                       "elevation (m, EGM2008, Copernicus GLO-30 DSM)",
               "mesh_step_m": step, "vertical_exaggeration": 1}
     glb = SEC / f"{sid}.glb"
-    write_glb(glb, prims, jpeg, f"{sid} {title}", extras, xy)
+    write_glb(glb, prims, jpeg, f"{sid} {title}", extras, xy, infra)
     entry = {"sheet": sid, "name": title, "glb": f"sections/{glb.name}",
              "bounds": list(rect), "mesh_step_m": step, "base_m": base,
              "elev_min_m": round(float(z.min()), 1), "elev_max_m": round(float(z.max()), 1),
-             "glb_mb": round(glb.stat().st_size / 1e6, 2)}
+             "glb_mb": round(glb.stat().st_size / 1e6, 2),
+             "infra": {lay["extras"]["layer"]: lay["extras"]["count"] for lay in infra}}
     if sat:
         sj = SEC / f"{sid}_satellite.jpg"
         sj.write_bytes(render(sat_layers + [outside], rect, SAT, 96))
         entry["satellite"] = f"sections/{sj.name}"
-    print(f"  {sid} {title}: {entry['glb_mb']} MB, {z.min():.0f}-{z.max():.0f} m", flush=True)
+    print(f"  {sid} {title}: {entry['glb_mb']} MB, {z.min():.0f}-{z.max():.0f} m, "
+          f"infrastructure {entry['infra']}", flush=True)
     return entry
 
 
@@ -294,7 +337,8 @@ def main() -> None:
     tree = project.layerTreeRoot()
     topo = [lyr for lyr in tree.layerOrder() if tree.findLayer(lyr.id()).isVisible()
             and lyr.name() != "Sheet index 1:50,000"]
-    img = QgsRasterLayer(str(RASTER / "imagery_sentinel2_truecolor_10m.tif"), "Sentinel-2")
+    img = QgsRasterLayer(str(RASTER / "imagery_sentinel2_truecolor_10m.tif"), "Sentinel-2", "gdal",
+                         QgsRasterLayer.LayerOptions(loadDefaultStyle=False))
     mb = QgsMultiBandColorRenderer(img.dataProvider(), 1, 2, 3)
     mb.setAlphaBand(4)
     for setter in (mb.setRedContrastEnhancement, mb.setGreenContrastEnhancement,
@@ -310,24 +354,29 @@ def main() -> None:
     outside = outside_relief()
 
     idx = gpd.read_file(DATA / "brasov_topographic.gpkg", layer="topo_sheet_index_50k")
+    infra_src = (gpd.read_file(DATA / "brasov_topographic.gpkg", layer="topo_structures"),
+                 gpd.read_file(DATA / "brasov_landuse_infrastructure.gpkg",
+                               layer="infrastructure_lines"))
+    gx0, gy0, gx1, gy1 = (float(v) for v in idx.total_bounds)
+    surf50 = Surface(heights((gx0, gy0, gx1, gy1), STEP), gx0, gy1, STEP)
     only = [x.split("=", 1)[1].split(",") for x in sys.argv if x.startswith("--only=")]
     if only:   # quick test: build just these sections, skip overview and index
         for r in idx[idx.sheet.isin(only[0])].itertuples():
             build(r.sheet, r.name, (r.xmin, r.ymin, r.xmax, r.ymax), STEP, TEX, DPI, topo,
-                  [img] + county_line, outside)
+                  [img] + county_line, outside, infra_src=infra_src, surf=surf50)
         return
     entries = []
     for r in idx.sort_values("page").itertuples():
         rect = (r.xmin, r.ymin, r.xmax, r.ymax)
         entries.append(build(r.sheet, r.name, rect, STEP, TEX, DPI, topo, [img] + county_line,
-                             outside))
+                             outside, infra_src=infra_src, surf=surf50))
     # county overview: whole sheet grid, coarser mesh, generalised texture
     xmin, ymin, xmax, ymax = idx.total_bounds
     rect = (float(xmin), float(ymin), float(xmax), float(ymax))
     w = 4096
     h = int(round(w * (ymax - ymin) / (xmax - xmin)))
     ov = build("BV-overview", "Brașov County (overview)", rect, OV_STEP, (w, h), 150, topo,
-               [img] + county_line, outside, sat=True, xy=10)
+               [img] + county_line, outside, sat=True, xy=10, infra_src=infra_src)
     index = {"title": "Brașov County - 3D topographic sections",
              "crs": "EPSG:3844", "vertical_exaggeration_in_files": 1,
              "overview": ov, "sections": entries,

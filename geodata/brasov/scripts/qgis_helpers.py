@@ -4,7 +4,8 @@ from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QColor, QFont
 from qgis.core import (
     Qgis, QgsCategorizedSymbolRenderer, QgsColorRampShader, QgsFillSymbol,
-    QgsGeometryGeneratorSymbolLayer, QgsLineSymbol, QgsMarkerSymbol, QgsPalLayerSettings,
+    QgsGeometryGeneratorSymbolLayer, QgsLineSymbol, QgsMarkerLineSymbolLayer, QgsMarkerSymbol,
+    QgsPalLayerSettings, QgsSymbolLayer,
     QgsPalettedRasterRenderer, QgsProperty, QgsRasterDataProvider, QgsRasterShader,
     QgsRendererCategory, QgsRuleBasedLabeling, QgsRuleBasedRenderer, QgsSimpleLineSymbolLayer,
     QgsSingleBandPseudoColorRenderer, QgsTextBufferSettings, QgsTextFormat,
@@ -64,6 +65,56 @@ def rules(lyr, rule_list, symbol_levels=False):
 
 
 M_UNIT = Qgis.RenderUnit.MetersInMapUnits
+
+
+def tunnel_casing(color, half_width, metres=False):
+    """Road in tunnel: two thin dashed lines along the road edges, no fill. half_width in mm,
+    or in metres on the ground when metres=True (street-scale maps)."""
+    sym = QgsLineSymbol()
+    sym.deleteSymbolLayer(0)
+    for off in (-half_width, half_width):
+        sl = QgsSimpleLineSymbolLayer(qc(color), 0.16)
+        sl.setOffset(off)
+        if metres:
+            sl.setOffsetUnit(M_UNIT)
+        sl.setUseCustomDashPattern(True)
+        sl.setCustomDashVector([1.0, 0.7])
+        sl.setPenCapStyle(Qt.PenCapStyle.FlatCap)
+        sym.appendSymbolLayer(sl)
+    return sym
+
+
+def bridge_casing(half_width, offset_expr=None, line_width=0.2):
+    """Bridge: black parapet lines either side of the road / railway. half_width in mm; with
+    offset_expr (e.g. '"width_m" / 2 + 1.5') the offset is metres on the ground per feature."""
+    sym = QgsLineSymbol()
+    sym.deleteSymbolLayer(0)
+    for sign in (-1, 1):
+        sl = QgsSimpleLineSymbolLayer(qc("#000000"), line_width)
+        sl.setOffset(sign * half_width)
+        if offset_expr:
+            sl.setOffsetUnit(M_UNIT)
+            sl.setDataDefinedProperty(QgsSymbolLayer.Property.Offset,
+                                      QgsProperty.fromExpression(f"{sign} * ({offset_expr})"))
+        sl.setPenCapStyle(Qt.PenCapStyle.FlatCap)
+        sym.appendSymbolLayer(sl)
+    return sym
+
+
+def tunnel_portals(size=2.0):
+    """Portal brackets at both ends of a tunnel."""
+    sym = QgsLineSymbol()
+    sym.deleteSymbolLayer(0)
+    for placement, angle in ((Qgis.MarkerLinePlacement.FirstVertex, 90),
+                             (Qgis.MarkerLinePlacement.LastVertex, 270)):
+        m = QgsMarkerSymbol.createSimple({"name": "half_arc", "color": "#000000",
+                                          "outline_color": "#000000", "size": str(size),
+                                          "outline_width": "0.3", "angle": str(angle)})
+        ml = QgsMarkerLineSymbolLayer(True)
+        ml.setPlacements(placement)
+        ml.setSubSymbol(m)
+        sym.appendSymbolLayer(ml)
+    return sym
 
 
 def road_symbol(fill_c, case_c, width_m, fill_pass, dash=False):

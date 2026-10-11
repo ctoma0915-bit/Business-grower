@@ -8,6 +8,9 @@
                          are not already a named peak, with elevation
   topo_peaks_labelled    named peaks / saddles with an elevation label (OSM `ele` tag, or the
                          DEM value where OSM has none)
+  topo_structures        road and rail bridges and tunnels: exactly the bridged / tunnelled
+                         piece of each segment, as 3D lines (deck top or tunnel floor, modelled
+                         from the DEM, see structures.py) with length, heights and clearances
 """
 import math
 
@@ -16,9 +19,11 @@ import numpy as np
 import pandas as pd
 import rasterio
 from scipy import ndimage as ndi
-from shapely.geometry import box
+from shapely.geometry import LineString, box
 
-from common import CRS, RASTER, stage_gpkg
+from common import CRS, RASTER, WORK, aoi_path, stage_gpkg
+from structures import (DECK_THICKNESS, Surface, clip_3d, floor_under, profile,
+                        structures_from)
 
 SHEET_W, SHEET_H = 20000, 15000      # metres; 400 x 300 mm at 1:50,000
 GRID_X0, GRID_Y1 = 470000, 525000    # sheet grid origin (west edge, north edge)
@@ -130,6 +135,37 @@ def labelled_peaks() -> gpd.GeoDataFrame:
     return pk
 
 
+def structures() -> gpd.GeoDataFrame:
+    """Profiles are computed on the whole structure (pieces outside the AOI included), then
+    clipped to the AOI."""
+    st = structures_from(gpd.read_file(stage_gpkg("overture"), layer="transport_structure_pieces"))
+    aoi = gpd.read_file(aoi_path()).geometry.iloc[0]
+    xmin, ymin, xmax, ymax = st.total_bounds
+    surf = Surface.from_raster(WORK / "dem_hydro.tif", (xmin - 500, ymin - 500, xmax + 500,
+                                                        ymax + 500))
+    rows = []
+    for rec in st.to_dict("records"):
+        kind, mode, g = rec.pop("structure"), rec["mode"], rec.pop("geometry")
+        height = 7.5 if mode == "rail" else 7.0
+        xy, sl, ground, z = profile(g, kind, surf, height)
+        if kind == "bridge":
+            clear = z - DECK_THICKNESS - floor_under(xy, surf, float(np.clip(0.4 * g.length, 12, 45)))
+        else:
+            cover = ground - z - height
+        full = LineString(np.column_stack([xy, z.round(2)]))
+        for part in clip_3d(full, aoi):
+            if part.length < 3:
+                continue
+            pz = np.asarray(part.coords)[:, 2]
+            rows.append({"structure": kind, **rec, "length_m": round(part.length, 1),
+                         "z_start_m": round(float(pz[0]), 1), "z_end_m": round(float(pz[-1]), 1),
+                         "max_clearance_m": round(float(clear.max()), 1) if kind == "bridge"
+                         else None,
+                         "max_cover_m": round(float(cover.max()), 1) if kind == "tunnel" else None,
+                         "full_length_m": round(g.length, 1), "geometry": part})
+    return gpd.GeoDataFrame(rows, crs=CRS)
+
+
 def main() -> None:
     OUT.unlink(missing_ok=True)
     idx = sheet_index()
@@ -144,6 +180,10 @@ def main() -> None:
     sh = spot_heights(pk)
     sh.to_file(OUT, layer="topo_spot_heights", driver="GPKG")
     print(f"spot heights: {len(sh)}; peaks labelled: {pk.elev_label.notna().sum()}/{len(pk)}")
+    st = structures()
+    st.to_file(OUT, layer="topo_structures", driver="GPKG")
+    print("structures:", st.groupby(["structure", "mode"]).agg(
+        n=("length_m", "size"), km=("length_m", lambda v: round(v.sum() / 1000, 1))).to_dict())
 
 
 if __name__ == "__main__":

@@ -6,14 +6,17 @@
   maps/3d/index.json      enriched with the county outline and grid bounds for the index map
   docs/3d/<sheet>.jpg     oblique render of every section (headless Chromium, same viewer code)
   docs/3d_sections.jpg    contact sheet of all sections
+  docs/3d/detail_*.jpg    close-ups of the infrastructure (bridges, tunnels, lifts)
   _work/artifact/         the same viewer with CDN imports, for publishing as a web page. Web
                           hosts may not serve .glb, so there each block is rebuilt in the browser
                           from <sheet>_height.png (lossless, the GLB's own decimetre heights) and
-                          <sheet>_topo.jpg (the GLB's own texture), both extracted from the GLB
+                          <sheet>_topo.jpg (the GLB's own texture) and <sheet>_infra.json (the
+                          GLB's infrastructure meshes, base64 arrays), all extracted from the GLB
 
 Libraries: three.js 0.170.0 and proj4 2.15.0 (npm). Pass --no-shots to skip the renders,
 --only=ID,ID to re-render some of them.
 """
+import base64
 import functools
 import http.server
 import json
@@ -30,6 +33,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 from common import DATA, ROOT, WORK, stage_gpkg
+from infra3d import MATERIALS
 
 OUT = ROOT / "maps" / "3d"
 LIB = OUT / "lib"
@@ -137,6 +141,37 @@ def glb_height_and_texture(path: Path, step: float):
     return grid, jpeg
 
 
+def glb_infra(path: Path) -> dict | None:
+    """Infrastructure nodes of a section GLB as JSON-ready base64 arrays."""
+    gltf, binbuf = read_glb(path)
+
+    def arr(acc_i, dtype):
+        acc = gltf["accessors"][acc_i]
+        bv = gltf["bufferViews"][acc["bufferView"]]
+        n = acc["count"] * {"SCALAR": 1, "VEC2": 2, "VEC3": 3}[acc["type"]]
+        a = np.frombuffer(binbuf, dtype, n, bv["byteOffset"])
+        return base64.b64encode(a.tobytes()).decode()
+
+    layers = []
+    for node in gltf["nodes"]:
+        ex = node.get("extras", {})
+        if "layer" not in ex:
+            continue
+        prims = []
+        for prim in gltf["meshes"][node["mesh"]]["primitives"]:
+            mat = gltf["materials"][prim["material"]]["name"]
+            hexc, emissive, double = MATERIALS[mat]
+            at = prim["attributes"]
+            prims.append({"mode": prim.get("mode", 4), "material": mat, "color": hexc,
+                          "emissive": emissive, "double": double,
+                          "pos": arr(at["POSITION"], "float32"),
+                          "nrm": arr(at["NORMAL"], "float32") if "NORMAL" in at else None,
+                          "fid": arr(at["_FEATURE_ID"], "float32"),
+                          "idx": arr(prim["indices"], "uint32") if "indices" in prim else None})
+        layers.append({**ex, "prims": prims})
+    return {"layers": layers} if layers else None
+
+
 def web_package(idx: dict) -> None:
     """Heights + drapes for the web viewer (see module docstring)."""
     adir = WORK / "artifact"
@@ -153,6 +188,12 @@ def web_package(idx: dict) -> None:
         t = sec / f"{e['sheet']}_topo.jpg"
         t.write_bytes(jpeg)
         files = [h, t]
+        infra = glb_infra(OUT / f"sections/{e['sheet']}.glb")
+        if infra:
+            j = sec / f"{e['sheet']}_infra.json"
+            j.write_text(json.dumps(infra, ensure_ascii=False, separators=(",", ":")))
+            files.append(j)
+            e["infra_json"] = f"sections/{j.name}"
         if "satellite" in e:
             shutil.copyfile(OUT / e["satellite"], adir / e["satellite"])
         e.update(height=f"sections/{h.name}", topo=f"sections/{t.name}",
@@ -168,6 +209,15 @@ def serve(directory: Path):
     srv = socketserver.TCPServer(("127.0.0.1", 0), handler)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     return srv, srv.server_address[1]
+
+
+# close-ups: (file, query) - cx/cz aim at a point as fractions of the block, cy its elevation
+DETAILS = [
+    ("detail_predeal_tunnels", "s=BV50-F4&cx=0.875&cz=0.24&cy=1000&dist=0.11&az=25&el=42"),
+    ("detail_predeal_dn1_viaduct", "s=BV50-F4&cx=0.714&cz=0.464&cy=1000&dist=0.035&az=-50&el=28"),
+    ("detail_poiana_brasov_lifts", "s=BV50-E4&cx=0.675&cz=0.78&cy=1250&dist=0.16&az=-35&el=32"),
+    ("detail_brasov_tampa", "s=BV50-E4&cx=0.83&cz=0.33&cy=700&dist=0.09&az=-20&el=38"),
+]
 
 
 def shots(idx: dict) -> None:
@@ -194,6 +244,13 @@ def shots(idx: dict) -> None:
                 fn = DOCS3D / f"{sid}{'_satellite' if tex == 'sat' else ''}.jpg"
                 page.screenshot(path=str(fn), type="jpeg", quality=88)
                 print("  shot", fn.name, flush=True)
+        if not only:
+            for fn, q in DETAILS:
+                page.goto(f"http://127.0.0.1:{port}/viewer.html?{q}&shot=1&tex=topo")
+                page.wait_for_function("window.__ready === true", timeout=180000)
+                page.wait_for_timeout(300)
+                page.screenshot(path=str(DOCS3D / f"{fn}.jpg"), type="jpeg", quality=88)
+                print("  shot", fn, flush=True)
         b.close()
     srv.shutdown()
     # contact sheet in sheet-grid order

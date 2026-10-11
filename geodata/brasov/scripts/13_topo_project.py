@@ -28,7 +28,8 @@ from qgis.core import (
 
 from catalog import RASTERS, VECTORS
 from common import DATA, RASTER, ROOT
-from qgis_helpers import categorized, fill, line, marker, qc, ramp, rules, smooth_raster
+from qgis_helpers import (bridge_casing, categorized, fill, line, marker, qc, ramp, rules,
+                          smooth_raster, tunnel_casing, tunnel_portals)
 
 app = QgsApplication([], False)
 app.initQgis()
@@ -72,8 +73,13 @@ def vec(stem, layer, name=None):
     return lyr
 
 
+# Rasters load without the .qml saved next to them (10_qgis_project.py's styles): QGIS applies
+# that default style automatically, scale limits included, which would leak into this map.
+NO_QML = QgsRasterLayer.LayerOptions(loadDefaultStyle=False)
+
+
 def ras(fname, name=None):
-    lyr = QgsRasterLayer(str(RASTER / fname), name or RTITLES[fname])
+    lyr = QgsRasterLayer(str(RASTER / fname), name or RTITLES[fname], "gdal", NO_QML)
     assert lyr.isValid(), fname
     return lyr
 
@@ -321,19 +327,32 @@ add(g_bnd, ctx)
 
 # ---- transport & lines
 roads = vec("brasov_landuse_infrastructure", "transport_roads", "Roads")
+TUNNEL = "coalesce(\"road_flags\", '') LIKE '%is_tunnel%'"
+BUILDING = "coalesce(\"road_flags\", '') LIKE '%is_under_construction%'"
+OPEN = f"NOT ({TUNNEL}) AND NOT ({BUILDING})"
+MAJOR = "\"class\" IN ('motorway','trunk','primary','secondary','tertiary')"
 rules(roads, [
-    ("Motorway", "\"class\" = 'motorway'", cased("#e4312b", 1.1, "#5c0d0a", 1.7, 9), 0),
-    ("National road (DN, E-route)", "\"class\" = 'trunk'",
+    ("Motorway", f"\"class\" = 'motorway' AND {OPEN}", cased("#e4312b", 1.1, "#5c0d0a", 1.7, 9), 0),
+    ("National road (DN, E-route)", f"\"class\" = 'trunk' AND {OPEN}",
      cased("#e4312b", 0.85, "#2b2b2b", 1.35, 8), 0),
-    ("National road (DN)", "\"class\" = 'primary'", cased("#ef6a2a", 0.75, "#2b2b2b", 1.2, 7), 0),
-    ("County road (DJ)", "\"class\" = 'secondary'", cased("#f8a83c", 0.6, "#2b2b2b", 1.0, 6), 0),
-    ("Communal road", "\"class\" = 'tertiary'", cased("#ffe36b", 0.45, "#3a3a3a", 0.8, 5), 0),
+    ("National road (DN)", f"\"class\" = 'primary' AND {OPEN}",
+     cased("#ef6a2a", 0.75, "#2b2b2b", 1.2, 7), 0),
+    ("County road (DJ)", f"\"class\" = 'secondary' AND {OPEN}",
+     cased("#f8a83c", 0.6, "#2b2b2b", 1.0, 6), 0),
+    ("Communal road", f"\"class\" = 'tertiary' AND {OPEN}",
+     cased("#ffe36b", 0.45, "#3a3a3a", 0.8, 5), 0),
     ("Street / local road", "\"class\" IN ('residential','unclassified','living_street',"
-     "'unknown','pedestrian')", cased("#ffffff", 0.3, "#4a4a4a", 0.6, 4), OV),
-    ("Service road", "\"class\" = 'service'", line("#5a5a5a", 0.18), 60000),
-    ("Track / forest road", "\"class\" = 'track'", dashed("#3a2a1a", 0.25, [2.2, 0.8]), OV),
-    ("Path / footpath", "\"class\" IN ('path','footway','bridleway','steps','cycleway')",
+     f"'unknown','pedestrian') AND {OPEN}", cased("#ffffff", 0.3, "#4a4a4a", 0.6, 4), OV),
+    ("Service road", f"\"class\" = 'service' AND {OPEN}", line("#5a5a5a", 0.18), 60000),
+    ("Track / forest road", f"\"class\" = 'track' AND {OPEN}",
+     dashed("#3a2a1a", 0.25, [2.2, 0.8]), OV),
+    ("Path / footpath", f"\"class\" IN ('path','footway','bridleway','steps','cycleway') AND {OPEN}",
      dashed("#1a1a1a", 0.18, [0.8, 0.7]), OV),
+    ("Road in tunnel", f"{TUNNEL} AND {MAJOR}", tunnel_casing("#2b2b2b", 0.45), 0),
+    ("Minor road / path in tunnel", f"{TUNNEL} AND NOT {MAJOR}", dashed("#2b2b2b", 0.18, [0.9, 0.6]),
+     OV),
+    ("Road under construction", f"{BUILDING} AND NOT ({TUNNEL})",
+     cased("#ffffff", 0.55, "#7a7a7a", 1.05, 3, dash=[1.6, 1.0]), 0),
 ], symbol_levels=True)
 ref_fmt = text_format(5.5, "#000000", bold=True, buffer=0)
 bg = QgsTextBackgroundSettings()
@@ -363,9 +382,33 @@ for color, w, d in (("#000000", 0.75, None), ("#ffffff", 0.4, [2.5, 2.5])):
         sl.setUseCustomDashPattern(True)
         sl.setCustomDashVector(d)
     rail_sym.appendSymbolLayer(sl)
+RF = "coalesce(\"rail_flags\", '')"
+R_TUNNEL = f"{RF} LIKE '%is_tunnel%'"
+R_BUILDING = f"{RF} LIKE '%is_under_construction%'"
+R_DISUSED = f"({RF} LIKE '%is_disused%' OR {RF} LIKE '%is_abandoned%')"
+R_IN_USE = (f"\"class\" NOT IN ('unknown','tram','funicular') AND NOT {R_BUILDING} "
+            f"AND NOT {R_DISUSED}")
 rules(rail, [
-    ("Railway", "\"class\" NOT IN ('abandoned','disused','tram','funicular')", rail_sym, 0),
+    ("Railway", f"{R_IN_USE} AND NOT {R_TUNNEL}", rail_sym, 0),
+    ("Railway in tunnel", f"{R_IN_USE} AND {R_TUNNEL}", dashed("#000000", 0.35, [1.6, 1.0]), 0),
+    ("Railway under construction", f"{R_BUILDING} AND NOT {R_DISUSED}",
+     dashed("#6b6b6b", 0.45, [3.0, 1.5]), 0),
+    ("Disused railway", R_DISUSED, dashed("#7a7a7a", 0.3, [0.6, 0.8]), OV),
     ("Tram / funicular", "\"class\" IN ('tram','funicular')", line("#000000", 0.3), OV),
+])
+
+# bridges (parapet lines either side) and tunnel portals, over the roads and railways
+structures = vec("brasov_topographic", "topo_structures", "Bridges & tunnels")
+MAJOR_ST = "\"mode\" = 'road' AND \"class\" IN ('motorway','trunk','primary')"
+MID_ST = ("(\"mode\" = 'road' AND \"class\" IN ('secondary','tertiary')) OR \"mode\" = 'rail'")
+rules(structures, [
+    ("Bridge, viaduct", f"\"structure\" = 'bridge' AND ({MAJOR_ST})", bridge_casing(0.85), 0),
+    ("Bridge (county / communal road, railway)", f"\"structure\" = 'bridge' AND ({MID_ST})",
+     bridge_casing(0.65), 0),
+    ("Bridge (street, track, footbridge)",
+     f"\"structure\" = 'bridge' AND NOT ({MAJOR_ST}) AND NOT ({MID_ST})", bridge_casing(0.42),
+     OV),
+    ("Tunnel portal", "\"structure\" = 'tunnel' AND \"length_m\" >= 30", tunnel_portals(), 0),
 ])
 lines_inf = vec("brasov_landuse_infrastructure", "infrastructure_lines", "Power lines, lifts, dams")
 rules(lines_inf, [
@@ -377,6 +420,7 @@ rules(lines_inf, [
     ("Dam", "\"class\" = 'dam'", line("#000000", 0.9), 0),
     ("City wall", "\"class\" = 'city_wall'", line("#5a3a1a", 0.6), OV),
 ])
+add(g_tr, structures)
 add(g_tr, rail)
 add(g_tr, roads)
 add(g_tr, lines_inf)
@@ -435,7 +479,7 @@ add(g_rel, ct)
 
 # ---- relief shading (live, from the cubic-interpolated DEM)
 dem_src = str(RASTER / "topo_dem_25m.tif")
-shade = QgsRasterLayer(dem_src, "Relief shading")
+shade = QgsRasterLayer(dem_src, "Relief shading", "gdal", NO_QML)
 hr = QgsHillshadeRenderer(shade.dataProvider(), 1, 315, 45)
 hr.setMultiDirectional(True)
 hr.setZFactor(1.3)
@@ -502,9 +546,10 @@ county_ext = county.extent()
 county_ext.grow(2000)
 project.viewSettings().setDefaultViewExtent(QgsReferencedRectangle(county_ext, project.crs()))
 
-MAP_LAYERS = [sett, pk, spot, mtn, poi, county, uat, ctx, rail, roads, lines_inf, bld, sp, wa, wl,
+MAP_LAYERS = [sett, pk, spot, mtn, poi, county, uat, ctx, structures, rail, roads, lines_inf, bld,
+              sp, wa, wl,
               us, ct, shade, prot, lu, nat, forest]
-LEGEND_LAYERS = [roads, rail, lines_inf, bld, lu, nat, forest, wl, us, wa, sp, ct, pk, spot,
+LEGEND_LAYERS = [roads, rail, structures, lines_inf, bld, lu, nat, forest, wl, us, wa, sp, ct, pk, spot,
                  poi, prot, county, uat]
 
 

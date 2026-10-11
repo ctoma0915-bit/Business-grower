@@ -22,19 +22,27 @@ plus a 1:200,000 county overview) and **3D relief models** of the same 29 sheets
 
 ## Open it
 
-### Option 1: one file, `brasov_county_qgis.gpkg` (467 MB)
+### Option 1: one file, `brasov_county_qgis.gpkg` (~470 MB)
 
-Everything in a single GeoPackage: all 26 vector layers and tables, all 19 rasters, the styles
-and the complete QGIS project with its five A3 layouts and seven map themes. It is too large for GitHub (100 MB per
-file limit), so it is not in this repository. Get it from the chat, or rebuild it with
-`python scripts/11_single_gpkg.py` (about 2 minutes once `data/` exists).
+Everything in a single GeoPackage: all 31 vector layers and tables, all 19 rasters, the styles
+and **both QGIS projects**:
 
-1. Save the file **without renaming it**. The embedded project finds its layers by this file
+* **Brasov County** - the planning base with five A3 layouts and seven map themes;
+* **Topographic map 1-50000** - the topographic map with the A2 atlas of 29 sheets and the A1
+  county overview.
+
+At about 470 MB it is over GitHub's 100 MB limit for ordinary files and is set up for Git LFS
+(`.gitattributes`), but it is not in the repository yet. Build it with
+`python scripts/11_single_gpkg.py` (about 4 minutes once `data/` exists), or use Option 2,
+which has the same content as separate files.
+
+1. Save the file **without renaming it**. The embedded projects find their layers by this file
    name, so `brasov_county_qgis (1).gpkg` breaks the links. If that happens, rename it back,
    or use *Auto-Find* in QGIS's "Handle Unavailable Layers" dialog.
 2. In QGIS (3.34 LTR or newer), open the **Browser** panel, navigate to the file, expand it,
-   and double-click **Brasov County** (the project, listed under the GeoPackage).
-   Or: *Project → Open From → GeoPackage*, pick the file, choose *Brasov County*.
+   and double-click **Brasov County** or **Topographic map 1-50000** (the projects, listed
+   under the GeoPackage). Or: *Project → Open From → GeoPackage*, pick the file, choose a
+   project.
 3. To use single layers in your own project instead, drag the `.gpkg` onto the map. Vector
    layers come in with their styles (stored in the file); rasters arrive unstyled.
 
@@ -78,12 +86,15 @@ after the main locality on each sheet (or the highest peak on mountain sheets).
 | `maps/topo_50k/BV50-<sheet>_<name>.pdf` | one sheet each, **1:50,000 on A2** (map face 400 × 300 mm), 1–8 MB |
 | `maps/brasov_topographic_overview_200k.pdf` | whole county on A1 at 1:200,000, with the sheet index |
 | `brasov_topographic.qgz` | the QGIS project behind them: the map, an **atlas layout** for the 29 sheets and the A1 overview |
-| `data/brasov_topographic.gpkg` | the extra layers it uses: sheet index, DEM streams not in OSM, spot heights, labelled peaks |
+| `data/brasov_topographic.gpkg` | the extra layers it uses: sheet index, DEM streams not in OSM, spot heights, labelled peaks, **bridges and tunnels** (`topo_structures`, 3D lines) |
 
 **On each sheet:** 20 m contours with labelled 100 m index contours; hillshading; forest and
 scrub from the 5 m canopy model; rivers, streams (DEM-derived streams that OSM lacks are
-dashed), lakes, wetlands; roads by class with DN/DJ numbers, railways, power lines; building
-footprints; county, UAT and protected-area boundaries; place names, named peaks and spot heights.
+dashed), lakes, wetlands; roads by class with DN/DJ numbers, railways, power lines; **bridges**
+with parapet lines, **tunnels** as dashed casings with portal marks (only the tunnelled stretch),
+lines under construction and disused railways in their own symbols (proposed lines are not
+drawn); building footprints; county, UAT and protected-area boundaries; place names, named
+peaks and spot heights.
 In the margin: Stereo 70 km grid (2 km) with a zebra frame, latitude/longitude ticks every
 5′, scale bar, legend, locator map, adjoining sheets, sources and projection notes.
 
@@ -114,13 +125,38 @@ scale (no vertical exaggeration), draped with the topographic map at about 5 m p
 side walls and a base like a physical relief model. A whole-county model (200 m mesh) gives the
 overview.
 
+**Infrastructure stands in 3D at its real position and height**, in colours that do not occur on
+the map:
+
+| | What | How it is placed |
+|---|---|---|
+| turquoise | **bridges and viaducts** (1,707), grey piers under high decks | deck runs straight between the two abutments and never dips under the ground; piers go down to the valley floor |
+| magenta | **tunnels** (156), shown through the ground in the viewer, dark portal arches | even grade between the two portals, kept under the hill (e.g. Teliu railway tunnel, 4.4 km, up to ~157 m of rock above it; the Predeal horseshoe tunnels) |
+| violet | **power lines** with towers and cross-arms | towers at the line's pylons (OSM nodes), conductors sag between them |
+| blue | **cable cars, gondolas, chair and drag lifts** (Tâmpa, Poiana Brașov, Predeal …) | supports and stations on the ground, cables between them |
+| grey | **dams** | crest wall along the dam line |
+
+The data has no measured deck or tunnel levels, so heights are modelled from the elevation model
+(see *Method notes*); pointing at a structure in the viewer gives its name, road number, length,
+height above ground or rock cover. Tunnels are only the tunnelled stretch of each road or
+railway: Overture segments are cut where a bridge or tunnel starts and ends.
+
+| | |
+|---|---|
+| ![Predeal: railway tunnels seen through the hill](docs/3d/detail_predeal_tunnels.jpg) | ![Predeal: DN1 viaduct](docs/3d/detail_predeal_dn1_viaduct.jpg) |
+| ![Poiana Brașov: gondola, chair lifts, cable cars](docs/3d/detail_poiana_brasov_lifts.jpg) | ![Brașov: Tâmpa cable car](docs/3d/detail_brasov_tampa.jpg) |
+
 ![3D section BV50-F3 Bran](docs/3d/BV50-F3.jpg)
 
 * **On the web:** [Brașov 3D Relief](https://claude.ai/artifact/N9CdJ5qugVGERLmctNcA2m).
   Pick a sheet on the index, orbit, zoom, switch between topographic and satellite drapes, set
-  the vertical exaggeration; pointing at the terrain gives elevation and Stereo 70 and
-  latitude/longitude coordinates. The page is private until you share it from its Share menu.
-* **Model files:** `maps/3d/sections/BV50-<sheet>.glb` (4–8 MB each) and `BV-overview.glb`.
+  the vertical exaggeration, switch infrastructure layers on and off; pointing at the terrain
+  gives elevation and Stereo 70 and latitude/longitude coordinates, pointing at a structure gives
+  its details. The page is private until you share it from its Share menu.
+* **Model files:** `maps/3d/sections/BV50-<sheet>.glb` (4–9 MB each) and `BV-overview.glb`.
+  Terrain and each infrastructure layer are separate nodes (`infra:bridges`, `infra:tunnels`,
+  `infra:power`, `infra:aerialways`, `infra:dams`), so they can be hidden or restyled in Blender;
+  the nodes' `extras` list the features (name, ref, length, heights).
   glTF 2.0 binary (compact, with `KHR_mesh_quantization`). Opens in Blender (*File → Import →
   glTF 2.0*), online viewers such as the three.js editor or the Babylon.js Sandbox, and game
   engines; for 3D printing, import into Blender and export STL. `BV50-<sheet>_satellite.jpg`
@@ -211,9 +247,22 @@ buildings and their footprint; road length (excluding paths and tracks); stream 
   shallower than 50 cm become D (NRCS NEH 630 ch. 7 convention).
 * **Contours** come from the 25 m DEM after light Gaussian smoothing (σ = 1 cell), simplified
   to 2 m tolerance.
+* **Bridges and tunnels.** Overture marks bridges, tunnels and levels as ranges along each road
+  or rail segment (`between`, a fraction of its length); segments are cut at those ranges, so
+  `road_flags` / `rail_flags` hold for the whole piece, and touching pieces are merged into one
+  structure. Heights are modelled on the whole structure (also beyond the county edge, so a
+  tunnel cut by the boundary keeps its real portals): a **deck** runs straight between the
+  ground at its two abutments and stays at least 1.5 m clear of the ground under it; the
+  **ground under a bridge** is the lowest point across the line within 40 % of its length
+  (12-45 m), because the elevation model records the deck itself. A **tunnel** floor runs on an
+  even grade between the portals and is pushed down to keep 6 m of ground over the tube (`structures.py`).
 
 ## Limitations — read before using for statutory plans
 
+* **Bridge and tunnel heights are modelled, not surveyed** (see *Method notes*): good for
+  seeing what crosses what and roughly how high or deep, not for clearance design. Tall viaducts
+  come out right within a few metres (Sibiu-Făgăraș motorway over the Olt ≈ 20 m, Podu Ilii
+  viaduct ≈ 18 m); short bridges over narrow gaps tend to be underestimated.
 * **The DEM is a surface model (DSM).** Copernicus GLO-30 includes forest canopy and buildings,
   so in forests contours and elevations can sit 10-30 m above the ground. Heights refer to the
   EGM2008 geoid, not the Romanian Black Sea 1975 datum. The two can differ by up to about a

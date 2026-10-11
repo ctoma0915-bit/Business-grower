@@ -24,8 +24,9 @@ from qgis.core import (
 )
 
 from catalog import RASTERS, VECTORS
-from qgis_helpers import (categorized, fill, label_settings, labels, line, marker, paletted, qc,
-                          ramp, road_symbol, rule_labels, rules, smooth_raster, smoothed)
+from qgis_helpers import (bridge_casing, categorized, fill, label_settings, labels, line, marker,
+                          paletted, qc, ramp, road_symbol, rule_labels, rules, smooth_raster,
+                          smoothed, tunnel_casing, tunnel_portals)
 from common import DATA, RASTER, ROOT
 
 app = QgsApplication([], False)
@@ -131,7 +132,8 @@ for lyr, vis in ((county, True), (uat, True), (sett, True), (ctx, True)):
 MINOR = "('residential','unclassified','living_street','unknown')"
 PATHS = "('path','footway','steps','cycleway','bridleway')"
 roads = vec("brasov_landuse_infrastructure", "transport_roads")
-rules(roads, [
+TUNNEL = "coalesce(\"road_flags\", '') LIKE '%is_tunnel%'"
+road_rules = [
     # county / town scale: lines in mm
     ("Motorway", "\"class\" = 'motorway'", line("#e8336b", 1.4), 0, DETAIL),
     ("Trunk / DN (E)", "\"class\" = 'trunk'", line("#f07b3f", 1.1), 0, DETAIL),
@@ -164,6 +166,10 @@ rules(roads, [
      DETAIL),
     ("Footway / path / steps (detail)", "\"class\" IN ('path','footway','steps','bridleway')",
      road_symbol("#e8705f", None, 1.2, 1, dash=True), DETAIL),
+]
+rules(roads, [(r[0], f"({r[1]}) AND NOT ({TUNNEL})", *r[2:]) for r in road_rules] + [
+    ("Road in tunnel", TUNNEL, line("#6e6e6e", 0.3, "dash"), 100000, DETAIL),
+    ("Road in tunnel (detail)", TUNNEL, tunnel_casing("#555555", 5, metres=True), DETAIL),
 ], symbol_levels=True)
 rule_labels(roads, [
     (label_settings("coalesce(\"ref\", \"name\")", size=6.5, line_placement=True), 150000, DETAIL,
@@ -182,8 +188,26 @@ for color, w, dashed in (("#4d4d4d", 0.9, False), ("#ffffff", 0.5, True)):
         sl.setUseCustomDashPattern(True)
         sl.setCustomDashVector([3.0, 3.0])
     rail_detail.appendSymbolLayer(sl)
-rules(rail, [("Railway", "TRUE", line("#262626", 0.6, "dash"), 0, 25000),
-             ("Railway (detail)", "TRUE", rail_detail, 25000)])
+RF = "coalesce(\"rail_flags\", '')"
+BUILT = f"NOT (\"class\" = 'unknown' AND {RF} = '')"          # 'unknown' + no flags = proposed
+R_TUNNEL = f"{RF} LIKE '%is_tunnel%'"
+R_OFF = (f"({RF} LIKE '%is_disused%' OR {RF} LIKE '%is_abandoned%' OR "
+         f"{RF} LIKE '%is_under_construction%')")
+rules(rail, [("Railway", f"{BUILT} AND NOT {R_TUNNEL} AND NOT {R_OFF}",
+              line("#262626", 0.6, "dash"), 0, 25000),
+             ("Railway (detail)", f"{BUILT} AND NOT {R_TUNNEL} AND NOT {R_OFF}", rail_detail,
+              25000),
+             ("Railway in tunnel", f"{BUILT} AND {R_TUNNEL}", line("#6e6e6e", 0.3, "dash"), 0),
+             ("Disused / under construction railway", f"{BUILT} AND {R_OFF} AND NOT {R_TUNNEL}",
+              line("#8c8c8c", 0.3, "dot"), 100000)])
+structures = vec("brasov_topographic", "topo_structures")
+rules(structures, [
+    ("Bridge", "\"structure\" = 'bridge'", bridge_casing(0.55), 100000, DETAIL),
+    ("Bridge (detail)", "\"structure\" = 'bridge'",
+     bridge_casing(0, "\"width_m\" / 2 + 2", line_width=0.35), DETAIL),
+    ("Tunnel portal", "\"structure\" = 'tunnel' AND \"length_m\" >= 30", tunnel_portals(),
+     100000),
+])
 infl = vec("brasov_landuse_infrastructure", "infrastructure_lines")
 rules(infl, [
     ("Power line (HV)", "\"class\" = 'power_line'", line("#7b3294", 0.45, "dash dot"), 0),
@@ -252,6 +276,7 @@ for lab, flt, sym, mins in poi_rules:
     root_rule.appendChild(r)
 poi.setRenderer(QgsRuleBasedRenderer(root_rule))
 labels(poi, "\"name\"", size=6.5, color="#4a4a4a", italic=True, minscale=4000)
+add(g_infra, structures)
 add(g_infra, roads)
 add(g_infra, rail)
 add(g_infra, infl)
@@ -761,9 +786,9 @@ def theme(name, on):
 BASE = {county, uat, sett, ctx}
 esri = web.get("Esri")
 theme("1 Planning base - relief, water, streets", default_on)
-theme("2 Satellite + streets", BASE | {roads, rail, wa, wl, poi, img} | ({esri} if esri else set()))
-theme("3 Water & flood susceptibility", BASE | {wa, wl, st, flood, hs, hs_live, roads})
-theme("4 Slope classes (buildability)", BASE | {roads, wa, wl, ct, slc, hs, hs_live})
+theme("2 Satellite + streets", BASE | {roads, rail, structures, wa, wl, poi, img} | ({esri} if esri else set()))
+theme("3 Water & flood susceptibility", BASE | {wa, wl, st, flood, hs, hs_live, roads, structures})
+theme("4 Slope classes (buildability)", BASE | {roads, structures, wa, wl, ct, slc, hs, hs_live})
 theme("5 Soils", BASE | {wl, soil, hs, hs_live})
 theme("6 Land cover & tree canopy", BASE | {wl, wa, wc, canopy, hs, hs_live})
 theme("7 Landforms", BASE | {wl, gm, hs, hs_live})

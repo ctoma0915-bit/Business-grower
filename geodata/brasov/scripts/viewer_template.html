@@ -74,6 +74,13 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
 .slider input { width: 100%; accent-color: var(--contour); }
 .slider output { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; min-width: 4ch; text-align: right; }
 .hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+.infra { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.infra label { display: grid; grid-template-columns: auto auto 1fr auto; gap: 8px; align-items: center;
+  padding: 5px 2px; cursor: pointer; font-size: 13px; }
+.infra input { margin: 0; accent-color: var(--contour); }
+.infra .sw { width: 18px; height: 6px; border-radius: 3px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 25%, transparent); }
+.infra .n { font: 500 12px var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+.infra li.off .lbl { color: var(--muted); }
 .sources { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin-top: auto; }
 .sources p { margin: 0 0 6px; }
 .stage { position: relative; min-width: 0; min-height: 320px; background: linear-gradient(180deg, var(--sky-top), var(--sky-low) 70%); }
@@ -86,6 +93,8 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
 }
 .readout .k { color: var(--muted); }
 .readout .elev { color: var(--contour); font-weight: 500; }
+.readout .title { grid-column: 1 / -1; font: 600 13px var(--body); margin-bottom: 2px; display: flex; gap: 8px; align-items: center; }
+.readout .title::before { content: ""; width: 14px; height: 6px; border-radius: 3px; background: var(--sw); flex: none; }
 .compass {
   position: absolute; right: 14px; top: 14px; width: 46px; height: 46px; border-radius: 50%;
   background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--rule);
@@ -148,6 +157,12 @@ body.shot .app { grid-template-columns: 1fr; }
         <button id="t-topo" type="button" aria-pressed="true">Topographic map</button>
         <button id="t-sat" type="button" aria-pressed="false">Satellite</button>
       </div>
+    </section>
+
+    <section id="infra-box" hidden>
+      <p class="label">Infrastructure</p>
+      <ul class="infra" id="infra-list"></ul>
+      <p class="hint">Tunnels show through the ground. Point at a bridge, tunnel or line for its details.</p>
     </section>
 
     <section>
@@ -237,6 +252,8 @@ new ResizeObserver(resize).observe(stage);
 
 // ---------------------------------------------------------------- state
 let index = null, entry = null, root = null, node = null, terrain = [], topoTex = null;
+let infraNodes = [];
+const infraOn = new Map();          // layer -> visible, kept across sections
 let tex = params.get('tex') === 'sat' ? 'sat' : 'topo', exag = Number(params.get('exag') || 1);
 const satCache = new Map();
 const loader = new GLTFLoader();
@@ -260,6 +277,11 @@ function setLoading(on, msg, frac) {
 function fitCamera(azDeg = Number(params.get('az') ?? 0), elDeg = Number(params.get('el') ?? 32)) {
   const box = new THREE.Box3().setFromObject(root);
   const c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3());
+  if (params.has('cx') && params.has('cz')) {     // shots: aim at a point (fractions of the block)
+    c.x = box.min.x + s.x * Number(params.get('cx'));
+    c.z = box.min.z + s.z * Number(params.get('cz'));
+    if (params.has('cy')) c.y = Number(params.get('cy')) * exag;      // elevation of the aim point (m)
+  }
   const narrow = Math.max(1, 1.5 / camera.aspect);   // portrait stages need more distance
   const d = Math.max(s.x, s.z) * (SHOT ? 0.92 : 1.0) * narrow * Number(params.get('dist') || 1);
   const az = THREE.MathUtils.degToRad(azDeg), el = THREE.MathUtils.degToRad(elDeg);
@@ -272,8 +294,11 @@ function fitCamera(azDeg = Number(params.get('az') ?? 0), elDeg = Number(params.
 
 function applyExag() {
   if (!node) return;
-  node.scale.y = node.userData.baseY * exag;
-  node.updateMatrixWorld(true);
+  for (const n of root.children) {
+    n.userData.baseY = n.userData.baseY ?? n.scale.y;
+    n.scale.y = n.userData.baseY * exag;
+    n.updateMatrixWorld(true);
+  }
   $('exag-out').textContent = `${exag.toFixed(exag % 1 ? 2 : 1).replace(/(\.\d)0$/, '$1')}×`;
   requestRender();
 }
@@ -321,7 +346,8 @@ function show(e, group) {
   node = root.children[0];
   node.userData.baseY = node.userData.baseY ?? node.scale.y;
   terrain = [];
-  root.traverse((o) => { if (o.isMesh && o.material.map) { terrain.push(o); topoTex = o.material.map; o.material.roughness = 1; } });
+  node.traverse((o) => { if (o.isMesh && o.material.map) { terrain.push(o); topoTex = o.material.map; o.material.roughness = 1; } });
+  setupInfra();
   topoTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   scene.add(root);
   applyExag();
@@ -329,6 +355,93 @@ function show(e, group) {
   applyTexture();
   setLoading(false);
   requestAnimationFrame(() => requestAnimationFrame(() => { window.__ready = true; }));
+}
+
+// ---------------------------------------------------------------- infrastructure
+// Bridges, tunnels, power lines, lifts and dams are extra nodes next to the terrain, tagged with
+// extras.layer; every vertex carries _feature_id into extras.features.
+const dotTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 32;
+  const g = c.getContext('2d');
+  g.beginPath(); g.arc(16, 16, 12, 0, Math.PI * 2);
+  g.fillStyle = '#ffffff'; g.fill(); g.lineWidth = 4; g.strokeStyle = '#1b1b1b'; g.stroke();
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+})();
+
+function styleInfra(o) {
+  const m = o.material, name = (m && m.name) || '';
+  if (o.isPoints) {
+    o.material = new THREE.PointsMaterial({ color: m.color, map: dotTex, size: 11, sizeAttenuation: false,
+      transparent: true, alphaTest: 0.4, depthTest: name !== 'tunnel_marker' });
+    o.material.name = name; o.renderOrder = 12;
+    m.dispose();
+  } else if (o.isMesh) {
+    m.roughness = 0.8; m.metalness = 0;
+    if (name === 'tunnel_tube') {          // x-ray: seen through the terrain
+      m.transparent = true; m.opacity = 0.55; m.depthTest = false; m.depthWrite = false; o.renderOrder = 10;
+    }
+  } else if (o.isLine && name === 'tunnel_line') {
+    m.depthTest = false; o.renderOrder = 11;
+  }
+}
+
+function setupInfra() {
+  infraNodes = root.children.filter((n) => n.userData && n.userData.layer);
+  const list = $('infra-list');
+  list.textContent = '';
+  $('infra-box').hidden = !infraNodes.length;
+  for (const n of infraNodes) {
+    n.traverse(styleInfra);
+    const u = n.userData, on = infraOn.get(u.layer) ?? true;
+    n.visible = on;
+    const li = document.createElement('li');
+    const lab = document.createElement('label');
+    const cb = Object.assign(document.createElement('input'), { type: 'checkbox', checked: on });
+    const sw = Object.assign(document.createElement('span'), { className: 'sw' });
+    sw.style.background = u.swatch;
+    const tx = Object.assign(document.createElement('span'), { className: 'lbl', textContent: u.label });
+    const ct = Object.assign(document.createElement('span'), { className: 'n', textContent: u.count });
+    lab.append(cb, sw, tx, ct);
+    li.append(lab);
+    li.classList.toggle('off', !on);
+    cb.addEventListener('change', () => {
+      n.visible = cb.checked; infraOn.set(u.layer, cb.checked); li.classList.toggle('off', !cb.checked);
+      requestRender();
+    });
+    list.append(li);
+  }
+}
+
+function b64(s, Type) {
+  const bin = atob(s), u8 = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  return new Type(u8.buffer);
+}
+
+// web build: the same infrastructure meshes, shipped as JSON (web hosts may not serve .glb)
+function infraFromJson(data) {
+  return data.layers.map((L) => {
+    const g = new THREE.Group();
+    g.userData = { layer: L.layer, label: L.label, swatch: L.swatch, count: L.count, features: L.features };
+    for (const p of L.prims) {
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(b64(p.pos, Float32Array), 3));
+      if (p.nrm) geo.setAttribute('normal', new THREE.BufferAttribute(b64(p.nrm, Float32Array), 3));
+      geo.setAttribute('_feature_id', new THREE.BufferAttribute(b64(p.fid, Float32Array), 1));
+      if (p.idx) geo.setIndex(new THREE.BufferAttribute(b64(p.idx, Uint32Array), 1));
+      const col = new THREE.Color(p.color);
+      let obj;
+      if (p.mode === 4) {
+        obj = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: col, emissive: col.clone().multiplyScalar(p.emissive),
+          side: p.double ? THREE.DoubleSide : THREE.FrontSide }));
+      } else if (p.mode === 1) obj = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: col }));
+      else obj = new THREE.Points(geo, new THREE.PointsMaterial({ color: col }));
+      obj.material.name = p.material;
+      g.add(obj);
+    }
+    return g;
+  });
 }
 
 function failed(err) {
@@ -357,7 +470,8 @@ async function buildFromHeight(e) {
   let got = 0;
   const total = e.web_bytes || 1;
   const tick = (n) => { got += n; if (entry === e) setLoading(true, null, Math.min(got / total, 1)); };
-  const [hBlob, tBlob] = await Promise.all([fetchBlob(e.height, tick), fetchBlob(e.topo, tick)]);
+  const [hBlob, tBlob, iBlob] = await Promise.all([fetchBlob(e.height, tick), fetchBlob(e.topo, tick),
+    e.infra_json ? fetchBlob(e.infra_json, tick) : null]);
   const opts = { colorSpaceConversion: 'none', premultiplyAlpha: 'none' };
   const [hBmp, tBmp] = await Promise.all([createImageBitmap(hBlob, opts), createImageBitmap(tBlob)]);
   const [nx, ny] = [hBmp.width, hBmp.height], step = e.mesh_step_m;
@@ -419,6 +533,7 @@ async function buildFromHeight(e) {
   n.add(terrainMesh, walls);
   const group = new THREE.Group();
   group.add(n);
+  if (iBlob) for (const g of infraFromJson(JSON.parse(await iBlob.text()))) group.add(g);
   return group;
 }
 
@@ -487,22 +602,71 @@ renderer.domElement.addEventListener('pointerleave', (ev) => {
   if (ev.pointerType === 'mouse') $('readout').innerHTML = '<span class="k">Point at or tap the terrain</span><span></span>';
 });
 
+function kv(k, v, cls) {
+  const a = Object.assign(document.createElement('span'), { className: 'k', textContent: k });
+  const b = Object.assign(document.createElement('span'), { textContent: v });
+  if (cls) b.className = cls;
+  return [a, b];
+}
+
+function coordRows(E, N) {
+  const rows = [...kv('E (Stereo 70)', `${fmt(E)} m`), ...kv('N (Stereo 70)', `${fmt(N)} m`)];
+  if (window.proj4) {
+    const [lon, lat] = proj4('EPSG:3844', 'EPSG:4326', [E, N]);
+    rows.push(...kv('Lat / Lon', `${lat.toFixed(5)}° N  ${lon.toFixed(5)}° E`));
+  }
+  return rows;
+}
+
+const ROAD_KIND = { motorway: 'motorway', trunk: 'national road (E-route)', primary: 'national road (DN)',
+  secondary: 'county road (DJ)', tertiary: 'communal road', residential: 'street', unclassified: 'local road',
+  living_street: 'street', service: 'service road', track: 'track / forest road', footway: 'footpath',
+  path: 'path', steps: 'steps', cycleway: 'cycle path', pedestrian: 'pedestrian street', bridleway: 'bridleway' };
+
+function infraReadout(hit) {
+  let n = hit.object;
+  while (n && !(n.userData && n.userData.layer)) n = n.parent;
+  const attr = hit.object.geometry.getAttribute('_feature_id');
+  if (!n || !attr) return false;
+  const f = n.userData.features[Math.round(attr.getX(hit.face ? hit.face.a : hit.index))] || {};
+  const p = n.worldToLocal(hit.point.clone());
+  const E = entry.bounds[0] + p.x, N = entry.bounds[3] - p.z;
+  const title = Object.assign(document.createElement('span'), { className: 'title' });
+  title.style.setProperty('--sw', n.userData.swatch);
+  title.textContent = [f.kind, f.ref && f.ref.replace(/;/g, ' / '), f.name].filter(Boolean).join(' · ');
+  const rows = [title];
+  if (f.mode) rows.push(...kv('Carries', f.mode === 'rail' ? 'railway' : (ROAD_KIND[f.class] || 'road')));
+  if (f.status && f.status !== 'in use') rows.push(...kv('Status', f.status));
+  if (f.length_m) rows.push(...kv('Length', `${fmt(f.length_m)} m`));
+  if (f.clearance_m) rows.push(...kv('Max. height above ground', `≈ ${fmt(f.clearance_m)} m`));
+  if (f.cover_m) rows.push(...kv('Max. ground above tunnel', `≈ ${fmt(f.cover_m)} m`));
+  if (f.tower_height_m) rows.push(...kv('Tower height', `≈ ${fmt(f.tower_height_m)} m`));
+  rows.push(...kv(f.kind === 'Tunnel' ? 'Tunnel level here' : 'Height here', `${fmt(p.y)} m`, 'elev'));
+  rows.push(...coordRows(E, N));
+  $('readout').replaceChildren(...rows);
+  return true;
+}
+
 function readout() {
   hoverPending = false;
   if (!terrain.length) return;
   ray.setFromCamera(ndc, camera);
   const hit = ray.intersectObjects(terrain, false)[0];
+  const pick = [];
+  for (const n of infraNodes) if (n.visible) n.traverse((o) => { if (o.isMesh || o.isLine || o.isPoints) pick.push(o); });
+  if (pick.length) {
+    const d = camera.position.distanceTo(controls.target);
+    ray.params.Line.threshold = d * 0.004;
+    ray.params.Points.threshold = d * 0.006;
+    const ih = ray.intersectObjects(pick, false)[0];
+    const xray = ih && /^tunnel/.test(ih.object.material.name);
+    if (ih && (xray || !hit || ih.distance <= hit.distance + d * 0.002) && infraReadout(ih)) return;
+  }
   if (!hit) return;
   const p = node.worldToLocal(hit.point.clone());
   const xy = node.scale.x;
   const E = entry.bounds[0] + p.x * xy, N = entry.bounds[3] - p.z * xy, Z = p.y * node.userData.baseY;
-  let ll = '';
-  if (window.proj4) {
-    const [lon, lat] = proj4('EPSG:3844', 'EPSG:4326', [E, N]);
-    ll = `<span class="k">Lat / Lon</span><span>${lat.toFixed(5)}° N  ${lon.toFixed(5)}° E</span>`;
-  }
-  $('readout').innerHTML = `<span class="k">Elevation</span><span class="elev">${fmt(Z)} m</span>`
-    + `<span class="k">E (Stereo 70)</span><span>${fmt(E)} m</span><span class="k">N (Stereo 70)</span><span>${fmt(N)} m</span>${ll}`;
+  $('readout').replaceChildren(...kv('Elevation', `${fmt(Z)} m`, 'elev'), ...coordRows(E, N));
 }
 
 // ---------------------------------------------------------------- controls

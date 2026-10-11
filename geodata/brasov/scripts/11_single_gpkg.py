@@ -1,10 +1,13 @@
-"""One-file QGIS package: every vector layer, every raster, the default styles and the styled
-QGIS project (with the A3 layouts), all inside a single GeoPackage.
+"""One-file QGIS package: every vector layer, every raster, the default styles and both styled
+QGIS projects with their print layouts, all inside a single GeoPackage.
 
     brasov_county_qgis.gpkg
-      ├─ 26 vector layers / tables  (same as the thematic GeoPackages, styles in layer_styles)
-      ├─ 18 raster tables           (tiled, with overviews)
-      └─ QGIS project "Brasov County"  (open it from the Browser panel, or drag the file in)
+      ├─ 31 vector layers / tables  (same as the thematic GeoPackages, styles in layer_styles)
+      ├─ 19 raster tables           (tiled, with overviews)
+      ├─ QGIS project "Brasov County"            planning base, 5 A3 layouts, 7 map themes
+      └─ QGIS project "Topographic map 1-50000"  topographic map, A2 atlas of 29 sheets,
+                                                 A1 county overview
+    Open a project from the Browser panel (expand the file), or Project → Open From → GeoPackage.
 
 Raster encoding (GeoPackage tiles):
   * categorical / integer rasters -> 16-bit PNG "gridded coverage", lossless
@@ -13,9 +16,14 @@ Raster encoding (GeoPackage tiles):
   * upstream area                 -> Float32 TIFF tiles, lossless (values span 7 orders)
   * Sentinel-2 imagery            -> RGBA, JPEG for full tiles / PNG for edge tiles
 """
+import io
+import json
+import re
 import sqlite3
 import subprocess
 import sys
+import zipfile
+from datetime import datetime
 
 from catalog import RASTERS, VECTORS
 from common import DATA, RASTER, ROOT, run
@@ -46,6 +54,29 @@ def descriptions() -> dict:
                     "SELECT table_name, identifier, description FROM gpkg_contents"):
                 out[name] = (stem, ident, desc)
     return out
+
+
+def embed_project(qgz, name: str) -> None:
+    """Store a finished .qgz in OUT, its layers repointed at OUT's tables. Building the
+    topographic project against the 470 MB GeoPackage directly makes some layer queries
+    (extents) fail with "unable to open database file", which empties the layout extents."""
+    zin = zipfile.ZipFile(qgz)
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zout:
+        for member in zin.namelist():
+            data = zin.read(member)
+            if member.endswith(".qgs"):
+                qgs = data.decode()
+                qgs = re.sub(r"\./data/raster/([\w.-]+)\.tif", rf"GPKG:./{OUT.name}:\1", qgs)
+                qgs = re.sub(r"\./data/[\w.-]+\.gpkg\|", f"./{OUT.name}|", qgs)
+                assert "./data/" not in qgs, "unmapped data source"
+                data = qgs.encode()
+            zout.writestr(member, data)
+    meta = json.dumps({"last_modified_time": datetime.now().isoformat(timespec="seconds"),
+                       "last_modified_user": "brasov pipeline"})
+    with sqlite3.connect(OUT) as con:
+        con.execute("INSERT OR REPLACE INTO qgis_projects(name, metadata, content) VALUES (?,?,?)",
+                    (name, meta, buf.getvalue().hex()))
 
 
 def main() -> None:
@@ -82,8 +113,9 @@ def main() -> None:
         run(["gdaladdo", "-q", "-r", resampling, f"GPKG:{OUT}:{table}",
              2, 4, 8, 16, 32, 64])
 
-    # ---- styled QGIS project, embedded in the GeoPackage ------------------------------
+    # ---- styled QGIS projects, embedded in the GeoPackage ------------------------------
     subprocess.run([sys.executable, "10_qgis_project.py", "--single", str(OUT)], check=True)
+    embed_project(ROOT / "brasov_topographic.qgz", "Topographic map 1-50000")
     run(["ogrinfo", "-q", "-sql", "VACUUM", OUT])
     print(f"{OUT.name}: {OUT.stat().st_size / 1e6:.1f} MB")
 

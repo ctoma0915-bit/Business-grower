@@ -4,7 +4,8 @@ Reads GeoParquet straight from the public S3 bucket with bbox predicate push-dow
 row groups covering Brașov are downloaded.
 
 Layers written to brasov_county.gpkg:
-  transport_roads, transport_rail, buildings, water_lines, water_areas, water_points,
+  transport_roads, transport_rail (cut where bridges / tunnels start and end),
+  transport_structure_pieces (bridge / tunnel pieces before clipping, for 3D profiles), buildings, water_lines, water_areas, water_points,
   landuse, protected_areas, land_natural_areas, land_natural_lines, topo_peaks, infrastructure_points,
   infrastructure_lines, infrastructure_areas, settlements, places_poi
 """
@@ -20,6 +21,7 @@ import pyarrow.compute as pc
 import pyarrow.dataset as ds
 import pyarrow.fs as pafs
 import shapely
+import shapely.ops
 
 from common import COUNTY_BBOX_WGS84, CRS, WORK, aoi_path, stage_gpkg
 
@@ -116,6 +118,43 @@ def write(gdf: gpd.GeoDataFrame, layer: str, kind: str | None = None) -> None:
 
 
 NAME = {"name": pc.field("names", "primary")}
+RANGED = ("road_flags", "rail_flags", "level_rules")
+
+
+def _covers(rule, t: float) -> bool:
+    b = rule.get("between")
+    return b is None or (b[0] <= t <= b[1])
+
+
+def split_at_rules(seg: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """Cut segments where a flag or level applies to only part of them ('between' = fractions
+    of the segment length), so that a bridge or tunnel covers exactly its own piece. Each piece
+    keeps the rules that hold at its midpoint, without the range."""
+    rows, geoms = [], []
+    for row, geom in zip(seg.drop(columns="geometry").to_dict("records"), seg.geometry):
+        cuts = {0.0, 1.0}
+        for col in RANGED:
+            for rule in row[col] if row[col] is not None else []:
+                if rule.get("between") is not None:
+                    cuts.update(float(np.clip(v, 0, 1)) for v in rule["between"])
+        cuts = sorted(cuts)
+        if len(cuts) == 2:
+            rows.append(row)
+            geoms.append(geom)
+            continue
+        for a, b in zip(cuts[:-1], cuts[1:]):
+            if b - a < 1e-6:
+                continue
+            piece = dict(row)
+            mid = (a + b) / 2
+            for col in RANGED:
+                if row[col] is not None:
+                    kept = [{**r, "between": None} for r in row[col] if _covers(r, mid)]
+                    piece[col] = kept or None
+            rows.append(piece)
+            geoms.append(shapely.ops.substring(geom, a, b, normalized=True))
+    out = gpd.GeoDataFrame(rows, geometry=geoms, crs=seg.crs)
+    return out[out.geom_type.isin(["LineString", "MultiLineString"]) & (out.length > 0)]
 
 
 def roads_and_rail():
@@ -126,7 +165,7 @@ def roads_and_rail():
         "level_rules": pc.field("level_rules"), "rail_flags": pc.field("rail_flags"),
         "road_flags": pc.field("road_flags"), "width_rules": pc.field("width_rules"),
     })
-    seg = clip(seg)
+    seg = split_at_rules(seg)
 
     def route_refs(r):
         if r is None or len(r) == 0:
@@ -157,6 +196,11 @@ def roads_and_rail():
         "road_flags": seg["road_flags"].map(flags), "rail_flags": seg["rail_flags"].map(flags),
     })
     out = gpd.GeoDataFrame(out, geometry=seg.geometry.values, crs=CRS)
+    # bridge / tunnel pieces before clipping: 3D profiles need both real ends (a tunnel cut at
+    # the county edge would otherwise get a "portal" inside the mountain)
+    fl = out["road_flags"].fillna("") + out["rail_flags"].fillna("")
+    write(out[fl.str.contains("is_bridge|is_tunnel")], "transport_structure_pieces", "line")
+    out = clip(out)
     out["length_m"] = out.length.round(1)
     write(out[out.subtype == "road"].drop(columns=["subtype", "rail_flags"]), "transport_roads", "line")
     write(out[out.subtype == "rail"].drop(columns=["subtype", "road_flags", "surface",

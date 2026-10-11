@@ -16,7 +16,14 @@
   "base_m": 170.0,
   "elev_min_m": 320.5,
   "elev_max_m": 2484.4,
-  "glb_mb": 12.57,
+  "glb_mb": 14.59,
+  "infra": {
+   "bridges": 499,
+   "tunnels": 48,
+   "power": 99,
+   "aerialways": 22,
+   "dams": 6
+  },
   "satellite": "sections/BV-overview_satellite.jpg"
  },
  "sections": [
@@ -34,7 +41,11 @@
    "base_m": 230.0,
    "elev_min_m": 384.2,
    "elev_max_m": 827.9,
-   "glb_mb": 4.84,
+   "glb_mb": 4.93,
+   "infra": {
+    "bridges": 22,
+    "power": 1
+   },
    "satellite": "sections/BV50-A2_satellite.jpg"
   },
   {
@@ -51,7 +62,12 @@
    "base_m": 300.0,
    "elev_min_m": 459.3,
    "elev_max_m": 823.8,
-   "glb_mb": 5.21,
+   "glb_mb": 5.59,
+   "infra": {
+    "bridges": 30,
+    "tunnels": 7,
+    "power": 14
+   },
    "satellite": "sections/BV50-A3_satellite.jpg"
   },
   {
@@ -68,7 +84,10 @@
    "base_m": 320.0,
    "elev_min_m": 473.2,
    "elev_max_m": 1008.4,
-   "glb_mb": 4.4,
+   "glb_mb": 4.41,
+   "infra": {
+    "bridges": 2
+   },
    "satellite": "sections/BV50-A4_satellite.jpg"
   },
   {
@@ -85,7 +104,8 @@
    "base_m": 290.0,
    "elev_min_m": 441.9,
    "elev_max_m": 700.7,
-   "glb_mb": 4.32,
+   "glb_mb": 4.33,
+   "infra": {},
    "satellite": "sections/BV50-B1_satellite.jpg"
   },
   {
@@ -102,7 +122,11 @@
    "base_m": 320.0,
    "elev_min_m": 474.1,
    "elev_max_m": 773.7,
-   "glb_mb": 5.69,
+   "glb_mb": 5.79,
+   "infra": {
+    "bridges": 18,
+    "power": 1
+   },
    "satellite": "sections/BV50-B2_satellite.jpg"
   },
   {
@@ -119,7 +143,12 @@
    "base_m": 290.0,
    "elev_min_m": 441.7,
    "elev_max_m": 753.7,
-   "glb_mb": 5.94,
+   "glb_mb": 7.71,
+   "infra": {
+    "bridges": 74,
+    "tunnels": 4,
+    "power": 22
+   },
    "satellite": "sections/BV50-B3_satellite.jpg"
   },
   {
@@ -136,7 +165,12 @@
    "base_m": 250.0,
    "elev_min_m": 400.2,
    "elev_max_m": 984.1,
-   "glb_mb": 5.6,
+   "glb_mb": 7.63,
+   "infra": {
+    "bridges": 51,
+    "tunnels": 3,
+    "power": 4
+   },
    "satellite": "sections/BV50-B4_satellite.jpg"
   },
   {
@@ -153,7 +187,12 @@
    "base_m": 250.0,
    "elev_min_m": 405.2,
    "elev_max_m": 701.8,
-   "glb_mb": 5.24,
+   "glb_mb": 5.38,
+   "infra": {
+    "bridges": 30,
+    "power": 2,
+    "dams": 1
+   },
    "satellite": "sections/BV50-C1_satellite.jpg"
   },
   {
@@ -170,7 +209,11 @@
    "base_m": 260.0,
    "elev_min_m": 415.3,
    "elev_max_m": 693.3,
-   "glb_mb": 6.02,
+   "glb_mb": 6.44,
+   "infra": {
+    "bridges": 77,
+    "power": 12
+   },
    "satellite": "sections/BV50-C2_satellite.jpg"
   },
   {
@@ -187,7 +230,11 @@
    "base_m": 280.0,
    "elev_min_m": 430.7,
    "elev_max_m": 1006.5,
-   "glb_mb": 6.05,
+   "glb_mb": 6.28,
+   "infra": {
+    "bridges": 61,
+    "power": 10
+   },
    "satellite": "sections/BV50-C3_satellite.jpg"
   },
   {
@@ -204,7 +251,12 @@
    "base_m": 320.0,
    "elev_min_m": 470.7,
    "elev_max_m": 1100.7,
-   "glb_mb": 6.0,
+   "glb_mb": 6.31,
+   "infra": {
+    "bridges": 71,
+    "power": 3,
+    "dams": 1
+   },
    "satellite": "sections/BV50-C4_satellite.jpg"
   },
   {
@@ -221,7 +273,11 @@
    "base_m": 240.0,
    "elev_min_m": 399.4,
    "elev_max_m": 973.1,
-   "glb_mb": 5.51,
+   "glb_mb": 6.78,
+   "infra": {
+    "bridges": 131,
+    "power": 10
+   },
    "satellite": "sections/BV50-D1_satellite.jpg"
   },
   {
@@ -238,7 +294,12 @@
    "base_m": 270.0,
    "elev_min_m": 425.9,
    "elev_max_m": 1019.7,
-   "glb_mb": 5.41,
+   "glb_mb": 5.86,
+   "infra": {
+    "bridges": 103,
+    "tunnels": 1,
+    "power": 10
+   },
    "satellite": "sections/BV50-D2_satellite.jpg"
   },
   {
@@ -255,7 +316,12 @@
    "base_m": 290.0,
    "elev_min_m": 444.9,
    "elev_max_m": 1017.2,
-   "glb_mb": 6.38,
+   "glb_mb": 6.8,
+   "infra": {
+    "bridges": 79,
+    "tunnels": 3,
+    "power": 9
+   },
    "satellite": "sections/BV50-D3_satellite.jpg"
   },
   {
@@ -272,7 +338,11 @@
    "base_m": 330.0,
    "elev_min_m": 485.0,
    "elev_max_m": 1298.7,
-   "glb_mb": 5.84,
+   "glb_mb": 6.51,
+   "infra": {
+    "bridges": 114,
+    "power": 30
+   },
    "satellite": "sections/BV50-D4_satellite.jpg"
   },
   {
@@ -289,7 +359,12 @@
    "base_m": 330.0,
    "elev_min_m": 487.5,
    "elev_max_m": 1007.0,
-   "glb_mb": 5.25,
+   "glb_mb": 5.78,
+   "infra": {
+    "bridges": 76,
+    "tunnels": 1,
+    "power": 26
+   },
    "satellite": "sections/BV50-D5_satellite.jpg"
   },
   {
@@ -307,6 +382,9 @@
    "elev_min_m": 515.9,
    "elev_max_m": 1226.8,
    "glb_mb": 4.27,
+   "infra": {
+    "bridges": 6
+   },
    "satellite": "sections/BV50-D6_satellite.jpg"
   },
   {
@@ -323,7 +401,10 @@
    "base_m": 480.0,
    "elev_min_m": 631.8,
    "elev_max_m": 2515.2,
-   "glb_mb": 6.3,
+   "glb_mb": 6.01,
+   "infra": {
+    "bridges": 16
+   },
    "satellite": "sections/BV50-E1_satellite.jpg"
   },
   {
@@ -340,7 +421,11 @@
    "base_m": 510.0,
    "elev_min_m": 661.2,
    "elev_max_m": 2300.0,
-   "glb_mb": 6.89,
+   "glb_mb": 6.54,
+   "infra": {
+    "bridges": 23,
+    "tunnels": 1
+   },
    "satellite": "sections/BV50-E2_satellite.jpg"
   },
   {
@@ -357,7 +442,11 @@
    "base_m": 390.0,
    "elev_min_m": 544.0,
    "elev_max_m": 2042.0,
-   "glb_mb": 7.48,
+   "glb_mb": 7.39,
+   "infra": {
+    "bridges": 96,
+    "power": 6
+   },
    "satellite": "sections/BV50-E3_satellite.jpg"
   },
   {
@@ -374,7 +463,13 @@
    "base_m": 370.0,
    "elev_min_m": 528.3,
    "elev_max_m": 1832.6,
-   "glb_mb": 7.17,
+   "glb_mb": 8.78,
+   "infra": {
+    "bridges": 187,
+    "tunnels": 29,
+    "power": 63,
+    "aerialways": 14
+   },
    "satellite": "sections/BV50-E4_satellite.jpg"
   },
   {
@@ -391,7 +486,14 @@
    "base_m": 390.0,
    "elev_min_m": 544.9,
    "elev_max_m": 1834.1,
-   "glb_mb": 6.87,
+   "glb_mb": 7.62,
+   "infra": {
+    "bridges": 83,
+    "tunnels": 3,
+    "power": 43,
+    "aerialways": 2,
+    "dams": 2
+   },
    "satellite": "sections/BV50-E5_satellite.jpg"
   },
   {
@@ -408,7 +510,12 @@
    "base_m": 470.0,
    "elev_min_m": 624.2,
    "elev_max_m": 1526.3,
-   "glb_mb": 5.94,
+   "glb_mb": 6.39,
+   "infra": {
+    "bridges": 36,
+    "tunnels": 1,
+    "power": 1
+   },
    "satellite": "sections/BV50-E6_satellite.jpg"
   },
   {
@@ -425,7 +532,13 @@
    "base_m": 540.0,
    "elev_min_m": 693.1,
    "elev_max_m": 2224.9,
-   "glb_mb": 6.85,
+   "glb_mb": 7.08,
+   "infra": {
+    "bridges": 192,
+    "power": 19,
+    "aerialways": 4,
+    "dams": 2
+   },
    "satellite": "sections/BV50-F3_satellite.jpg"
   },
   {
@@ -442,7 +555,13 @@
    "base_m": 530.0,
    "elev_min_m": 687.2,
    "elev_max_m": 2503.7,
-   "glb_mb": 6.84,
+   "glb_mb": 7.18,
+   "infra": {
+    "bridges": 105,
+    "tunnels": 6,
+    "power": 4,
+    "aerialways": 4
+   },
    "satellite": "sections/BV50-F4_satellite.jpg"
   },
   {
@@ -459,7 +578,11 @@
    "base_m": 650.0,
    "elev_min_m": 807.0,
    "elev_max_m": 1914.2,
-   "glb_mb": 6.28,
+   "glb_mb": 6.22,
+   "infra": {
+    "bridges": 20,
+    "power": 1
+   },
    "satellite": "sections/BV50-F5_satellite.jpg"
   },
   {
@@ -476,7 +599,10 @@
    "base_m": 570.0,
    "elev_min_m": 723.3,
    "elev_max_m": 1941.3,
-   "glb_mb": 5.43,
+   "glb_mb": 5.37,
+   "infra": {
+    "bridges": 6
+   },
    "satellite": "sections/BV50-F6_satellite.jpg"
   },
   {
@@ -493,7 +619,10 @@
    "base_m": 430.0,
    "elev_min_m": 583.9,
    "elev_max_m": 2128.1,
-   "glb_mb": 4.77,
+   "glb_mb": 4.74,
+   "infra": {
+    "bridges": 4
+   },
    "satellite": "sections/BV50-G3_satellite.jpg"
   },
   {
@@ -510,7 +639,8 @@
    "base_m": 460.0,
    "elev_min_m": 616.9,
    "elev_max_m": 2338.6,
-   "glb_mb": 4.54,
+   "glb_mb": 4.52,
+   "infra": {},
    "satellite": "sections/BV50-G4_satellite.jpg"
   }
  ],

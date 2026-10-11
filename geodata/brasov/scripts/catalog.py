@@ -79,9 +79,11 @@ VECTORS = [
      "complete Natura 2000 / ANANP inventory.", "ov"),
     ("brasov_landuse_infrastructure", "transport_roads", "overture", "Roads",
      "Road segments with class, name, national/European route refs (DN/DJ/E), surface, "
-     "speed limit, level (bridges/tunnels).", "ov"),
-    ("brasov_landuse_infrastructure", "transport_rail", "overture", "Railways", "Rail segments.",
-     "ov"),
+     "speed limit, level. Segments are cut where a bridge or tunnel starts and ends, so "
+     "road_flags (is_bridge, is_tunnel, ...) hold for the whole piece.", "ov"),
+    ("brasov_landuse_infrastructure", "transport_rail", "overture", "Railways",
+     "Rail segments, cut at bridges and tunnels like the roads (rail_flags per piece). "
+     "class 'unknown' without status flags = proposed line, not built.", "ov"),
     ("brasov_landuse_infrastructure", "infrastructure_lines", "overture",
      "Linear infrastructure", "Power lines, bridges, dams, pipelines, aerialways, fences.", "ov"),
     ("brasov_landuse_infrastructure", "infrastructure_points", "overture",
@@ -103,6 +105,11 @@ VECTORS = [
     ("brasov_topographic", "topo_peaks_labelled", "topo", "Named peaks with elevation",
      "OSM peaks/saddles with elev_label = OSM elevation, or the DEM value where OSM has none "
      "(elev_source).", "ov"),
+    ("brasov_topographic", "topo_structures", "topo", "Bridges and tunnels (3D)",
+     "Road and rail bridges and tunnels, one feature per structure (joined pieces merged), as "
+     "3D lines: Z = deck top (bridges) or tunnel floor, modelled from the DEM between the "
+     "abutments / portals (OSM has no levels). With status (in use / under construction / "
+     "disused), length, end heights, clearance under bridges, rock cover over tunnels.", "ov"),
 
     ("brasov_buildings", "buildings", "overture", "Building footprints",
      "All building footprints (OSM + Microsoft ML) with class, height/floors where known.",
