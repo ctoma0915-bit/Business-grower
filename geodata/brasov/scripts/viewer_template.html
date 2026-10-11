@@ -173,7 +173,7 @@ body.shot .app { grid-template-columns: 1fr; }
       <text x="0" y="-17.5" text-anchor="middle" font-size="7" font-family="var(--mono)" fill="var(--ink)">N</text>
     </svg></div>
     <div class="readout" id="readout" aria-live="off">
-      <span class="k">Point at the terrain</span><span></span>
+      <span class="k">Point at or tap the terrain</span><span></span>
     </div>
     <div class="loading" id="loading"><div class="box">
       <span id="load-msg">Loading section…</span>
@@ -187,6 +187,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+window.__boot = true;   // the libraries loaded (see the watchdog script below)
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
 const SHOT = params.has('shot');
@@ -199,7 +200,14 @@ if (window.proj4) {
 
 // ---------------------------------------------------------------- renderer & scene
 const stage = $('stage');
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: SHOT });
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: SHOT });
+} catch (err) {
+  $('load-msg').textContent = 'This browser could not start 3D graphics (WebGL). Try another browser, or turn on hardware acceleration.';
+  $('load-msg').classList.add('err');
+  throw err;
+}
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 stage.prepend(renderer.domElement);
@@ -252,7 +260,8 @@ function setLoading(on, msg, frac) {
 function fitCamera(azDeg = Number(params.get('az') ?? 0), elDeg = Number(params.get('el') ?? 32)) {
   const box = new THREE.Box3().setFromObject(root);
   const c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3());
-  const d = Math.max(s.x, s.z) * (SHOT ? 0.92 : 1.0) * Number(params.get('dist') || 1);
+  const narrow = Math.max(1, 1.5 / camera.aspect);   // portrait stages need more distance
+  const d = Math.max(s.x, s.z) * (SHOT ? 0.92 : 1.0) * narrow * Number(params.get('dist') || 1);
   const az = THREE.MathUtils.degToRad(azDeg), el = THREE.MathUtils.degToRad(elDeg);
   controls.target.copy(c);
   camera.position.set(c.x + d * Math.sin(az) * Math.cos(el), c.y + d * Math.sin(el), c.z + d * Math.cos(az) * Math.cos(el));
@@ -265,7 +274,7 @@ function applyExag() {
   if (!node) return;
   node.scale.y = node.userData.baseY * exag;
   node.updateMatrixWorld(true);
-  $('exag-out').textContent = `${exag.toFixed(exag % 1 ? 2 : 1).replace(/0$/, '')}×`;
+  $('exag-out').textContent = `${exag.toFixed(exag % 1 ? 2 : 1).replace(/(\.\d)0$/, '$1')}×`;
   requestRender();
 }
 
@@ -283,6 +292,10 @@ function applyTexture() {
     satCache.set(url, t);
     if (tex === 'sat') set(t);
   });
+}
+
+function setHash(id) {
+  try { history.replaceState(null, '', '#' + id); } catch { /* sandboxed frame */ }
 }
 
 function showFacts(e) {
@@ -441,7 +454,7 @@ function buildIndex() {
       .forEach(([k, v]) => r.setAttribute(k, v));
     r.dataset.id = s.sheet;
     r.setAttribute('aria-label', `${s.sheet} ${s.name}`);
-    const go = () => { if (entry !== s) { load(s); history.replaceState(null, '', '#' + s.sheet); } };
+    const go = () => { if (entry !== s) { load(s); setHash(s.sheet); } };
     r.addEventListener('click', go);
     r.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); go(); } });
     const t = document.createElementNS(ns, 'text');
@@ -455,7 +468,7 @@ function buildIndex() {
   pick.add(new Option('Whole county (overview)', 'BV-overview'));
   pick.addEventListener('change', () => {
     const s = pick.value === 'BV-overview' ? index.overview : index.sections.find((x) => x.sheet === pick.value);
-    load(s); history.replaceState(null, '', '#' + s.sheet);
+    load(s); setHash(s.sheet);
   });
 }
 
@@ -463,12 +476,16 @@ function buildIndex() {
 const ray = new THREE.Raycaster();
 const ndc = new THREE.Vector2();
 let hoverPending = false;
-renderer.domElement.addEventListener('pointermove', (ev) => {
+const aim = (ev) => {
   const r = renderer.domElement.getBoundingClientRect();
   ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
   hoverPending = true;
+};
+renderer.domElement.addEventListener('pointermove', aim);
+renderer.domElement.addEventListener('pointerdown', aim);
+renderer.domElement.addEventListener('pointerleave', (ev) => {
+  if (ev.pointerType === 'mouse') $('readout').innerHTML = '<span class="k">Point at or tap the terrain</span><span></span>';
 });
-renderer.domElement.addEventListener('pointerleave', () => { $('readout').innerHTML = '<span class="k">Point at the terrain</span><span></span>'; });
 
 function readout() {
   hoverPending = false;
@@ -494,7 +511,7 @@ $('t-sat').onclick = () => { tex = 'sat'; applyTexture(); };
 $('exag').value = exag;
 $('exag').oninput = (ev) => { exag = Number(ev.target.value); applyExag(); };
 $('reset').onclick = () => fitCamera();
-$('overview').onclick = () => { load(index.overview); history.replaceState(null, '', '#BV-overview'); };
+$('overview').onclick = () => { load(index.overview); setHash('BV-overview'); };
 
 const needle = $('needle');
 renderer.setAnimationLoop(() => {
@@ -515,4 +532,12 @@ fetch('index.json').then((r) => r.json()).then((data) => {
   const start = want === 'BV-overview' ? index.overview : (index.sections.find((s) => s.sheet === want) || index.sections[0]);
   load(start);
 }).catch(() => setLoading(true, 'The section list could not be loaded.', 0));
+</script>
+<script>
+setTimeout(() => {
+  if (window.__boot) return;
+  const m = document.getElementById('load-msg');
+  m.textContent = 'The 3D library (three.js) has not loaded yet. Check your connection, then reload the page.';
+  m.classList.add('err');
+}, 25000);
 </script>
