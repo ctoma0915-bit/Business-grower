@@ -1,0 +1,8 @@
+# download cache and intermediates (rebuilt by scripts/run_all.sh)
+_raw
+_work
+*.aux.xml
+__pycache__/
+# one-file QGIS package (~470 MB): Git LFS file (see .gitattributes), not committed until LFS
+# uploads work from the build environment - rebuild with scripts/11_single_gpkg.py
+brasov_county_qgis.gpkg
