@@ -1,0 +1,2 @@
+three.js 0.170.0 - MIT License, Copyright 2010-2024 three.js authors
+proj4js 2.15.0 - MIT License, Copyright 2014 Mike Adair, Richard Greenwood, Didier Richard, Stephen Irons, Olivier Terral, Calvin Metcalf
