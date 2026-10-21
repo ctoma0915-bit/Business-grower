@@ -153,7 +153,9 @@ railway: Overture segments are cut where a bridge or tunnel starts and ends.
   the vertical exaggeration, switch infrastructure layers on and off; pointing at the terrain
   gives elevation and Stereo 70 and latitude/longitude coordinates, pointing at a structure gives
   its details. The page is private until you share it from its Share menu.
-* **Model files:** `maps/3d/sections/BV50-<sheet>.glb` (4–9 MB each) and `BV-overview.glb`.
+* **Model files:** `maps/3d/sections/BV50-<sheet>.glb` (4–9 MB each) and `BV-overview.glb`
+  ([all files on GitHub](https://github.com/ctoma0915-bit/Business-grower/tree/claude/tender-hypatia-t15rga/geodata/brasov/maps/3d/sections);
+  the web viewer has a download link on each section, and `maps/3d/README.txt` says how to open them).
   Terrain and each infrastructure layer are separate nodes (`infra:bridges`, `infra:tunnels`,
   `infra:power`, `infra:aerialways`, `infra:dams`), so they can be hidden or restyled in Blender;
   the nodes' `extras` list the features (name, ref, length, heights).

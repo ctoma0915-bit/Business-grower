@@ -11,7 +11,9 @@
                           hosts may not serve .glb, so there each block is rebuilt in the browser
                           from <sheet>_height.png (lossless, the GLB's own decimetre heights) and
                           <sheet>_topo.jpg (the GLB's own texture) and <sheet>_infra.json (the
-                          GLB's infrastructure meshes, base64 arrays), all extracted from the GLB
+                          GLB's infrastructure meshes, base64 arrays), all extracted from the GLB.
+                          Its download links point at the GLBs on GitHub, pinned to the last
+                          commit that changed maps/3d/sections (commit new models first)
 
 Libraries: three.js 0.170.0 and proj4 2.15.0 (npm). Pass --no-shots to skip the renders,
 --only=ID,ID to re-render some of them.
@@ -172,6 +174,21 @@ def glb_infra(path: Path) -> dict | None:
     return {"layers": layers} if layers else None
 
 
+def github_links() -> tuple[str, str]:
+    """(raw-file URL prefix, folder URL) of maps/3d/sections on GitHub at the last commit that
+    changed it."""
+    def git(*args):
+        return subprocess.run(["git", *args], cwd=OUT, capture_output=True, text=True,
+                              check=True).stdout.strip()
+    repo = git("remote", "get-url", "origin").split("github.com/", 1)[1].removesuffix(".git")
+    rel = (OUT / "sections").relative_to(git("rev-parse", "--show-toplevel")).as_posix()
+    sha = git("log", "-1", "--format=%H", "--", "sections")
+    if git("status", "--porcelain", "--", "sections"):
+        print("  note: uncommitted models - download links point to the last committed ones")
+    return (f"https://github.com/{repo}/raw/{sha}/{rel}",
+            f"https://github.com/{repo}/tree/{sha}/{rel}")
+
+
 def web_package(idx: dict) -> None:
     """Heights + drapes for the web viewer (see module docstring)."""
     adir = WORK / "artifact"
@@ -179,7 +196,9 @@ def web_package(idx: dict) -> None:
     shutil.rmtree(sec, ignore_errors=True)
     sec.mkdir(parents=True)
     web = json.loads(json.dumps(idx))
+    raw, web["download_all"] = github_links()
     for e in [web["overview"]] + web["sections"]:
+        e["download"] = f"{raw}/{e['sheet']}.glb"
         grid, jpeg = glb_height_and_texture(OUT / e.pop("glb"), e["mesh_step_m"])
         rgb = np.zeros(grid.shape + (3,), "uint8")
         rgb[..., 0], rgb[..., 1] = grid >> 8, grid & 255
