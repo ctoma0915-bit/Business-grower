@@ -109,11 +109,14 @@ f.addEventListener('submit', async e => {
   try { if (window.fbq) fbq('track', 'Lead'); } catch(_) {}
   try { if (window.gtag && CFG.GTAG_SEND_TO) gtag('event', 'conversion', { send_to: CFG.GTAG_SEND_TO }); } catch(_) {}
   const link = waLink(code, d);
+  // Without SHEET_URL nothing is stored, so the WhatsApp message is the only way the request reaches us.
+  const saved = !code.startsWith('BR-W');
+  const waTel = CFG.WA.replace(/^40/, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
   document.getElementById('box').innerHTML = `<div class="ok"><h2>Mulțumim, ${d.nume.split(' ')[0].replace(/[<>&"]/g,'')}!</h2>
-    <p class="s">Am primit cererea dumneavoastră. Vă sunăm în curând pentru detalii.</p>
+    <p class="s">${saved ? 'Am primit cererea dumneavoastră. Vă sunăm în curând pentru detalii.' : 'Mai e un pas: trimiteți-ne mesajul pregătit pe WhatsApp, ca cererea să ajungă la noi.'}</p>
     <div>Codul cererii:</div><div class="code">${code}</div>
-    <a class="btn wa" href="${link}" target="_blank" rel="noopener">Trimiteți și pe WhatsApp</a>
-    <p class="s" style="margin-top:12px;font-size:14px">Opțional – ne ajută să vă răspundem mai repede.</p></div>`;
+    <a class="btn wa" href="${link}" target="_blank" rel="noopener">${saved ? 'Trimiteți și pe WhatsApp' : 'Trimiteți cererea pe WhatsApp'}</a>
+    <p class="s" style="margin-top:12px;font-size:14px">${saved ? 'Opțional – ne ajută să vă răspundem mai repede.' : `Mesajul este deja scris, apăsați doar „Trimite”. Nu folosiți WhatsApp? Sunați-ne la <a href="tel:+${CFG.WA}">${waTel}</a>.`}</p></div>`;
   document.getElementById('box').scrollIntoView({ block: 'center' });
   if (!CFG.SHEET_URL || code.startsWith('BR-W')) setTimeout(() => { location.href = link; }, 900);
 });
