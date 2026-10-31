@@ -45,6 +45,45 @@ section h2{font-size:clamp(26px,5vw,38px);line-height:1.15;margin:10px 0 22px;co
 .cta2{text-align:center}.cta2 .btn{display:inline-block;width:auto;padding:16px 36px}
 footer{background:#1d1f21;color:#bbb;font-size:14px;text-align:center;padding:28px 16px}
 footer a{color:#fff}
+:root{--wa:#25D366;--wa-dark:#1da851;--wa-ink:#1da851}
+.card{border-top:5px solid #EF202A;padding:22px 18px 20px}
+.card-top{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.wa-badge{flex:none;width:48px;height:48px;border-radius:50%;background:var(--wa);color:#fff;display:grid;place-items:center;--wa-ink:var(--wa)}
+.wa-badge svg{width:28px;height:28px}
+.card h2{text-align:left;font-size:23px;line-height:1.15;margin:0}
+.card .s{text-align:left;margin:3px 0 0;font-size:15px}
+.card .trust{list-style:none;margin:0 0 6px;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px;color:#444}
+.card .trust li{display:flex;gap:6px;align-items:center;font-weight:500}.trust svg{width:16px;height:16px;flex:none}
+fieldset{border:0;margin:12px 0 0;padding:0;min-width:0}
+legend{font-size:14px;font-weight:600;color:#333;margin:0 0 8px;padding:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+label.chip{display:block;margin:0;font-weight:500;cursor:pointer;position:relative}
+.chip input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.chip span{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border:1.5px solid #e1e1e1;border-radius:999px;background:#f7f7f7;font-size:14.5px;color:#333;line-height:1.2}
+.chip span:before{content:"";flex:none;width:14px;height:14px;border-radius:50%;border:2px solid #bdbdbd;background:#fff;box-sizing:border-box}
+.chip input:checked+span{border-color:#EF202A;background:#fff2f2;color:#111;font-weight:600}
+.chip input:checked+span:before{border-color:#EF202A;background:#EF202A;box-shadow:inset 0 0 0 2.5px #fff}
+.chip input:focus-visible+span{outline:2px solid #EF202A;outline-offset:2px}
+.row2{display:grid;gap:0 12px}@media(min-width:520px){.row2{grid-template-columns:1fr 1fr}}
+.inp{position:relative}.inp svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:#8a8a8a;pointer-events:none}
+.inp input{padding-left:42px}
+details.more{margin-top:12px}
+details.more summary{cursor:pointer;font-size:14.5px;font-weight:600;color:#c4161c;list-style:none;display:inline-block;padding:4px 0}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary:before{content:"+ "}details.more[open] summary:before{content:"− "}
+details.more textarea{margin-top:6px}
+.btn.wa{display:flex;align-items:center;justify-content:center;gap:10px;font-size:17px;background:var(--wa);box-shadow:0 8px 20px rgba(37,211,102,.35);--wa-ink:var(--wa)}
+.btn.wa:hover{background:var(--wa-dark)}
+.btn.wa svg{width:26px;height:26px;flex:none}
+.hint{font-size:13px;color:#666;text-align:center;margin:10px 0 0}
+.ok .tick{width:56px;height:56px;margin:4px auto 8px;display:block}
+.ok h2{text-align:center!important}
+.ok .step{background:#f0fbf4;border:1px solid #c9efd7;border-radius:8px;padding:10px 12px;margin:12px 0 0;font-size:14.5px;color:#1f3d2b;text-align:left}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(255,255,255,.96);box-shadow:0 -6px 20px rgba(0,0,0,.12);transform:translateY(110%);transition:transform .25s}
+.dock.on{transform:none}.dock .btn{margin:0}
+@media(min-width:900px){.dock{display:none}}
+@media(max-width:899px){footer{padding-bottom:96px}}
+@media(prefers-reduced-motion:reduce){.dock{transition:none}}
 </style></head><body>
 <header><img src="../logo.png" alt="Montare Reparații Acoperiș" width="271" height="52"></header>
 <main>
@@ -56,16 +95,17 @@ footer a{color:#fff}
 </pattern></defs><rect width="100%" height="100%" fill="url(#t)"/></svg></div><div class="shade"></div><div class="hin">
 <div><div class="kick">Profesionalism</div><h1>Montaj și înlocuire acoperiș</h1><p class="lead">Țiglă ceramică sau metalică, izolație mansarde și dulgherie. Lucrăm în București și Ilfov.</p>
 <ul><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Montare acoperiș nou</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Înlocuire acoperiș vechi</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Izolație mansarde</li></ul></div>
-<div class="card" id="box"><h2 id="oferta">Solicitați ofertă</h2><p class="s">Aflați simplu și rapid cât vă poate costa.</p>
+<div class="card" id="box"><div class="card-top"><span class="wa-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.3 21.7l4.8-1.3A9.8 9.8 0 1 0 12 2.2z" fill="currentColor"/><path d="M8.5 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .6l-.4.6c-.1.2-.2.3 0 .6.4.7 1 1.3 1.7 1.8.5.3.8.5 1.1.6.2.1.4 0 .5-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4 0 .5-.2 1.2-.6 1.5-.5.4-1.2.7-2 .5-1.9-.5-3.7-1.8-4.9-3.4-.7-1-1.3-2.1-1.3-3.2 0-.9.4-1.5.7-1.9z" fill="var(--wa-ink)"/></svg></span><div><h2 id="oferta">Cereți o ofertă pe WhatsApp</h2><p class="s">Completați în 30 de secunde, apoi vorbim direct pe WhatsApp.</p></div></div>
+<ul class="trust"><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25D366"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Fără obligații</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25D366"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>București și Ilfov</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25D366"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Răspundem pe WhatsApp</li></ul>
 <form id="f" data-page="montaj" novalidate>
-<label for="nume">Nume *</label><input id="nume" name="nume" autocomplete="name" required>
-<label for="telefon">Telefon *</label><input id="telefon" name="telefon" type="tel" inputmode="tel" autocomplete="tel" placeholder="07xx xxx xxx" required>
-<label for="lucrare">Ce lucrare doriți? *</label><select id="lucrare" name="lucrare"><option>Reparație / infiltrații</option><option selected>Acoperiș nou / înlocuire</option><option>Jgheaburi</option><option>Vopsire acoperiș</option><option>Izolație mansardă</option><option>Dulgherie acoperiș</option><option>Altceva</option></select>
-<label for="zona">Zona (sector / localitate) *</label><input id="zona" name="zona" list="zone" placeholder="ex. Sector 3, Voluntari" required><datalist id="zone"><option value="Sector 1"><option value="Sector 2"><option value="Sector 3"><option value="Sector 4"><option value="Sector 5"><option value="Sector 6"><option value="Voluntari"><option value="Otopeni"><option value="Chitila"><option value="Bragadiru"><option value="Popești-Leordeni"><option value="Pantelimon"><option value="Chiajna"><option value="Măgurele"><option value="Buftea"><option value="Corbeanca"><option value="Snagov"><option value="Ștefăneștii de Jos"></datalist>
-<label for="mesaj">Detalii (opțional)</label><textarea id="mesaj" name="mesaj" placeholder="ex. curge la coș, aprox. 120 mp, țiglă metalică"></textarea>
+<fieldset><legend>Ce lucrare doriți?</legend><div class="chips"><label class="chip"><input type="radio" name="lucrare" value="Reparație / infiltrații"><span>Reparație / infiltrații</span></label><label class="chip"><input type="radio" name="lucrare" value="Acoperiș nou / înlocuire" checked><span>Acoperiș nou / înlocuire</span></label><label class="chip"><input type="radio" name="lucrare" value="Jgheaburi"><span>Jgheaburi</span></label><label class="chip"><input type="radio" name="lucrare" value="Vopsire acoperiș"><span>Vopsire acoperiș</span></label><label class="chip"><input type="radio" name="lucrare" value="Izolație mansardă"><span>Izolație mansardă</span></label><label class="chip"><input type="radio" name="lucrare" value="Dulgherie acoperiș"><span>Dulgherie acoperiș</span></label><label class="chip"><input type="radio" name="lucrare" value="Altceva"><span>Altceva</span></label></div></fieldset>
+<div class="row2"><div><label for="nume">Nume</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><input id="nume" name="nume" autocomplete="name" placeholder="ex. Ion Popescu" required></div></div>
+<div><label for="telefon">Telefon</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg><input id="telefon" name="telefon" type="tel" inputmode="tel" autocomplete="tel" placeholder="07xx xxx xxx" required></div></div></div>
+<label for="zona">Zona (sector / localitate)</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><input id="zona" name="zona" list="zone" placeholder="ex. Sector 3, Voluntari" required></div><datalist id="zone"><option value="Sector 1"><option value="Sector 2"><option value="Sector 3"><option value="Sector 4"><option value="Sector 5"><option value="Sector 6"><option value="Voluntari"><option value="Otopeni"><option value="Chitila"><option value="Bragadiru"><option value="Popești-Leordeni"><option value="Pantelimon"><option value="Chiajna"><option value="Măgurele"><option value="Buftea"><option value="Corbeanca"><option value="Snagov"><option value="Ștefăneștii de Jos"></datalist>
+<details class="more"><summary>Adăugați detalii (opțional)</summary><label for="mesaj" class="hp">Detalii</label><textarea id="mesaj" name="mesaj" placeholder="ex. curge la coș, aprox. 120 mp, țiglă metalică"></textarea></details>
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><input type="hidden" name="utm_source"><input type="hidden" name="utm_medium"><input type="hidden" name="utm_campaign"><input type="hidden" name="utm_content"><input type="hidden" name="fbclid"><input type="hidden" name="gclid">
 <label class="cons"><input type="checkbox" name="acord" id="acord"><span>Sunt de acord să fiu contactat telefonic în legătură cu cererea mea. Detalii în <a href="../confidentialitate/" target="_blank">politica de confidențialitate</a>.</span></label>
-<button class="btn" id="send" type="submit">Trimite</button><div class="err" id="err" role="alert"></div>
+<button class="btn wa" id="send" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.3 21.7l4.8-1.3A9.8 9.8 0 1 0 12 2.2z" fill="currentColor"/><path d="M8.5 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .6l-.4.6c-.1.2-.2.3 0 .6.4.7 1 1.3 1.7 1.8.5.3.8.5 1.1.6.2.1.4 0 .5-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4 0 .5-.2 1.2-.6 1.5-.5.4-1.2.7-2 .5-1.9-.5-3.7-1.8-4.9-3.4-.7-1-1.3-2.1-1.3-3.2 0-.9.4-1.5.7-1.9z" fill="var(--wa-ink)"/></svg><span>Trimite cererea pe WhatsApp</span></button><p class="hint">Se deschide WhatsApp cu mesajul gata scris. Nu folosiți WhatsApp? Sunați la <a href="tel:+40738049791">0738 049 791</a>.</p><div class="err" id="err" role="alert"></div>
 </form></div></div></div>
 <section><div class="eyebrow">Servicii</div><h2>Montaj și reparații țiglă ceramică sau metalică</h2>
 <ul class="svc"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Înlocuire acoperiș</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Montare acoperiș</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Izolație mansarde</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Dulgherie acoperiș</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Jgheaburi</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Vopsire acoperiș</li></ul></section>
@@ -75,9 +115,11 @@ footer a{color:#fff}
 <li><b>Primiți oferta</b>Aflați cât vă costă lucrarea.</li></ol></section></div>
 <section class="cta2"><h2>București și Ilfov</h2><p>Lucrăm în București și în localitățile din Ilfov.</p>
 <a class="btn" href="#oferta">Solicitați ofertă</a></section>
-</main><footer>Montare Reparații Acoperiș · București și Ilfov<br><a href="../confidentialitate/">Politica de confidențialitate</a></footer>
+</main><div class="dock" id="dock" aria-hidden="true"><a class="btn wa" href="#oferta" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.3 21.7l4.8-1.3A9.8 9.8 0 1 0 12 2.2z" fill="currentColor"/><path d="M8.5 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .6l-.4.6c-.1.2-.2.3 0 .6.4.7 1 1.3 1.7 1.8.5.3.8.5 1.1.6.2.1.4 0 .5-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4 0 .5-.2 1.2-.6 1.5-.5.4-1.2.7-2 .5-1.9-.5-3.7-1.8-4.9-3.4-.7-1-1.3-2.1-1.3-3.2 0-.9.4-1.5.7-1.9z" fill="var(--wa-ink)"/></svg><span>Cereți ofertă pe WhatsApp</span></a></div><footer>Montare Reparații Acoperiș · București și Ilfov<br><a href="../confidentialitate/">Politica de confidențialitate</a></footer>
 <script>
 const CFG = {"SHEET_URL": "", "WA": "40738049791"};
+const WA_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.3 21.7l4.8-1.3A9.8 9.8 0 1 0 12 2.2z" fill="currentColor"/><path d="M8.5 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .6l-.4.6c-.1.2-.2.3 0 .6.4.7 1 1.3 1.7 1.8.5.3.8.5 1.1.6.2.1.4 0 .5-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4 0 .5-.2 1.2-.6 1.5-.5.4-1.2.7-2 .5-1.9-.5-3.7-1.8-4.9-3.4-.7-1-1.3-2.1-1.3-3.2 0-.9.4-1.5.7-1.9z" fill="var(--wa-ink)"/></svg>';
+const TICK = '<svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25D366"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const f = document.getElementById('f'), err = document.getElementById('err'), btn = document.getElementById('send');
 const qs = new URLSearchParams(location.search);
 ['utm_source','utm_medium','utm_campaign','utm_content','fbclid','gclid'].forEach(k => { const el = f.elements[k]; if (el) el.value = qs.get(k) || ''; });
@@ -86,6 +128,7 @@ function waLink(code, d){
   const t = `Bună ziua, am trimis o cerere pentru acoperiș (${code}).\nNume: ${d.nume}\nTelefon: ${d.telefon}\nLucrare: ${d.lucrare}\nZona: ${d.zona}` + (d.mesaj ? `\nDetalii: ${d.mesaj}` : '');
   return `https://wa.me/${CFG.WA}?text=` + encodeURIComponent(t);
 }
+f.addEventListener('input', () => { err.textContent = ''; });
 f.addEventListener('submit', async e => {
   e.preventDefault(); err.textContent = '';
   if (f.elements.website.value) return;
@@ -97,27 +140,38 @@ f.addEventListener('submit', async e => {
   if (!d.zona) { err.textContent = 'Vă rugăm să completați zona (sector sau localitate).'; f.elements.zona.focus(); return; }
   if (!f.elements.acord.checked) { err.textContent = 'Vă rugăm să bifați acordul pentru a fi contactat.'; return; }
   d.telefon = tel; d.pagina = f.dataset.page; d.trimis = new Date().toISOString(); delete d.website; delete d.acord;
-  btn.disabled = true; btn.textContent = 'Se trimite…';
+  btn.disabled = true; btn.querySelector('span').textContent = 'Se trimite…';
   let code = null;
   if (CFG.SHEET_URL) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 6000);
     try {
-      const r = await fetch(CFG.SHEET_URL, { method: 'POST', body: JSON.stringify(d) });
+      const r = await fetch(CFG.SHEET_URL, { method: 'POST', body: JSON.stringify(d), signal: ctl.signal });
       const j = await r.json(); if (j && j.ok) code = j.code;
     } catch (_) {}
+    clearTimeout(t);
   }
+  // Without a saved code the WhatsApp message is the only way the request reaches us.
+  const saved = !!code;
   if (!code) code = 'BR-W' + Date.now().toString(36).slice(-5).toUpperCase();
   try { if (window.fbq) fbq('track', 'Lead'); } catch(_) {}
   try { if (window.gtag && CFG.GTAG_SEND_TO) gtag('event', 'conversion', { send_to: CFG.GTAG_SEND_TO }); } catch(_) {}
   const link = waLink(code, d);
-  // Without SHEET_URL nothing is stored, so the WhatsApp message is the only way the request reaches us.
-  const saved = !code.startsWith('BR-W');
   const waTel = CFG.WA.replace(/^40/, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
-  document.getElementById('box').innerHTML = `<div class="ok"><h2>Mulțumim, ${d.nume.split(' ')[0].replace(/[<>&"]/g,'')}!</h2>
-    <p class="s">${saved ? 'Am primit cererea dumneavoastră. Vă sunăm în curând pentru detalii.' : 'Mai e un pas: trimiteți-ne mesajul pregătit pe WhatsApp, ca cererea să ajungă la noi.'}</p>
+  const first = d.nume.split(' ')[0].replace(/[<>&"]/g, '');
+  document.getElementById('box').innerHTML = `<div class="ok">${TICK}<h2>Mulțumim, ${first}!</h2>
+    <p class="s" style="text-align:center">${saved ? 'Am înregistrat cererea dumneavoastră.' : 'Mai e un singur pas.'}</p>
     <div>Codul cererii:</div><div class="code">${code}</div>
-    <a class="btn wa" href="${link}" target="_blank" rel="noopener">${saved ? 'Trimiteți și pe WhatsApp' : 'Trimiteți cererea pe WhatsApp'}</a>
-    <p class="s" style="margin-top:12px;font-size:14px">${saved ? 'Opțional – ne ajută să vă răspundem mai repede.' : `Mesajul este deja scris, apăsați doar „Trimite”. Nu folosiți WhatsApp? Sunați-ne la <a href="tel:+${CFG.WA}">${waTel}</a>.`}</p></div>`;
+    <div class="step">${saved ? 'Se deschide WhatsApp cu mesajul gata scris. Apăsați <b>Trimite</b> ca să vorbim direct acolo. Dacă nu ajunge, vă sunăm noi.' : 'Se deschide WhatsApp cu mesajul gata scris. Apăsați <b>Trimite</b>, ca cererea să ajungă la noi.'}</div>
+    <a class="btn wa" href="${link}" target="_blank" rel="noopener">${WA_ICON}<span>Deschide WhatsApp</span></a>
+    <p class="hint">Nu folosiți WhatsApp? Sunați-ne la <a href="tel:+${CFG.WA}">${waTel}</a>.</p></div>`;
   document.getElementById('box').scrollIntoView({ block: 'center' });
-  if (!CFG.SHEET_URL || code.startsWith('BR-W')) setTimeout(() => { location.href = link; }, 900);
+  document.getElementById('dock').remove();
+  setTimeout(() => { location.href = link; }, 1200);
 });
+
+(() => {
+  const dock = document.getElementById('dock'), box = document.getElementById('box');
+  if (!dock || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([e]) => { if (document.body.contains(dock)) dock.classList.toggle('on', !e.isIntersecting); }).observe(box);
+})();
 </script></body></html>
