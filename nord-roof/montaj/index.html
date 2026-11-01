@@ -85,6 +85,17 @@ details.more textarea{margin-top:6px}
 @media(min-width:900px){.dock{display:none}}
 @media(max-width:899px){footer{padding-bottom:96px}}
 @media(prefers-reduced-motion:reduce){.dock{transition:none}}
+input,textarea{font-size:16px}
+.chip span{min-height:44px}
+.opt{font-weight:400;color:#666}
+.ferr{color:#c4161c;font-size:13.5px;font-weight:500;margin:6px 0 0}.ferr:empty{display:none}
+input[aria-invalid="true"],textarea[aria-invalid="true"]{border-color:#c4161c;background:#fff5f5}
+.fhint{font-size:13px;color:#666;margin:6px 0 0}
+#mesaj{min-height:64px;overflow:hidden}
+p.cons{display:block;margin:14px 0 0}
+.auto{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 10px;margin-top:10px;font-size:15px;color:#222}.auto[hidden]{display:none}
+.cancel{background:none;border:0;color:#c4161c;font:600 15px Inter,Roboto,Arial,sans-serif;text-decoration:underline;padding:10px 6px;min-height:44px;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style></head><body>
 <header><img src="../logo.png" alt="Montare Reparații Acoperiș" width="271" height="52"></header>
 <main>
@@ -100,13 +111,13 @@ details.more textarea{margin-top:6px}
 <ul class="trust"><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25D366"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Evaluare gratuită în București</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25D366"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>București și Ilfov</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25D366"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Răspundem pe WhatsApp</li></ul>
 <form id="f" data-page="montaj" novalidate>
 <fieldset><legend>Ce lucrare doriți?</legend><div class="chips"><label class="chip"><input type="radio" name="lucrare" value="Reparație / infiltrații"><span>Reparație / infiltrații</span></label><label class="chip"><input type="radio" name="lucrare" value="Acoperiș nou / înlocuire" checked><span>Acoperiș nou / înlocuire</span></label><label class="chip"><input type="radio" name="lucrare" value="Jgheaburi"><span>Jgheaburi</span></label><label class="chip"><input type="radio" name="lucrare" value="Vopsire acoperiș"><span>Vopsire acoperiș</span></label><label class="chip"><input type="radio" name="lucrare" value="Izolație mansardă"><span>Izolație mansardă</span></label><label class="chip"><input type="radio" name="lucrare" value="Dulgherie acoperiș"><span>Dulgherie acoperiș</span></label><label class="chip"><input type="radio" name="lucrare" value="Altceva"><span>Altceva</span></label></div></fieldset>
-<div class="row2"><div><label for="nume">Nume</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><input id="nume" name="nume" autocomplete="name" placeholder="ex. Ion Popescu" required></div></div>
-<div><label for="telefon">Telefon</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg><input id="telefon" name="telefon" type="tel" inputmode="tel" autocomplete="tel" placeholder="07xx xxx xxx" required></div></div></div>
-<label for="zona">Zona (sector / localitate)</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><input id="zona" name="zona" list="zone" placeholder="ex. Sector 3, Voluntari" required></div><p class="znote">Evaluarea la fața locului e gratuită în București. În Ilfov se aplică o taxă de deplasare de 250 lei.</p><datalist id="zone"><option value="Sector 1"><option value="Sector 2"><option value="Sector 3"><option value="Sector 4"><option value="Sector 5"><option value="Sector 6"><option value="Voluntari"><option value="Otopeni"><option value="Chitila"><option value="Bragadiru"><option value="Popești-Leordeni"><option value="Pantelimon"><option value="Chiajna"><option value="Măgurele"><option value="Buftea"><option value="Corbeanca"><option value="Snagov"><option value="Ștefăneștii de Jos"></datalist>
-<details class="more"><summary>Adăugați detalii (opțional)</summary><label for="mesaj" class="hp">Detalii</label><textarea id="mesaj" name="mesaj" placeholder="ex. curge la coș, aprox. 120 mp, țiglă metalică"></textarea></details>
+<div class="row2"><div><label for="nume">Nume</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><input id="nume" name="nume" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="ex. Ion Popescu" required aria-describedby="err-nume"></div><p class="ferr" id="err-nume"></p></div>
+<div><label for="telefon">Telefon</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg><input id="telefon" name="telefon" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" placeholder="07xx xxx xxx" required aria-describedby="err-telefon"></div><p class="ferr" id="err-telefon"></p></div></div>
+<label for="zona">Zona (sector / localitate)</label><div class="inp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><input id="zona" name="zona" list="zone" autocomplete="address-level2" autocapitalize="words" enterkeyhint="next" placeholder="ex. Sector 3, Voluntari" required aria-describedby="err-zona znote"></div><p class="ferr" id="err-zona"></p><p class="znote" id="znote">Evaluarea la fața locului e gratuită în București. În Ilfov se aplică o taxă de deplasare de 250 lei.</p><datalist id="zone"><option value="Sector 1"><option value="Sector 2"><option value="Sector 3"><option value="Sector 4"><option value="Sector 5"><option value="Sector 6"><option value="Voluntari"><option value="Otopeni"><option value="Chitila"><option value="Bragadiru"><option value="Popești-Leordeni"><option value="Pantelimon"><option value="Chiajna"><option value="Măgurele"><option value="Buftea"><option value="Corbeanca"><option value="Snagov"><option value="Ștefăneștii de Jos"></datalist>
+<label for="mesaj">Detalii <span class="opt">(opțional)</span></label><textarea id="mesaj" name="mesaj" rows="2" enterkeyhint="send" placeholder="ex. curge la coș, aprox. 120 mp, țiglă metalică" aria-describedby="mesaj-hint"></textarea><p class="fhint" id="mesaj-hint">Când ați terminat, apăsați Trimite pe tastatură.</p>
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><input type="hidden" name="utm_source"><input type="hidden" name="utm_medium"><input type="hidden" name="utm_campaign"><input type="hidden" name="utm_content"><input type="hidden" name="fbclid"><input type="hidden" name="gclid">
-<label class="cons"><input type="checkbox" name="acord" id="acord"><span>Sunt de acord să fiu contactat telefonic în legătură cu cererea mea. Detalii în <a href="../confidentialitate/" target="_blank">politica de confidențialitate</a>.</span></label>
-<button class="btn wa" id="send" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.3 21.7l4.8-1.3A9.8 9.8 0 1 0 12 2.2z" fill="currentColor"/><path d="M8.5 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .6l-.4.6c-.1.2-.2.3 0 .6.4.7 1 1.3 1.7 1.8.5.3.8.5 1.1.6.2.1.4 0 .5-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4 0 .5-.2 1.2-.6 1.5-.5.4-1.2.7-2 .5-1.9-.5-3.7-1.8-4.9-3.4-.7-1-1.3-2.1-1.3-3.2 0-.9.4-1.5.7-1.9z" fill="var(--wa-ink)"/></svg><span>Trimite cererea pe WhatsApp</span></button><p class="hint">Se deschide WhatsApp cu mesajul gata scris. Nu folosiți WhatsApp? Sunați la <a href="tel:+40738049791">0738 049 791</a>.</p><div class="err" id="err" role="alert"></div>
+<p class="cons">Folosim datele doar ca să vă răspundem la cerere. Detalii în <a href="../confidentialitate/" target="_blank">politica de confidențialitate</a>.</p>
+<button class="btn wa" id="send" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.3 21.7l4.8-1.3A9.8 9.8 0 1 0 12 2.2z" fill="currentColor"/><path d="M8.5 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .6l-.4.6c-.1.2-.2.3 0 .6.4.7 1 1.3 1.7 1.8.5.3.8.5 1.1.6.2.1.4 0 .5-.1l.7-.8c.2-.2.3-.2.6-.1l1.6.8c.3.1.4.2.4.4 0 .5-.2 1.2-.6 1.5-.5.4-1.2.7-2 .5-1.9-.5-3.7-1.8-4.9-3.4-.7-1-1.3-2.1-1.3-3.2 0-.9.4-1.5.7-1.9z" fill="var(--wa-ink)"/></svg><span>Trimite cererea pe WhatsApp</span></button><div class="auto" id="auto" hidden><span id="auto-txt"></span><button type="button" class="cancel" id="cancel">Mai am de scris</button></div><p class="hint">Se deschide WhatsApp cu mesajul gata scris. Nu folosiți WhatsApp? Sunați la <a href="tel:+40738049791">0738 049 791</a>.</p><p class="sr" id="live" aria-live="polite"></p><div class="err" id="err" role="alert"></div>
 </form></div></div></div>
 <section><div class="eyebrow">Servicii</div><h2>Montaj și reparații țiglă ceramică sau metalică</h2>
 <ul class="svc"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Înlocuire acoperiș</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Montare acoperiș</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Izolație mansarde</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Dulgherie acoperiș</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Jgheaburi</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#EF202A"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Vopsire acoperiș</li></ul></section>
@@ -129,18 +140,81 @@ function waLink(code, d){
   const t = `Bună ziua, am trimis o cerere pentru acoperiș (${code}).\nNume: ${d.nume}\nTelefon: ${d.telefon}\nLucrare: ${d.lucrare}\nZona: ${d.zona}` + (d.mesaj ? `\nDetalii: ${d.mesaj}` : '');
   return `https://wa.me/${CFG.WA}?text=` + encodeURIComponent(t);
 }
-f.addEventListener('input', () => { err.textContent = ''; });
+const FIELDS = ['nume', 'telefon', 'zona', 'mesaj'];
+const coarse = matchMedia('(pointer: coarse)').matches;  // phones and tablets
+const auto = document.getElementById('auto'), autoTxt = document.getElementById('auto-txt'), live = document.getElementById('live');
+let sending = false, touched = false, timer = null;
+function check(name) {  // error text for a field, or ''
+  const v = (f.elements[name].value || '').trim();
+  if (name === 'nume') return v.length < 2 ? 'Scrieți numele dumneavoastră.' : '';
+  if (name === 'telefon') return phoneOk(v) ? '' : 'Scrieți un număr de telefon valid, de ex. 0722 123 456.';
+  if (name === 'zona') return v ? '' : 'Scrieți sectorul sau localitatea.';
+  return '';
+}
+function setErr(name, msg) {
+  const el = f.elements[name];
+  if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+  document.getElementById('err-' + name).textContent = msg;
+}
+function firstInvalid(show) {
+  let first = null;
+  for (const n of ['nume', 'telefon', 'zona']) { const m = check(n); if (show) setErr(n, m); if (m && !first) first = n; }
+  return first;
+}
+function grow(t) { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight + 2, 240) + 'px'; }
+function submitNow() { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event('submit', { cancelable: true })); }
+function stopAuto() { if (timer) { clearInterval(timer); timer = null; } auto.hidden = true; }
+// On a phone, closing the keyboard ("Done") with everything filled in sends the request after a short countdown.
+function maybeAuto() {
+  if (!coarse || sending || timer || !touched) return;
+  const a = document.activeElement;
+  if (a && a !== document.body && f.contains(a)) return;
+  if (firstInvalid(false)) return;
+  let left = 3;
+  autoTxt.textContent = `Se trimite automat în ${left} s…`;
+  live.textContent = 'Cererea se trimite automat în 3 secunde. Apăsați Mai am de scris dacă vreți să mai adăugați ceva.';
+  auto.hidden = false;
+  auto.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  timer = setInterval(() => {
+    left -= 1;
+    if (left > 0) { autoTxt.textContent = `Se trimite automat în ${left} s…`; return; }
+    stopAuto(); submitNow();
+  }, 1000);
+}
+document.getElementById('cancel').addEventListener('click', () => { stopAuto(); touched = false; live.textContent = ''; f.elements.mesaj.focus(); });
+f.addEventListener('input', e => {
+  err.textContent = ''; touched = true; stopAuto();
+  const n = e.target.name;
+  if (n && e.target.hasAttribute('aria-invalid') && !check(n)) setErr(n, '');
+  if (n === 'mesaj') grow(e.target);
+});
+f.addEventListener('focusout', e => {
+  const n = e.target.name;
+  if (['nume', 'telefon', 'zona'].includes(n) && e.target.value.trim()) setErr(n, check(n));
+  setTimeout(maybeAuto, 350);
+});
+f.addEventListener('focusin', e => { if (e.target.id !== 'cancel') stopAuto(); });
+// The keyboard's Next / Send key: go to the next field, or send from the details box.
+f.addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || e.isComposing || e.shiftKey) return;
+  const n = e.target.name, i = FIELDS.indexOf(n);
+  if (i < 0) return;
+  e.preventDefault();
+  if (n === 'mesaj') { submitNow(); return; }
+  const m = check(n); setErr(n, m);
+  if (!m) f.elements[FIELDS[i + 1]].focus();
+});
 f.addEventListener('submit', async e => {
-  e.preventDefault(); err.textContent = '';
+  e.preventDefault(); err.textContent = ''; stopAuto();
+  if (sending) return;
   if (f.elements.website.value) return;
   const d = Object.fromEntries(new FormData(f).entries());
   d.nume = (d.nume||'').trim(); d.zona = (d.zona||'').trim(); d.mesaj = (d.mesaj||'').trim();
+  const bad = firstInvalid(true);
+  if (bad) { f.elements[bad].focus(); return; }
+  sending = true;
   const tel = phoneOk(d.telefon || '');
-  if (d.nume.length < 2) { err.textContent = 'Vă rugăm să completați numele.'; f.elements.nume.focus(); return; }
-  if (!tel) { err.textContent = 'Vă rugăm să introduceți un număr de telefon valid (ex. 07xx xxx xxx).'; f.elements.telefon.focus(); return; }
-  if (!d.zona) { err.textContent = 'Vă rugăm să completați zona (sector sau localitate).'; f.elements.zona.focus(); return; }
-  if (!f.elements.acord.checked) { err.textContent = 'Vă rugăm să bifați acordul pentru a fi contactat.'; return; }
-  d.telefon = tel; d.pagina = f.dataset.page; d.trimis = new Date().toISOString(); delete d.website; delete d.acord;
+  d.telefon = tel; d.pagina = f.dataset.page; d.trimis = new Date().toISOString(); delete d.website;
   btn.disabled = true; btn.querySelector('span').textContent = 'Se trimite…';
   let code = null;
   if (CFG.SHEET_URL) {
