@@ -1,0 +1,16 @@
+# conda / mamba environment used to build this export:
+#   mamba env create -f environment.yml && conda activate brasov-geo
+# PyQGIS lives in <env>/share/qgis/python: add it to PYTHONPATH when running 10_qgis_project.py.
+name: brasov-geo
+channels: [conda-forge]
+dependencies:
+  - python=3.12
+  - qgis=3.44
+  - gdal>=3.10
+  - whitebox_tools=2.4
+  - mdbtools
+  - rasterio
+  - geopandas>=1.0
+  - pyogrio
+  - pyarrow
+  - scipy

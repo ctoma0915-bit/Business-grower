@@ -1,0 +1,2 @@
+# one-file QGIS package (~470 MB, over GitHub's 100 MB limit): stored with Git LFS
+brasov_county_qgis.gpkg filter=lfs diff=lfs merge=lfs -text

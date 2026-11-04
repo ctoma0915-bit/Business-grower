@@ -1,0 +1,340 @@
+# Județul Brașov — geospatial base dataset (topography, soil, water)
+
+A complete, GIS-ready base for planning work in **Brașov County, Romania**:
+terrain, hydrology, soils, surface water, land cover, transport, buildings and administrative
+units, all in the national projection **EPSG:3844 (Stereo 70)**, plus a styled QGIS project
+with print layouts. Every layer is rebuilt from open data by the scripts in `scripts/`.
+
+Built on the same data: a **topographic map series** (29 sheets at 1:50,000, georeferenced PDF,
+plus a 1:200,000 county overview) and **3D relief models** of the same 29 sheets
+([2D](#topographic-map-2d) · [3D](#3d-relief-models)).
+
+| | |
+|---|---|
+| Area | 5,361 km² (county) + 1 km context ring |
+| Administrative units | 58 UATs: 4 municipii, 6 orașe, 48 comune |
+| Elevation range | 401 m (Olt valley at Ucea) to 2,502 m (Bucegi massif, Bran UAT) on the 25 m DEM |
+| CRS | EPSG:3844 Pulkovo 1942(58) / Stereo70, metres |
+| Terrain grid | 25 m (land cover and imagery 10 m), all rasters cell-aligned |
+| Size | data about 360 MB (largest file 75 MB, buildings); finished maps 310 MB (PDF sheets 130 MB, 3D models 180 MB) |
+
+![Overview](docs/layout_overview.png)
+
+## Open it
+
+### Option 1: one file, `brasov_county_qgis.gpkg` (~470 MB)
+
+Everything in a single GeoPackage: all 31 vector layers and tables, all 19 rasters, the styles
+and **both QGIS projects**:
+
+* **Brasov County** - the planning base with five A3 layouts and seven map themes;
+* **Topographic map 1-50000** - the topographic map with the A2 atlas of 29 sheets and the A1
+  county overview.
+
+At about 470 MB it is over GitHub's 100 MB limit for ordinary files and is set up for Git LFS
+(`.gitattributes`), but it is not in the repository yet. Build it with
+`python scripts/11_single_gpkg.py` (about 4 minutes once `data/` exists), or use Option 2,
+which has the same content as separate files.
+
+1. Save the file **without renaming it**. The embedded projects find their layers by this file
+   name, so `brasov_county_qgis (1).gpkg` breaks the links. If that happens, rename it back,
+   or use *Auto-Find* in QGIS's "Handle Unavailable Layers" dialog.
+2. In QGIS (3.34 LTR or newer), open the **Browser** panel, navigate to the file, expand it,
+   and double-click **Brasov County** or **Topographic map 1-50000** (the projects, listed
+   under the GeoPackage). Or: *Project → Open From → GeoPackage*, pick the file, choose a
+   project.
+3. To use single layers in your own project instead, drag the `.gpkg` onto the map. Vector
+   layers come in with their styles (stored in the file); rasters arrive unstyled.
+
+In this file the float rasters (DEM, slope, ruggedness, HAND, wetness) are stored as 16-bit
+tiles at a fixed precision (DEM ±5 cm, slope ±0.025°, TWI ±0.005), far below the source
+accuracy. Upstream area and all categorical layers are lossless.
+
+### Option 2: this folder, `brasov_county.qgz` + `data/`
+
+* **QGIS:** open `brasov_county.qgz`. Layers are grouped (Administrative, Transport &
+  infrastructure, Buildings, Water & hydrology, Contours & terrain points, Land use, land cover
+  & trees, Soil, Relief & terrain analysis, Imagery, Online basemaps). Five ready-made **A3
+  layouts** are under *Project → Layouts*: overview, water and flood susceptibility, soils,
+  land cover, and **Brașov centre at 1:10,000** (street detail). Styles are also stored *inside*
+  each GeoPackage and as `.qml` files next to each raster, so layers keep their symbology when
+  you drag them into another project. Keep `data/` next to the `.qgz`.
+* **ArcGIS Pro, Global Mapper, FME, AutoCAD Map 3D, etc.:** add the `.gpkg` and `.tif` files
+  directly. They are standard OGC GeoPackages and Cloud Optimized GeoTIFFs. Styles are QGIS-only.
+
+### Either way
+
+* **Map themes:** in the Layers panel, click the eye icon (*Manage Map Themes*) to switch
+  between ready-made views: planning base, satellite + streets, water & flood susceptibility,
+  slope classes (buildability), soils, land cover & tree canopy, landforms.
+* **Soil styles:** the soil layer has a second saved style. In *Layer Properties → Style →
+  Load Style → From database*, pick "hydrologic soil group" to switch to the A-D runoff view.
+* **3D view:** in QGIS use *View → 3D Map View*, then *Terrain → DEM (raster layer)* with
+  `Elevation (DEM) 25 m`, and drape the Sentinel-2 imagery or any thematic layer.
+* **Spreadsheet:** `data/uat_planning_statistics.csv` has one row per UAT.
+
+## Topographic map (2D)
+
+A classic topographic map of the whole county, drawn from the same layers as `brasov_county.qgz`.
+The county is cut into **29 sheets of 20 × 15 km** on a round Stereo 70 kilometre grid, named
+after the main locality on each sheet (or the highest peak on mountain sheets).
+
+![Topographic sheet BV50-E4 Brașov](docs/topo_sheet_BV50-E4.png)
+
+| File | What it is |
+|---|---|
+| `maps/topo_50k/BV50-<sheet>_<name>.pdf` | one sheet each, **1:50,000 on A2** (map face 400 × 300 mm), 1–8 MB |
+| `maps/brasov_topographic_overview_200k.pdf` | whole county on A1 at 1:200,000, with the sheet index |
+| `brasov_topographic.qgz` | the QGIS project behind them: the map, an **atlas layout** for the 29 sheets and the A1 overview |
+| `data/brasov_topographic.gpkg` | the extra layers it uses: sheet index, DEM streams not in OSM, spot heights, labelled peaks, **bridges and tunnels** (`topo_structures`, 3D lines) |
+
+**On each sheet:** 20 m contours with labelled 100 m index contours; hillshading; forest and
+scrub from the 5 m canopy model; rivers, streams (DEM-derived streams that OSM lacks are
+dashed), lakes, wetlands; roads by class with DN/DJ numbers, railways, power lines; **bridges**
+with parapet lines, **tunnels** as dashed casings with portal marks (only the tunnelled stretch),
+lines under construction and disused railways in their own symbols (proposed lines are not
+drawn); building footprints; county, UAT and protected-area boundaries; place names, named
+peaks and spot heights.
+In the margin: Stereo 70 km grid (2 km) with a zebra frame, latitude/longitude ticks every
+5′, scale bar, legend, locator map, adjoining sheets, sources and projection notes.
+
+| Sheets | | | | | |
+|---|---|---|---|---|---|
+| | A2 Bunești | A3 Cața | A4 Jimbor | | |
+| B1 Seliștat | B2 Jibert | B3 Rupea | B4 Racoș | | |
+| C1 Cincu | C2 Făgăraș | C3 Șercaia | C4 Măieruș | | |
+| D1 Victoria | D2 Recea | D3 Șinca Nouă | D4 Codlea | D5 Hărman | D6 Pilișca |
+| E1 Urlea | E2 Berivoiul Mare | E3 Zărnești | E4 Brașov | E5 Săcele | E6 Vama Buzăului |
+| | | F3 Bran | F4 Predeal | F5 Babarunca | F6 Bratocea din Jos |
+| | | G3 Muntele Clăbucetul | G4 Bucșa | | |
+
+* **Printing:** print the PDFs on A2 at **100 % / actual size** (no "fit to page") to keep the
+  1:50,000 scale. On A3 they print at about 1:70,000; the scale bar stays correct.
+* **Georeferenced PDF:** QGIS, ArcGIS, Global Mapper and Avenza Maps (phone, offline GPS
+  position) read the sheets' coordinates. In QGIS, drag a PDF onto the map.
+* **Other extents or scales:** open `brasov_topographic.qgz`, *Project → Layouts → Topographic
+  map 1:50,000 (A2 atlas)*, and use the atlas toolbar to preview or export any sheet. The map
+  itself is ordinary QGIS layers, so it also works on screen at any zoom.
+
+![County overview 1:200,000](docs/topo_overview_200k.png)
+
+## 3D relief models
+
+The terrain of each sheet as a **3D block**: the same 20 × 15 km footprint, 50 m mesh, true
+scale (no vertical exaggeration), draped with the topographic map at about 5 m per pixel, with
+side walls and a base like a physical relief model. A whole-county model (200 m mesh) gives the
+overview.
+
+**Infrastructure stands in 3D at its real position and height**, in colours that do not occur on
+the map:
+
+| | What | How it is placed |
+|---|---|---|
+| turquoise | **bridges and viaducts** (1,707), grey piers under high decks | deck runs straight between the two abutments and never dips under the ground; piers go down to the valley floor |
+| magenta | **tunnels** (156), shown through the ground in the viewer, dark portal arches | even grade between the two portals, kept under the hill (e.g. Teliu railway tunnel, 4.4 km, up to ~157 m of rock above it; the Predeal horseshoe tunnels) |
+| violet | **power lines** with towers and cross-arms | towers at the line's pylons (OSM nodes), conductors sag between them |
+| blue | **cable cars, gondolas, chair and drag lifts** (Tâmpa, Poiana Brașov, Predeal …) | supports and stations on the ground, cables between them |
+| grey | **dams** | crest wall along the dam line |
+
+The data has no measured deck or tunnel levels, so heights are modelled from the elevation model
+(see *Method notes*); pointing at a structure in the viewer gives its name, road number, length,
+height above ground or rock cover. Tunnels are only the tunnelled stretch of each road or
+railway: Overture segments are cut where a bridge or tunnel starts and ends.
+
+| | |
+|---|---|
+| ![Predeal: railway tunnels seen through the hill](docs/3d/detail_predeal_tunnels.jpg) | ![Predeal: DN1 viaduct](docs/3d/detail_predeal_dn1_viaduct.jpg) |
+| ![Poiana Brașov: gondola, chair lifts, cable cars](docs/3d/detail_poiana_brasov_lifts.jpg) | ![Brașov: Tâmpa cable car](docs/3d/detail_brasov_tampa.jpg) |
+
+![3D section BV50-F3 Bran](docs/3d/BV50-F3.jpg)
+
+* **On the web:** [Brașov 3D Relief](https://claude.ai/artifact/N9CdJ5qugVGERLmctNcA2m).
+  Pick a sheet on the index, orbit, zoom, switch between topographic and satellite drapes, set
+  the vertical exaggeration, switch infrastructure layers on and off; pointing at the terrain
+  gives elevation and Stereo 70 and latitude/longitude coordinates, pointing at a structure gives
+  its details. The page is private until you share it from its Share menu.
+* **Model files:** `maps/3d/sections/BV50-<sheet>.glb` (4–9 MB each) and `BV-overview.glb`
+  ([all files on GitHub](https://github.com/ctoma0915-bit/Business-grower/tree/claude/tender-hypatia-t15rga/geodata/brasov/maps/3d/sections);
+  the web viewer has a download link on each section, and `maps/3d/README.txt` says how to open them).
+  Terrain and each infrastructure layer are separate nodes (`infra:bridges`, `infra:tunnels`,
+  `infra:power`, `infra:aerialways`, `infra:dams`), so they can be hidden or restyled in Blender;
+  the nodes' `extras` list the features (name, ref, length, heights).
+  glTF 2.0 binary (compact, with `KHR_mesh_quantization`). Opens in Blender (*File → Import →
+  glTF 2.0*), online viewers such as the three.js editor or the Babylon.js Sandbox, and game
+  engines; for 3D printing, import into Blender and export STL. `BV50-<sheet>_satellite.jpg`
+  is a Sentinel-2 drape for the same footprint.
+* **Viewer on your computer:** run `python -m http.server -d maps/3d` and open
+  <http://localhost:8000/viewer.html> (browsers do not load models from a plain file path).
+  It works offline; three.js and proj4 are included in `maps/3d/lib`.
+* **Coordinates:** model units are metres. X = easting − west edge, −Z = northing − north edge,
+  Y = elevation (EGM2008). Each model stores its sheet, CRS and origin in the glTF node's
+  `extras`, and `maps/3d/index.json` lists bounds and elevation ranges for all of them.
+* **Previews:** `docs/3d/<sheet>.jpg` for every sheet, `docs/3d_sections.jpg` for all of them
+  on one page.
+
+![All 3D sections](docs/3d_sections.jpg)
+
+## Close zoom: what you see when you zoom in
+
+The project changes its symbology with scale, like a web map:
+
+| Scale | What switches on |
+|---|---|
+| closer than 1:60,000 | building footprints (coloured by type where known) |
+| closer than 1:50,000 | **live hillshade** computed by QGIS from the interpolated DEM at screen resolution (no 25 m pixels), a paler elevation tint, **5 m tree canopy height**, OSM land use, power plants and substations, stream and water-body names |
+| closer than 1:30,000 | 10 m contours (smoothed for display) |
+| closer than 1:25,000 | double-line railways, power towers, smoothed DEM streams, city walls, mapped springs |
+| closer than 1:15,000 | **street map**: every road at its real width (motorway 20 m … street 7 m … footpath 1.2 m) with casings and street names, DN/DJ numbers, 50 m contour labels, parking, transformers |
+| closer than 1:10,000 | points of interest by type (food, lodging, health, education, worship, shops, heritage, public services); bus stops from 1:7,500 |
+| closer than 1:5,000 | fences, walls, hedges, hydrants; POI and building names from 1:4,000; storey counts from 1:2,500 (`P+4` = ground + 4) |
+
+Continuous rasters (elevation, slope, HAND, wetness, imagery) are interpolated (cubic) when you
+zoom past their cell size, and the flood and slope classes are drawn from those interpolated
+surfaces, so class edges follow the terrain instead of showing squares. Online, the **Esri World
+Imagery** layer (sub-metre) takes over from the 10 m Sentinel-2 mosaic at close zoom in the
+"Satellite + streets" theme; offline, the Sentinel-2 mosaic shows through.
+
+**What is genuinely detailed and what is interpolated.** Vector data (roads, buildings, water,
+land use, boundaries, POIs) is mapped at metre level and is exact at any zoom. Tree canopy is
+real 5 m data from a ~1 m source. The derived streams now follow the mapped channels (below).
+The elevation itself is still the 30 m Copernicus model: the smooth relief at street scale is
+interpolation, not new survey detail, so use LiDAR for anything engineering-grade.
+
+## What's inside
+
+Full catalogue with feature counts, sources and licences: **[data/LAYERS.md](data/LAYERS.md)**.
+
+| Theme | Layers |
+|---|---|
+| **Topography** | DEM 25 m · multidirectional hillshade · slope (°) · **planning slope classes** (<2, 2-5, 5-10, 10-15, 15-25, 25-35, 35-50, ≥50 %) · aspect · terrain ruggedness · **landforms** (geomorphons: ridge, valley, footslope, …) · **contours every 10 m** (50 m / 100 m index) · named peaks, saddles, caves, cliffs |
+| **Water & hydrology** | **DEM-derived stream network** routed with the mapped rivers burned in (Strahler & Shreve order, upstream area, gradient) · **sub-catchments** (≥10 km²) · major drainage basins · flow direction · upstream area · **HAND** (height above nearest drainage) · **flood susceptibility classes** · **topographic wetness index** · mapped rivers, streams, canals, ditches, lakes, reservoirs, springs (OSM) · **JRC surface-water history 1984-2021** (occurrence, recurrence, seasonality, change) |
+| **Soil** | HWSD v2 soil mapping units: dominant WRB 2022 soil and all components, drainage, rootable depth, AWC, **topsoil (0-20 cm) and subsoil (20-100 cm)** sand/silt/clay, texture, organic carbon, pH, CEC, base saturation, bulk density, CaCO₃, coarse fragments · derived **hydrologic soil group A-D** · full horizon table D1-D7 (0-200 cm) |
+| **Land cover / use** | **tree canopy height 5 m** (from Meta/WRI's ~1 m canopy model) · ESA WorldCover 2021 (10 m) · OSM land use · natural areas · **protected areas** (Bucegi Natural Park, Piatra Craiului, Tâmpa, Dumbrava Vadului, …) and drinking-water well protection zones |
+| **Infrastructure** | Roads with class and DN/DJ/E route numbers · railways · power lines, towers, substations · bridges, dams, pipelines, ski lifts · 11k points of interest · **233,147 building footprints** |
+| **Administrative** | County outline · 58 UAT polygons with a **planning statistics block** · neighbouring counties · settlements |
+| **Imagery** | Sentinel-2 true colour 10 m, single cloud-free pass (26 July 2025), offline |
+
+### UAT planning statistics
+
+Every UAT polygon (and the CSV) carries: elevation min/mean/max; mean slope; % of area with
+slope <5, 5-15, 15-25 and >25 %; % of area with very high or high flood susceptibility; % forest,
+grassland, cropland, built-up and water; % tree canopy and mean canopy height; dominant soil and
+% hydrologic soil group D; number of
+buildings and their footprint; road length (excluding paths and tracks); stream density.
+
+## Method notes
+
+* **One grid for everything.** The Copernicus GLO-30 DEM is resampled once (bilinear) to a 25 m
+  Stereo 70 grid, and every terrain and hydrology raster is cut from that grid, so cells overlay
+  exactly. Outputs are masked to the county plus 1 km.
+* **Hydrology covers the whole upstream Olt.** Flow routing runs on a larger window
+  (24.45-26.65 °E, 45.25-46.98 °N) that contains the upper Olt and Râul Negru catchments in
+  Harghita and Covasna, so upstream areas are complete: the Olt drains about 10,000 km² where
+  it leaves the county. Conditioning is least-cost depression breaching, then filling
+  (WhiteboxTools). Channels start at 1 km² upstream area.
+* **Mapped waterways are burned into the DEM before routing** (rivers 10 m, canals 8 m,
+  streams 5 m, drains and ditches 2 m, lakes and riverbanks 3 m), so derived channels run in the
+  surveyed riverbeds. Share of OpenStreetMap river length within 25 m of a derived channel:
+  **58 % before, 95.5 % after**; for mapped streams 35 % → 53 % (the rest drain less than the
+  1 km² channel threshold). HAND is then measured on the *unburned* DEM along the burned flow
+  paths, so the burn depth never inflates heights; it matches WhiteboxTools' HAND to a median
+  of 7 cm.
+* **Tree canopy** is aggregated from the ~1 m canopy height model in its native grid
+  (6 × 6 pixels ≈ 5 m): a cell is canopy when trees ≥ 2 m cover at least half of it, and its
+  value is the mean height of those trees. This keeps edges crisp and heights honest.
+* **Flood susceptibility = HAND classes** (<1, 1-3, 3-5, 5-10, ≥10 m above the nearest
+  drainage). It is a terrain screening layer: it ignores levees, flow volumes and return periods.
+* **Hydrologic soil group** comes from topsoil USDA texture (A: sands and sandy loams;
+  B: loams and silt loams; C: sandy clay loam; D: clayey soils). Poorly drained soils and soils
+  shallower than 50 cm become D (NRCS NEH 630 ch. 7 convention).
+* **Contours** come from the 25 m DEM after light Gaussian smoothing (σ = 1 cell), simplified
+  to 2 m tolerance.
+* **Bridges and tunnels.** Overture marks bridges, tunnels and levels as ranges along each road
+  or rail segment (`between`, a fraction of its length); segments are cut at those ranges, so
+  `road_flags` / `rail_flags` hold for the whole piece, and touching pieces are merged into one
+  structure. Heights are modelled on the whole structure (also beyond the county edge, so a
+  tunnel cut by the boundary keeps its real portals): a **deck** runs straight between the
+  ground at its two abutments and stays at least 1.5 m clear of the ground under it; the
+  **ground under a bridge** is the lowest point across the line within 40 % of its length
+  (12-45 m), because the elevation model records the deck itself. A **tunnel** floor runs on an
+  even grade between the portals and is pushed down to keep 6 m of ground over the tube (`structures.py`).
+
+## Limitations — read before using for statutory plans
+
+* **Bridge and tunnel heights are modelled, not surveyed** (see *Method notes*): good for
+  seeing what crosses what and roughly how high or deep, not for clearance design. Tall viaducts
+  come out right within a few metres (Sibiu-Făgăraș motorway over the Olt ≈ 20 m, Podu Ilii
+  viaduct ≈ 18 m); short bridges over narrow gaps tend to be underestimated.
+* **The DEM is a surface model (DSM).** Copernicus GLO-30 includes forest canopy and buildings,
+  so in forests contours and elevations can sit 10-30 m above the ground. Heights refer to the
+  EGM2008 geoid, not the Romanian Black Sea 1975 datum. The two can differ by up to about a
+  metre. For engineering or PUZ-level work use ANCPI's LiDAR terrain model and survey data.
+* **Soil is mapped at ~1 km.** HWSD v2 in Romania is generalised from the European Soil
+  Database. It is fine for county-scale planning but not for individual parcels; use
+  OSPA/ICPA soil studies there. The ready-made `05b_soilgrids_optional.py` adds ISRIC
+  SoilGrids 250 m rasters, but it could not run in the build environment (host blocked) and
+  has not been tested.
+* **Tree canopy** comes from Maxar imagery of roughly 2010-2020, so recent felling or planting
+  may be missing. Model heights are accurate to a few metres and tend to underestimate tall
+  forest; a visible seam can appear where source image tiles of different dates meet.
+* **Flood susceptibility is not the official flood hazard map.** Statutory plans must use the
+  ANAR flood hazard and risk maps (PMRI).
+* **Protected areas are incomplete.** Only what OpenStreetMap maps is included. Natura 2000
+  sites (SCI/SPA) and the official boundaries from ANANP or the Ministry of Environment are
+  missing and should be added.
+* **Buildings** mix OSM footprints (about 137k) and Microsoft ML-detected footprints (about
+  97k), which are good for density analysis but are not cadastral.
+* **Boundaries** are the ANCPI UAT polygons as published by geoBoundaries (2023). They are not a
+  cadastral or legal delimitation.
+
+## Data not included (not openly available or not reachable here)
+
+| Need | Where to get it |
+|---|---|
+| Natura 2000 and national protected areas | ANANP / Ministry of Environment, EEA Natura 2000 database |
+| Official flood hazard and risk maps | ANAR (Planurile de Management al Riscului la Inundații) |
+| LiDAR DTM, high-resolution orthophotos, cadastral parcels | ANCPI (geoportal, eTerra) |
+| Detailed soil studies | OSPA Brașov, ICPA |
+| Geology and hydrogeology | Institutul Geologic al României (IGR) |
+| Groundwater bodies, water management | ANAR / ABA Olt |
+| Climate normals (precipitation, temperature) | ANM; or WorldClim / CHELSA (global) |
+
+## Rebuild or extend
+
+```bash
+mamba env create -f environment.yml && conda activate brasov-geo
+export PYTHONPATH=$CONDA_PREFIX/share/qgis/python   # for 10_qgis_project.py
+bash scripts/run_all.sh                              # about 1 hour on 4 cores, ~6 GB download
+```
+
+Steps 12–15 build the topographic series and the 3D models. `15_3d_viewer.py` installs three.js
+and proj4 with npm on first run and uses Playwright with Chromium for the preview renders
+(`--no-shots` skips them).
+
+Downloads are cached in `_raw/` and intermediates in `_work/` (both git-ignored). Region and
+parameters live in `scripts/common.py`: buffer, grid size, hydrology window. Stream and
+sub-catchment thresholds are in `scripts/04_hydrology.py`. To build the same package for
+another county, change the ISO code in `01_boundaries.py` and the bounding boxes in `common.py`.
+
+## Sources and attribution
+
+Use this attribution line on maps:
+
+> Copernicus DEM GLO-30 © DLR e.V. / Airbus, provided under COPERNICUS by the EU and ESA ·
+> © OpenStreetMap contributors, Overture Maps Foundation (ODbL) · ESA WorldCover 2021 (CC BY 4.0)
+> · EC JRC Global Surface Water (Pekel et al. 2016) · FAO & IIASA HWSD v2.0 · geoBoundaries /
+> ANCPI (CC BY 4.0) · contains modified Copernicus Sentinel-2 data 2025 · canopy height
+> © Meta & World Resources Institute (CC BY 4.0)
+
+* **ODbL (OSM/Overture layers):** if you publish a modified database built from these layers,
+  it must be shared under ODbL. Maps and printed plans only need the attribution.
+* **HWSD v2** is published by FAO and IIASA. FAO material is usually CC BY-NC-SA 3.0 IGO
+  (non-commercial), so check the terms before commercial use.
+* Everything else is open with attribution (CC BY 4.0 or the Copernicus licence).
+
+| Preview | |
+|---|---|
+| ![water](docs/layout_water.png) | ![soil](docs/layout_soil.png) |
+| ![land cover](docs/layout_landcover.png) | ![Brașov centre 1:10,000](docs/layout_brasov_centre_10k.png) |
+| ![Brașov old town 1:5,000](docs/detail_brasov_5k.png) | ![Bran 1:25,000](docs/detail_bran_25k.png) |
+| ![Prejmer 1:10,000](docs/detail_prejmer_10k.png) | ![Brașov 1:10,000](docs/detail_brasov_10k.png) |
