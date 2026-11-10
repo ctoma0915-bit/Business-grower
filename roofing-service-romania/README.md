@@ -1,8 +1,8 @@
-# Acoperișuri România
+# Roofing Service Romania
 
 Brand kit and page texts for a roofing firm that works in every region of Romania.
 
-"Acoperișuri România" is a working name. It changes if he picks another one.
+The name was chosen on 10 Nov 2026. It replaces the earlier working name "Acoperișuri România".
 
 ## Brand
 
@@ -11,24 +11,22 @@ Files are in `brand/`:
 | File | Use |
 |---|---|
 | `profil-1080.png` | Profile picture on Facebook, Instagram and WhatsApp Business (1080×1080, dark background, safe for the round crop) |
-| `profil-1080-cu-nume.png` | Alternative profile picture with the name under the symbol; the name is unreadable at small sizes, so use it only where the picture is shown large |
 | `coperta-facebook-1640x624.png` | Facebook cover photo |
 | `logo.png` | Main logo, dark text, transparent background (offers, documents, light ads) |
 | `logo-alb.png` | Logo with white text, transparent background (dark photos and backgrounds) |
-| `simbol.svg` | The symbol alone, as a vector |
+| `simbol.svg` | The symbol alone, as a vector, for light backgrounds |
+| `simbol-fundal-inchis.svg` | The symbol alone, for dark backgrounds |
 
-**The symbol:** a roof over a house in the colours of the flag, meaning roofs all over Romania.
+**The symbol:** a roof covered in rounded clay tiles ("solzi"), the kind on traditional Romanian houses, under a strong ridge line.
 
 **Colours**
 - Charcoal `#1C1F26`
-- Flag colours: blue `#002B7F`, yellow `#FCD116`, red `#CE1126`
+- Clay red: on light backgrounds `#C4512B` and `#D9693F`; on dark backgrounds `#D2582E` and `#E8774A`
 - White
 
-Use the flag colours only in the symbol and in thin bars, never for large backgrounds or for text. On the dark background, the blue is lightened to `#1C4FB8` so it stays visible.
-
-**Font:** Archivo (Google Fonts).
-- "ACOPERIȘURI": ExtraBold 800.
-- "ROMÂNIA": SemiBold 600, spread to the same width as the word above.
+**Fonts** (Google Fonts):
+- "ROOFING SERVICE": Barlow Semi Condensed ExtraBold 800.
+- "ROMANIA": Barlow SemiBold 600, in clay red, spread to the same width as the line above.
 
 ## Page texts
 
@@ -38,16 +36,16 @@ Check with him that 0757 359 952 is the number for customers before publishing.
 
 | Field | Text |
 |---|---|
-| Page name | Acoperișuri România |
+| Page name | Roofing Service Romania |
 | Category | Roofing Service (Serviciu de acoperișuri), plus Contractor |
-| Username | `acoperisuriromania` (if taken: `acoperisuri.romania`) |
+| Username | `roofingserviceromania` (if taken: `roofingservice.romania`) |
 | Bio (max 101 characters) | `Acoperișuri noi, reparații și jgheaburi în toată România. Cereți o ofertă pe WhatsApp.` |
 | Service area | Romania |
 | Button | Send WhatsApp message, number 0757 359 952 |
 
 **Details / About:**
 ```
-Acoperișuri România montează acoperișuri noi și face reparații în toată țara.
+Roofing Service Romania montează acoperișuri noi și face reparații în toată țara.
 
 Ce facem:
 • Acoperișuri noi și înlocuiri de acoperiș
@@ -65,8 +63,8 @@ Cum cereți o ofertă:
 
 | Field | Text |
 |---|---|
-| Name | Acoperișuri România |
-| Username | `acoperisuri.romania` (if taken: `acoperisuriromania.ro`) |
+| Name | Roofing Service Romania |
+| Username | `roofingservice.romania` (if taken: `roofingserviceromania`) |
 | Category | Roofing Service |
 | Link | `https://wa.me/40757359952` |
 
@@ -79,7 +77,7 @@ Trimiteți-ne poze cu acoperișul pe WhatsApp 👇
 
 ### WhatsApp Business
 
-- **Name:** Acoperișuri România
+- **Name:** Roofing Service Romania
 - **Profile picture:** `profil-1080.png`
 - **Description:** same as the Facebook bio
 - **Greeting message:**
@@ -101,7 +99,6 @@ Use only his real photos and jobs. Don't invent numbers, years or guarantees.
 
 ## Next steps
 
-1. He picks a final name, or keeps this one.
-2. He creates the Facebook page, Instagram account and WhatsApp Business profile with the texts above. Then he adds Toma as a page admin, or Toma creates them and gives him access.
-3. Lead form and ads: follow `../playbooks/meta-lead-form.md` (location question as short answer: `Localitatea și județul`).
-4. **Overlap:** other roofing clients already advertise in București and Ilfov. Leave București and Ilfov out of his ads unless Toma decides otherwise.
+1. He creates the Facebook page, Instagram account and WhatsApp Business profile with the texts above. Then he adds Toma as a page admin, or Toma creates them and gives him access.
+2. Lead form and ads: follow `../playbooks/meta-lead-form.md` (location question as short answer: `Localitatea și județul`).
+3. **Overlap:** other roofing clients already advertise in București and Ilfov. Leave București and Ilfov out of his ads unless Toma decides otherwise.
