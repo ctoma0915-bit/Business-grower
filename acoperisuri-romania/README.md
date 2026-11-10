@@ -10,7 +10,8 @@ Files are in `brand/`:
 
 | File | Use |
 |---|---|
-| `profil-1080.png` | Profile picture on Facebook, Instagram and WhatsApp Business (1080×1080, safe for the round crop) |
+| `profil-1080.png` | Profile picture on Facebook, Instagram and WhatsApp Business (1080×1080, dark background, safe for the round crop) |
+| `profil-1080-cu-nume.png` | Alternative profile picture with the name under the symbol; the name is unreadable at small sizes, so use it only where the picture is shown large |
 | `coperta-facebook-1640x624.png` | Facebook cover photo |
 | `logo.png` | Main logo, dark text, transparent background (offers, documents, light ads) |
 | `logo-alb.png` | Logo with white text, transparent background (dark photos and backgrounds) |
@@ -23,7 +24,7 @@ Files are in `brand/`:
 - Flag colours: blue `#002B7F`, yellow `#FCD116`, red `#CE1126`
 - White
 
-Use the flag colours only in the symbol and in thin bars, never for large backgrounds or for text.
+Use the flag colours only in the symbol and in thin bars, never for large backgrounds or for text. On the dark background, the blue is lightened to `#1C4FB8` so it stays visible.
 
 **Font:** Archivo (Google Fonts).
 - "ACOPERIȘURI": ExtraBold 800.
