@@ -23,55 +23,64 @@ So start new clients on form ads. Add WhatsApp ads only as a small extra, if at 
 
 ## 2. Create the form (the client does this; our Meta tools can't)
 
-Create it in **business.facebook.com → All tools → Instant forms → Create form**. If Meta asks, accept the **Lead Ads Terms**. Once published, a form can't be edited, only copied, so check the texts before publishing.
+**Goal:** the person taps the ad, sees their name and phone already filled in, taps one answer and sends, with nothing to type and nothing to think about. Every extra screen, field or long text loses people.
 
-**Form name** (only the client sees it): `[FIRMA] · Cerere ofertă`
+Create it in **business.facebook.com → All tools → Instant forms → Create form**. If Meta asks, accept the **Lead Ads Terms**.
 
-**Form type:** **Higher intent** ("Intenție mai mare"). It adds a review screen where people confirm their phone number, which means fewer wrong numbers.
+**Changing a form:** once published, a form can't be edited. Open the list of forms, choose **Duplicate**, change the copy, publish it, then move the ads to the new form ID.
 
-**Intro**
-- **Image:** the ad's image.
-- **Headline:** `Ofertă pentru [SERVICIU PRINCIPAL] în [ZONA]`
-- **Description** (bullet list, one line each):
-  ```
-  [SERVICII]
-  [OFERTA]
-  Vă contactăm noi pe WhatsApp sau la telefon
-  ```
+**Form name** (only the client sees it): `[FIRMA] · Ofertă rapidă`
+
+**Form type:** **More volume** ("Volum mai mare").
+- **Why:** sending is one tap, with no extra review screen.
+- **The cost:** a few more wrong numbers. Calling every lead within 15 minutes covers that.
+- **When to switch:** use **Higher intent** only if more than about 1 in 4 numbers turn out wrong.
+
+**Intro:** turn it **off**, so the form opens straight on the questions. If Meta insists on an intro, use only the ad image and the headline `Ofertă gratuită în 5 secunde`, with no description.
+
+**Questions description** (the line above the questions; this is what removes doubt):
+```
+✅ Gratuit și fără obligații
+✅ Numele și telefonul sunt deja completate
+👉 Alegeți o variantă și apăsați Trimiteți
+```
 
 **Questions**, in this order:
-1. **Custom question → Multiple choice:** `Ce lucrare doriți?`. Answers by trade:
+1. **Custom question → Multiple choice:** `Cu ce vă putem ajuta?`.
+   - Write the answers the way customers talk ("my roof leaks"), not in trade terms.
+   - Use 4 answers at most.
 
    | Trade | Answers |
    |---|---|
-   | Roofing | `Reparație / infiltrații` · `Acoperiș nou / înlocuire` · `Jgheaburi și burlane` · `Altceva` |
-   | Windows | `Ferestre noi` · `Înlocuire ferestre vechi` · `Uși de exterior` · `Altceva` |
-   | Renovations | `Renovare completă` · `Baie / bucătărie` · `Zugrăveli / finisaje` · `Altceva` |
-
-   Keep it to 3 or 4 answers, and always end with `Altceva`.
-2. **Custom question about the location:** `Unde este lucrarea?`
-   - **Local client:** multiple choice with the client's area, for example `București` · `Ilfov` · `Altă zonă`.
-   - **National client:** short answer, with the hint `Localitatea și județul`.
-3. **Prefill questions:** **Full name** and **Phone number** only.
-
-   Don't add email or anything else: every extra field loses people.
-
-**Questions description** (if there's a box for it): `Durează 10 secunde. Numele și telefonul sunt deja completate.`
+   | Roofing | `Îmi intră apa în casă` · `Acoperiș nou sau înlocuire` · `Reparație la acoperiș` · `Jgheaburi și burlane` |
+   | Windows | `Ferestre noi` · `Schimb ferestrele vechi` · `Ușă de exterior` · `Reparație / reglaj` |
+   | Renovations | `Renovare completă` · `Baie sau bucătărie` · `Zugrăveli și finisaje` · `Altă lucrare` |
+2. **Prefill questions:**
+   - **Full name** and **Phone number**. Meta fills both in from the person's profile.
+   - **National clients only:** also add **City** ("Oraș"). It is prefilled too, so it costs no typing.
+   - **Local clients:** don't ask for the location. The ad's targeting already covers the area; ask for the address on the call.
+   - Don't add email, budget, dates or any field people have to type.
 
 **Privacy policy**
 - Link text: `Politica de confidențialitate`
 - Link: `[LINK_CONFIDENTIALITATE]`
 
 **Ending screen**
-- **Headline:** `Mulțumim! Am primit cererea.`
-- **Description:** `Vă contactăm în curând pe WhatsApp sau la telefon. Nu mai trebuie să faceți nimic.`
+- **Headline:** `Gata! Am primit cererea ✅`
+- **Description:** `Vă sunăm noi astăzi, de pe [TELEFON]. Nu mai trebuie să faceți nimic.`
+  Promise "astăzi" only if the client really calls the same day.
 - **Button:** **Call business**, text `Sunați-ne acum`, number `[TELEFON]`.
 
 **Settings:** language Romanian; sharing **Restricted**.
 
-**Contact information:** the form doesn't need a field for this. The client's phone goes on the ending button, and the first message to each lead says "we'll contact you on WhatsApp or by phone". A WhatsApp text works as the first contact.
+**Contact information:** the form doesn't need a field for this. The client's phone goes on the ending button and in the ending text. A WhatsApp text works as the first contact.
 
 When it's published, ask the client for the **form ID**. Ads can't be created without it.
+
+**Ad text:** end it with the same promise as the form, for example:
+```
+👉 Apăsați „Obțineți ofertă”: numele și telefonul se completează singure. Durează 5 secunde, gratuit și fără obligații.
+```
 
 ## 3. Build the ads (Meta Ads tools)
 
@@ -88,6 +97,7 @@ When it's published, ask the client for the **form ID**. Ads can't be created wi
 - `link_data.link`: `"http://fb.me/"`.
 - `call_to_action`: `{"type":"GET_QUOTE","value":{"lead_gen_form_id":"<FORM ID>"}}`.
 - Without the form ID, the ad fails with "Missing Lead Form".
+- Ads can't switch forms. To move to a new form, create new ads with the same image and the new form ID, then pause the old ads once the new ones deliver.
 
 **Ads**
 - Make 3 to 5, each with a different photo and angle: a problem like leaks, a finished job, a review, a seasonal hook like "before winter", and a price or free visit.
