@@ -118,6 +118,42 @@ Bună ziua! Aș dori o ofertă pentru acoperiș. Localitatea: … Lucrarea: … 
 4. Never tap "Reset link": the old link would stop working everywhere.
 5. Test it from another phone: the chat should open with the form already typed.
 
+## Meta lead form (Instant Form)
+
+Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.com → All tools → Instant forms → Create form**, on the Acoperișuri de la A la Z page.
+
+| Setting | Value |
+|---|---|
+| Form name | `Acoperișuri de la A la Z · Ofertă rapidă` |
+| Type | **More volume** (*Volum mai mare*) |
+| Intro | Off. If Meta insists: ad image + headline `Ofertă gratuită în 5 secunde`, no description |
+| Language | Romanian |
+| Sharing | Restricted |
+
+**Questions description:**
+```
+✅ Gratuit și fără obligații
+✅ Numele și telefonul sunt deja completate
+👉 Alegeți o variantă și apăsați Trimiteți
+```
+
+**Questions:**
+1. Multiple choice, `Cu ce vă putem ajuta?`:
+   - `Îmi intră apa în casă`
+   - `Acoperiș nou sau înlocuire`
+   - `Reparație la acoperiș`
+   - `Jgheaburi și burlane`
+2. Prefill: **Full name**, **Phone number**. Nothing else (the ads target București și Ilfov; ask the address on the call).
+
+**Privacy policy:** text `Politica de confidențialitate`, link `https://ctoma0915-bit.github.io/Business-grower/acoperisuri-de-la-a-la-z/confidentialitate/`
+
+**Ending screen:**
+- Headline: `Gata! Am primit cererea ✅`
+- Description: `Vă sunăm noi astăzi, de pe 0728 636 383. Nu mai trebuie să faceți nimic.` (only if he really calls back the same day)
+- Button: **Call business**, text `Sunați-ne acum`, number `+40 728 636 383`
+
+After publishing, send Toma the **form ID**: the ads can't be built without it.
+
 ## First 3 posts (before any ads, so the page doesn't look empty)
 
 Use only his real photos and jobs. Don't invent numbers, years or guarantees.
