@@ -94,6 +94,30 @@ Montaj · Reparații · Jgheaburi · Mansarde
 Bună ziua! Trimiteți-ne 2–3 poze cu acoperișul și localitatea. Vă sunăm noi cu detaliile.
 ```
 
+### Short link with a ready-made form (optional)
+
+In the WhatsApp Business app, the short link (`wa.me/message/…`) can carry a default message. Set it to this mini-form, so the customer only fills in the blanks and adds photos:
+
+```
+Bună ziua! Aș dori o ofertă pentru acoperiș.
+📍 Localitatea:
+🔧 Lucrarea (reparație / acoperiș nou / jgheaburi / altceva):
+📷 Atașez mai jos 2–3 poze.
+```
+
+If the app doesn't keep the line breaks, use the one-line version:
+
+```
+Bună ziua! Aș dori o ofertă pentru acoperiș. Localitatea: … Lucrarea: … Atașez poze.
+```
+
+**Steps (on his phone, WhatsApp Business on 0728 636 383):**
+1. ⋮ (Android) or Settings (iPhone) → Business tools → Short link.
+2. Default message → paste the form above → turn on "Send default message" → Save.
+3. Copy link. Use it instead of `wa.me/40728636383` on Facebook (Website field, About text) and Instagram (external link).
+4. Never tap "Reset link": the old link would stop working everywhere.
+5. Test it from another phone: the chat should open with the form already typed.
+
 ## First 3 posts (before any ads, so the page doesn't look empty)
 
 Use only his real photos and jobs. Don't invent numbers, years or guarantees.
