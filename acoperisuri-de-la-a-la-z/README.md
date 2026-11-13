@@ -61,7 +61,7 @@ Cum cereți o ofertă:
 2. Spuneți-ne localitatea și ce lucrare doriți
 3. Vă spunem pașii următori și vă facem o ofertă
 
-Dacă vreți, ne puteți trimite și poze cu acoperișul pe WhatsApp, la același număr.
+Preferați să scrieți? Apăsați aici și trimiteți-ne poze pe WhatsApp: https://wa.me/40729373800?text=Bun%C4%83%20ziua%21%20V%C4%83%20trimit%20poze%20cu%20acoperi%C8%99ul.
 
 Zona: București și Ilfov.
 ```
@@ -74,6 +74,7 @@ Zona: București și Ilfov.
 | Username | `acoperisuridelaalaz` (if taken: `acoperisuri.delaalaz`) |
 | Category | Roofing Service |
 | Contact button | Call (*Sunați*), number 0729 373 800. Instagram doesn't open phone links from the bio, so the call goes through this button. |
+| Link | `https://wa.me/40729373800?text=Bun%C4%83%20ziua%21%20V%C4%83%20trimit%20poze%20cu%20acoperi%C8%99ul.`, titled `Trimiteți poze pe WhatsApp`. One tap opens WhatsApp with the message already written; the customer only adds the photos. |
 
 **Bio** (max 150 characters):
 ```
@@ -87,13 +88,10 @@ Montaj · Reparații · Jgheaburi · Mansarde
 
 - **Name:** Acoperișuri de la A la Z
 - **Description:** same as the Facebook bio
+- **Short link to share anywhere** (posts, comments, ads): the same `wa.me` link as on Instagram. It opens a chat with *„Bună ziua! Vă trimit poze cu acoperișul.”* already typed.
 - **Greeting message:**
 ```
-Bună ziua! Mulțumim pentru mesaj. Ca să vă putem da detalii și un preț corect, trimiteți-ne vă rog:
-1. Câteva poze cu acoperișul sau cu zona cu problema
-2. Localitatea
-3. Ce lucrare doriți (reparație, acoperiș nou, jgheaburi)
-Vă răspundem cât mai repede.
+Bună ziua! Trimiteți-ne 2–3 poze cu acoperișul și localitatea. Vă sunăm noi cu detaliile.
 ```
 
 ## First 3 posts (before any ads, so the page doesn't look empty)
