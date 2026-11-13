@@ -5,7 +5,7 @@ Texts for the Facebook page, Instagram account and WhatsApp Business profile of 
 **The idea behind the texts:** the name promises that the firm handles everything about a roof, from A to Z. Every text repeats that promise: you send a few photos, and the firm handles the rest.
 
 **Before publishing:**
-- Replace `[Oraș, județ]` with the area he works in.
+- Area: București și Ilfov (confirmed by Toma, 13 Nov 2026).
 - Check that 0729 373 800 is the number customers should use.
 - Remove any service he doesn't offer.
 
@@ -43,7 +43,7 @@ Files are in `brand/`:
 | Category | Roofing Service (Serviciu de acoperișuri), plus Contractor |
 | Username | `acoperisuridelaalaz` (if taken: `acoperisuri.delaalaz`) |
 | Bio (max 101 characters) | `Tot ce ține de acoperiș, de la A la Z: montaj, reparații, jgheaburi. Cereți o ofertă pe WhatsApp.` |
-| Service area | [Oraș, județ] and nearby areas |
+| Service area | București și Ilfov |
 | Button | Send WhatsApp message, number 0729 373 800 |
 
 **Details / About:**
@@ -61,7 +61,7 @@ Cum cereți o ofertă:
 2. Spuneți-ne localitatea
 3. Vă răspundem cu pașii următori și o ofertă
 
-Zona: [Oraș, județ] și împrejurimi.
+Zona: București și Ilfov.
 ```
 
 ## Instagram
@@ -77,7 +77,7 @@ Zona: [Oraș, județ] și împrejurimi.
 ```
 🏠 Tot ce ține de acoperiș, de la A la Z
 Montaj · Reparații · Jgheaburi · Mansarde
-📍 [Oraș, județ]
+📍 București și Ilfov
 👇 Cereți o ofertă pe WhatsApp
 ```
 
