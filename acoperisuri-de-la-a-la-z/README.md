@@ -42,7 +42,7 @@ Files are in `brand/`:
 | Page name | Acoperișuri de la A la Z |
 | Category | Roofing Service (Serviciu de acoperișuri), plus Contractor |
 | Username | `acoperisuridelaalaz` (if taken: `acoperisuri.delaalaz`) |
-| Bio (max 101 characters) | `Tot ce ține de acoperiș, de la A la Z: montaj, reparații, jgheaburi. Sunați pentru ofertă: 0729 373 800` |
+| Bio (max 101 characters) | `Acoperișuri de la A la Z: montaj, reparații, jgheaburi. Sunați pentru ofertă: 0729 373 800` |
 | Service area | București și Ilfov |
 | Button | Call now (*Sunați acum*), number 0729 373 800 |
 
