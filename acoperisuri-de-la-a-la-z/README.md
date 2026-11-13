@@ -9,6 +9,32 @@ Texts for the Facebook page, Instagram account and WhatsApp Business profile of 
 - Check that 0729 373 800 is the number customers should use.
 - Remove any service he doesn't offer.
 
+## Brand
+
+Files are in `brand/`:
+
+| File | Use |
+|---|---|
+| `profil-1080.png` | Profile picture on Facebook, Instagram and WhatsApp Business (1080×1080, safe for the round crop) |
+| `coperta-facebook-1640x624.png` | Facebook cover photo |
+| `logo.png` | Main logo, dark text, transparent background |
+| `logo-alb.png` | Logo with white text, transparent background, for dark photos and backgrounds |
+| `simbol.svg` / `simbol-fundal-inchis.svg` | The symbol alone, as a vector, for light and dark backgrounds |
+
+**The symbol:**
+- The **A** is drawn as a roof.
+- One **copper** line forms the A's crossbar and runs on into the **Z**: "de la A la Z" in a single stroke.
+- Copper also hints at copper gutters.
+
+**Colours**
+- Slate `#2B3440`
+- Copper: `#B8692A` on light backgrounds, `#E08A45` on dark ones
+- White
+
+**Font:** Plus Jakarta Sans (Google Fonts).
+- "ACOPERIȘURI": ExtraBold 800.
+- "DE LA A LA Z": SemiBold 600, spread to the same width as the word above, with the Z in copper.
+
 ## Facebook page
 
 | Field | Text |
@@ -93,6 +119,6 @@ Use only his real photos and jobs. Don't invent numbers, years or guarantees.
 ## Next steps
 
 1. He creates the Facebook page, Instagram account and WhatsApp Business profile with these texts, then adds Toma as a page admin. Alternatively, Toma creates them and gives him access.
-2. Logo and cover photo: not made yet. They can be made in the same style as `../roofing-service-romania/brand/`.
+2. Upload `brand/profil-1080.png` as the profile picture and `brand/coperta-facebook-1640x624.png` as the Facebook cover.
 3. Lead form and ads: follow `../playbooks/meta-lead-form.md`.
 4. **Overlap:** other roofing clients already advertise in București and Ilfov. If he works there too, Toma decides how to split the area.
