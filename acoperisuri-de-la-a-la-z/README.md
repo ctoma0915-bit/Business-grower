@@ -61,7 +61,7 @@ Cum cereți o ofertă:
 2. Spuneți-ne localitatea și ce lucrare doriți
 3. Vă spunem pașii următori și vă facem o ofertă
 
-Preferați să scrieți? Apăsați aici și trimiteți-ne poze pe WhatsApp: https://wa.me/40728636383?text=Bun%C4%83%20ziua%21%20V%C4%83%20trimit%20poze%20cu%20acoperi%C8%99ul.
+Preferați să scrieți? Trimiteți-ne poze pe WhatsApp: wa.me/40728636383
 
 Zona: București și Ilfov.
 ```
@@ -74,7 +74,7 @@ Zona: București și Ilfov.
 | Username | `acoperisuridelaalaz` (if taken: `acoperisuri.delaalaz`) |
 | Category | Roofing Service |
 | Contact button | Call (*Sunați*), number 0728 636 383. Instagram doesn't open phone links from the bio, so the call goes through this button. |
-| Link | `https://wa.me/40728636383?text=Bun%C4%83%20ziua%21%20V%C4%83%20trimit%20poze%20cu%20acoperi%C8%99ul.`, titled `Trimiteți poze pe WhatsApp`. One tap opens WhatsApp with the message already written; the customer only adds the photos. |
+| Link | `https://wa.me/40728636383`, titled `Trimiteți poze pe WhatsApp`. One tap opens a WhatsApp chat with his number; the greeting message then asks for the photos. |
 
 **Bio** (max 150 characters):
 ```
@@ -88,7 +88,7 @@ Montaj · Reparații · Jgheaburi · Mansarde
 
 - **Name:** Acoperișuri de la A la Z
 - **Description:** same as the Facebook bio
-- **Short link to share anywhere** (posts, comments, ads): the same `wa.me` link as on Instagram. It opens a chat with *„Bună ziua! Vă trimit poze cu acoperișul.”* already typed.
+- **Link to share anywhere** (posts, comments, ads): `wa.me/40728636383`. It's short and shows his number, so it doesn't look suspicious. The greeting message does the asking, so the link needs no pre-written text.
 - **Greeting message:**
 ```
 Bună ziua! Trimiteți-ne 2–3 poze cu acoperișul și localitatea. Vă sunăm noi cu detaliile.
