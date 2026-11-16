@@ -103,6 +103,42 @@ Bună ziua! Mulțumim pentru mesaj. Ca să vă putem da detalii și un preț cor
 Vă răspundem cât mai repede.
 ```
 
+## Meta lead form (Instant Form)
+
+Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.com → All tools → Instant forms → Create form**, on the HRL Acoperișuri page. Accept the Lead Ads Terms if Meta asks.
+
+| Setting | Value |
+|---|---|
+| Form name | `HRL Acoperișuri · Ofertă rapidă` |
+| Type | **More volume** (*Volum mai mare*) |
+| Intro | Off. If Meta insists: ad image + headline `Ofertă gratuită în 5 secunde`, no description |
+| Language | Romanian |
+| Sharing | Restricted |
+
+**Questions description:**
+```
+✅ Gratuit și fără obligații
+✅ Numele și telefonul sunt deja completate
+👉 Alegeți o variantă și apăsați Trimiteți
+```
+
+**Questions:**
+1. Multiple choice, `Cu ce vă putem ajuta?`:
+   - `Acoperiș nou sau tablă fălțuită`
+   - `Reparație sau reabilitare`
+   - `Casă modulară`
+   - `Terasă sau construcție din lemn`
+2. Prefill: **Full name**, **Phone number**. Nothing else (the ads target Oradea and Bihor; ask the address on the call).
+
+**Privacy policy:** text `Politica de confidențialitate`, link `https://ctoma0915-bit.github.io/Business-grower/hrl-acoperisuri/confidentialitate/`
+
+**Ending screen:**
+- Headline: `Gata! Am primit cererea ✅`
+- Description: `Vă contactăm noi în cel mai scurt timp. Nu mai trebuie să faceți nimic.`
+- Button: **Call business**, text `Sunați-ne acum`, number `+40 738 049 791`
+
+After publishing, send the **form ID**: the ads can't be built without it.
+
 ## First 3 posts (before any ads, so the page doesn't look empty)
 
 Use only his real photos and jobs. Don't invent numbers, years or guarantees. Fill the brackets from what he tells you about each job.
