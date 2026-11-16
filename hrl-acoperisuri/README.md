@@ -5,8 +5,8 @@ Brand kit and texts for the Facebook page, Instagram account and WhatsApp Busine
 **The idea behind the texts:** short and practical. The customer sends a few photos of the roof, the town and the job, and gets an answer. The texts never promise prices, years in business, guarantees or numbers of jobs.
 
 **Before publishing:**
-- Replace every `[Oraș, județ]` with the area he really works in.
-- Check that 0751 782 978 is the number customers should use (button, WhatsApp link, About text). If it isn't, change it everywhere, including `wa.me/40751782978`.
+- Area: Oradea, Bihor (confirmed by Toma, 16 Nov 2026).
+- Customer number: 0738 049 791 (confirmed by Toma, 16 Nov 2026). It is used everywhere: buttons, WhatsApp link and About text.
 - Remove any service he doesn't offer from the lists below (check *acoperișuri noi*, *jgheaburi*, *mansarde*, *dulgherie*, *termoizolație*).
 - Posts: only his own photos and jobs. No stock photos presented as his work.
 
@@ -40,11 +40,9 @@ Files are in `brand/` (`sursa-brand.html` regenerates them):
 | Page name | HRL Acoperișuri |
 | Category | Roofing Service (Serviciu de acoperișuri), plus Contractor |
 | Username | `hrlacoperisuri` (if taken: `hrl.acoperisuri`) |
-| Bio (max 101 characters; this one is 85) | `HRL Acoperișuri: lucrări de acoperiș în [Oraș, județ]. Trimiteți-ne poze pe WhatsApp.` |
-| Service area | [Oraș, județ] |
-| Button | Send WhatsApp message (*Trimiteți mesaj pe WhatsApp*), number 0751 782 978 |
-
-The bio is 85 characters with the placeholder. Any real area up to 29 characters long (e.g. `Cluj-Napoca, jud. Cluj`, 22) keeps it within 101.
+| Bio (max 101 characters; this one is 85) | `HRL Acoperișuri: lucrări de acoperiș în Oradea, Bihor. Trimiteți-ne poze pe WhatsApp.` |
+| Service area | Oradea, Bihor |
+| Button | Send WhatsApp message (*Trimiteți mesaj pe WhatsApp*), number 0738 049 791 |
 
 **Details / About:**
 ```
@@ -62,8 +60,8 @@ Cum cereți o ofertă:
 3. Spuneți-ne ce lucrare doriți
 Vă răspundem cu pașii următori și o ofertă.
 
-WhatsApp: wa.me/40751782978
-Zona: [Oraș, județ].
+WhatsApp: wa.me/40738049791
+Zona: Oradea, Bihor.
 ```
 
 ## Instagram
@@ -73,23 +71,24 @@ Zona: [Oraș, județ].
 | Name | HRL Acoperișuri |
 | Username | `hrl.acoperisuri` (if taken: `hrlacoperisuri`) |
 | Category | Roofing Service |
-| Link | `https://wa.me/40751782978`, titled `Trimiteți poze pe WhatsApp` |
+| Link | `https://wa.me/40738049791`, titled `Trimiteți poze pe WhatsApp` |
 
 **Bio** (max 150 characters; this one is 85, or 89 if Instagram counts each emoji as 2):
 ```
 🏠 Lucrări de acoperiș
-📍 [Oraș, județ]
+📍 Oradea, Bihor
 📷 Trimiteți-ne poze cu acoperișul pe WhatsApp 👇
 ```
 
 ## WhatsApp Business
 
+- **Number:** 0738 049 791
 - **Name:** HRL Acoperișuri
 - **Profile picture:** `brand/profil-1080.png`
 - **Category:** Home Improvement (*Îmbunătățiri pentru locuință*)
 - **Description:**
 ```
-Lucrări de acoperiș în [Oraș, județ]. Trimiteți-ne poze cu acoperișul, localitatea și ce lucrare doriți, și vă răspundem cu o ofertă.
+Lucrări de acoperiș în Oradea, Bihor. Trimiteți-ne poze cu acoperișul, localitatea și ce lucrare doriți, și vă răspundem cu o ofertă.
 ```
 - **Greeting message:**
 ```
@@ -106,7 +105,7 @@ Use only his real photos and jobs. Don't invent numbers, years or guarantees. Fi
 
 1. **Introduction:** a photo of a roof he finished (or the cover image if he has none yet), plus:
    ```
-   Bine ați venit la HRL Acoperișuri! Lucrăm la acoperișuri în [Oraș, județ]. Trimiteți-ne pe WhatsApp câteva poze cu acoperișul și vă spunem ce e de făcut: wa.me/40751782978
+   Bine ați venit la HRL Acoperișuri! Lucrăm la acoperișuri în Oradea, Bihor. Trimiteți-ne pe WhatsApp câteva poze cu acoperișul și vă spunem ce e de făcut: wa.me/40738049791
    ```
 2. **A finished job:** his own before and after photos, plus:
    ```
