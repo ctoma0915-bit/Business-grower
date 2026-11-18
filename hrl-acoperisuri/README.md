@@ -5,7 +5,7 @@ Brand kit and texts for the Facebook page, Instagram account and WhatsApp Busine
 **The idea behind the texts:** short and practical. The customer sends a few photos, the town and the job, and gets an answer. The texts never promise prices, years in business, guarantees or numbers of jobs.
 
 **Before publishing:**
-- Area: Oradea and every town and village in Bihor and nearby (confirmed by Toma, 16 Nov 2026).
+- Area: all of Romania (confirmed by Toma, 18 Nov 2026; until then it was Oradea and Bihor).
 - Customer number: 0738 049 791 (confirmed by Toma, 16 Nov 2026). It is used everywhere: buttons, WhatsApp link and About text.
 - Services: the list below is the full list he gave Toma (16 Nov 2026). Don't add others.
 - Posts: only his own photos and jobs. No stock photos presented as his work.
@@ -40,13 +40,13 @@ Files are in `brand/` (`sursa-brand.html` regenerates them):
 | Page name | HRL Acoperișuri |
 | Category | Roofing Service (Serviciu de acoperișuri), plus Contractor and Home Improvement |
 | Username | `hrlacoperisuri` (if taken: `hrl.acoperisuri`) |
-| Bio (max 101 characters; this one is 97) | `Acoperișuri, tablă fălțuită, case modulare, terase și reabilitări în Oradea și tot județul Bihor.` |
-| Service area | Oradea, plus Bihor County (*Județul Bihor*) |
+| Bio (max 101 characters; this one is 84) | `Acoperișuri, tablă fălțuită, case modulare, terase și reabilitări, în toată România.` |
+| Service area | Romania |
 | Button | Send WhatsApp message (*Trimiteți mesaj pe WhatsApp*), number 0738 049 791 |
 
 **Details / About:**
 ```
-HRL Acoperișuri lucrează în Oradea și în toate comunele, satele și localitățile din județul Bihor și din împrejurimi.
+HRL Acoperișuri lucrează în toată România: în orașe, comune și sate.
 
 Ce facem:
 • Acoperișuri
@@ -64,7 +64,7 @@ Cum cereți o ofertă:
 Vă răspundem cu pașii următori și o ofertă.
 
 WhatsApp: wa.me/40738049791
-Zona: Oradea, tot județul Bihor și împrejurimile.
+Zona: toată România.
 ```
 
 ## Instagram
@@ -76,11 +76,11 @@ Zona: Oradea, tot județul Bihor și împrejurimile.
 | Category | Roofing Service |
 | Link | `https://wa.me/40738049791`, titled `Trimiteți poze pe WhatsApp` |
 
-**Bio** (max 150 characters; this one is 139, or 143 if Instagram counts each emoji as 2):
+**Bio** (max 150 characters; this one is 135, at most 141 if Instagram counts emoji as 2):
 ```
 🏠 Acoperișuri · Tablă fălțuită · Case modulare
 🪵 Construcții din lemn · Terase · Reabilitări
-📍 Oradea și județul Bihor
+📍 În toată România 🇷🇴
 📷 Poze pe WhatsApp 👇
 ```
 
@@ -92,7 +92,7 @@ Zona: Oradea, tot județul Bihor și împrejurimile.
 - **Category:** Home Improvement (*Îmbunătățiri pentru locuință*)
 - **Description:**
 ```
-Acoperișuri, tablă fălțuită, case modulare (lemn, polistiren, structură metalică), construcții din lemn, terase, reabilitări și monumente istorice. Oradea și tot județul Bihor. Trimiteți-ne poze, localitatea și ce lucrare doriți, și vă răspundem cu o ofertă.
+Acoperișuri, tablă fălțuită, case modulare (lemn, polistiren, structură metalică), construcții din lemn, terase, reabilitări și monumente istorice. În toată România. Trimiteți-ne poze, localitatea și ce lucrare doriți, și vă răspundem cu o ofertă.
 ```
 - **Greeting message:**
 ```
@@ -128,7 +128,7 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
    - `Reparație sau reabilitare`
    - `Casă modulară`
    - `Terasă sau construcție din lemn`
-2. Prefill: **Full name**, **Phone number**. Nothing else (the ads target Oradea and Bihor; ask the address on the call).
+2. Prefill: **Full name**, **Phone number**. Because he works nationally, also add **City** (*Oraș*): it is prefilled, so it costs no typing. Nothing else.
 
 **Privacy policy:** text `Politica de confidențialitate`, link `https://ctoma0915-bit.github.io/Business-grower/hrl-acoperisuri/confidentialitate/`
 
@@ -145,10 +145,10 @@ Images are in `reclame/` (1080×1350; `sursa.html` regenerates them). All five u
 
 | # | Image | Photo | Headline on image |
 |---|---|---|---|
-| 1 | `reclama-1-acoperis-nou.png` | Metal tile and grey trapezoidal sheet roof | Acoperiș nou în Oradea sau în Bihor? |
+| 1 | `reclama-1-acoperis-nou.png` | Metal tile and grey trapezoidal sheet roof | Acoperiș nou, oriunde în România? |
 | 2 | `reclama-2-iarna.png` | Brown metal tile roof | Schimbați acoperișul înainte de iarnă. |
 | 3 | `reclama-3-sarpante.png` | Timber roof trusses | Șarpante din lemn, de la zero. |
-| 4 | `reclama-4-bihor.png` | Team laying red tiles | Acoperișuri noi, în tot județul Bihor. |
+| 4 | `reclama-4-romania.png` | Team laying red tiles | Acoperișuri noi, în toată țara. |
 | 5 | `reclama-5-lemn-terase.png` | Timber structure being built | Construcții din lemn și terase. |
 
 No modular-house ad yet: there is no photo of one. Add it when he sends one.
@@ -159,7 +159,7 @@ Use only his real photos and jobs. Don't invent numbers, years or guarantees. Fi
 
 1. **Introduction:** a photo of a job he finished (or the cover image if he has none yet), plus:
    ```
-   Bine ați venit la HRL Acoperișuri! Facem acoperișuri, tablă fălțuită, case modulare, construcții din lemn, terase și reabilitări, în Oradea și în tot județul Bihor. Trimiteți-ne pe WhatsApp câteva poze și vă spunem ce e de făcut: wa.me/40738049791
+   Bine ați venit la HRL Acoperișuri! Facem acoperișuri, tablă fălțuită, case modulare, construcții din lemn, terase și reabilitări, în toată România. Trimiteți-ne pe WhatsApp câteva poze și vă spunem ce e de făcut: wa.me/40738049791
    ```
 2. **A finished job:** his own before and after photos, plus:
    ```
@@ -178,4 +178,4 @@ Use only his real photos and jobs. Don't invent numbers, years or guarantees. Fi
 
 1. He (or Toma, with access for him) creates the Facebook page, Instagram account and WhatsApp Business profile with these texts, then adds Toma as a page admin.
 2. Upload `brand/profil-1080.png` as the profile picture and `brand/coperta-facebook-1640x624.png` as the Facebook cover.
-3. Lead form and ads: follow `../playbooks/meta-lead-form.md`. Target Oradea and Bihor County. Other roofing clients advertise in București and Ilfov, so there is no area overlap.
+3. Lead form and ads: follow `../playbooks/meta-lead-form.md`. Target all of Romania except București and Ilfov, where other roofing clients already advertise, unless Toma decides otherwise.
