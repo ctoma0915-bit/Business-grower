@@ -131,3 +131,16 @@ A close shot of one satisfying action: a screw going in, a sealant line, a gutte
 Caption: `Satisfăcător? 😄 Montaj curat, de la cap la coadă.` *(Satisfying? Clean installation, start to finish.)*
 
 **Posting plan:** keep 3 a week. Put the reels on Wednesdays, and use the new photos on Mondays once the old job posts run out.
+
+---
+
+## Ready reels (made from existing images; add a song in the Instagram app)
+
+| File | Length | Caption |
+|---|---|---|
+| `reel-5-semne.mp4` | 19 s | `5 semne că acoperișul are nevoie de reparație 🏠💧 Salvați reel-ul și verificați-vă acoperișul înainte de iarnă.` *(5 signs your roof needs repair. Save the reel and check your roof before winter.)* |
+| `reel-recenzii.mp4` | 12 s | `Ce spun clienții noștri ⭐⭐⭐⭐⭐ Mulțumim pentru încredere!` *(What our clients say. Thank you for your trust!)* |
+| `reel-va-ploua-in-casa.mp4` | 14 s | `Vă plouă în casă? 💧 Nu așteptați prima ninsoare: trimiteți-ne câteva poze pe WhatsApp și vă spunem ce e de făcut.` *(Is rain getting into your house? Don't wait for the first snow: send a few photos on WhatsApp and we'll tell you what needs doing.)* |
+| `reel-lucrari-recente.mp4` | 18 s | `Câteva dintre lucrările noastre din ultima perioadă 🔨` *(Some of our recent jobs.)* |
+
+End every caption with the standard ending (WhatsApp 0726 981 090, București și Ilfov, hashtags).
