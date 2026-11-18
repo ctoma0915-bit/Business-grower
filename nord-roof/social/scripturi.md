@@ -85,3 +85,49 @@ Only if the client is comfortable speaking on camera; otherwise put the same tex
 | Friday | Review or carousel |
 
 **When people comment or write:** reply the same day, and move the conversation to WhatsApp for photos and the address.
+
+---
+
+## Batch 2 (18 Nov): photos and reels for the client to shoot
+
+### Photos (a shot list: what to photograph, plus a caption)
+
+| # | Photo to take | Caption |
+|---|---|---|
+| F1 | **Before / after, same angle:** the same corner of the roof photographed before work and after. Post both photos as a 2-slide carousel. | `Înainte ➜ După. Aceeași casă, același unghi. 👆 Glisați.` *(Before ➜ after. Same house, same angle. Swipe.)* |
+| F2 | **The cause, close up:** the dried-out washer, rusty screw or cracked seam that caused the leak. | `Asta era cauza infiltrației: o garnitură de 2 lei. Problema mică, pagubă mare.` *(This was the cause of the leak: a tiny washer. Small problem, big damage.)* Use only if it's true for that job. |
+| F3 | **The team at work** (from behind or the side, no faces needed), on the roof with tools. | `Azi pe acoperiș în [localitate]. 🔨` *(On the roof today in [town].)* Use the real town. |
+| F4 | **Materials before fitting:** sheets, gutters, flashings laid out neatly on site. | `Materiale pregătite pentru lucrarea de mâine.` *(Materials ready for tomorrow's job.)* |
+| F5 | **Detail of a finished gutter / downpipe** in good light. | `Detaliile fac diferența. Jgheab montat drept, cu scurgere corectă.` *(Details make the difference. A straight gutter that drains properly.)* |
+| F6 | **The client's happy customer**, only if they agree: a handshake or a thumbs-up in front of the house, faces optional. | `Încă un acoperiș care nu mai plouă. Mulțumim pentru încredere!` *(Another roof that no longer leaks. Thanks for your trust!)* |
+
+**Photo tips:** daylight, phone held steady, the roof filling the frame, no house numbers or number plates. Send them to Toma, who adds the red MRA frame.
+
+### Reels (scripts)
+
+**Reel 5: "3 seconds of rain"** (best before winter)
+1. Water dripping from a ceiling or a bucket under a leak (3 s). Text: `Vă plouă în casă? 💧`
+2. The roof from outside, a quick pan (2 s). Text: `Cauza e aproape mereu sus`
+3. Hands sealing or fixing (4 s). Text: `Găsim cauza și o reparăm`
+4. Water test on the repair, dry ceiling (3 s). Text: `Testat ✅`
+5. End card: `Poze pe WhatsApp: 0726 981 090`
+
+Caption: `Nu așteptați prima ninsoare. Trimiteți-ne poze și vă spunem ce e de făcut.` *(Don't wait for the first snow. Send photos and we'll tell you what needs doing.)*
+
+**Reel 6: "What does a roof repair look like?"** (step by step, 15–20 s)
+On-screen text, one step per shot: `1. Verificăm` → `2. Desfacem ce e stricat` → `3. Etanșăm / înlocuim` → `4. Testăm cu apă` → `5. Curățăm după noi`
+Caption: `Așa arată o reparație făcută ca la carte. Ce pas vi se pare cel mai important?` *(This is what a proper repair looks like. Which step seems most important to you?)* The question gets comments.
+
+**Reel 7: "Question from a customer"** (the client talking, 20–30 s)
+Text at the top: `„Cât costă să repar acoperișul?”`
+> Depinde de trei lucruri: ce fel de acoperiș aveți, cât de mare e problema și cât de greu se ajunge la ea. De aceea vă cerem întâi câteva poze pe WhatsApp: din poze vă putem spune ce e de făcut și vă dăm un preț corect, fără să pierdeți timp.
+
+*(It depends on three things: the type of roof, how big the problem is, and how hard it is to reach. That's why we ask for a few photos on WhatsApp first: from the photos we can tell you what needs doing and give a fair price, without wasting your time.)*
+
+Don't name prices unless the client gives them.
+
+**Reel 8: "Satisfying"** (no text needed, 8–12 s)
+A close shot of one satisfying action: a screw going in, a sealant line, a gutter clicking into place, a sheet laid down. Add music.
+Caption: `Satisfăcător? 😄 Montaj curat, de la cap la coadă.` *(Satisfying? Clean installation, start to finish.)*
+
+**Posting plan:** keep 3 a week. Put the reels on Wednesdays, and use the new photos on Mondays once the old job posts run out.
