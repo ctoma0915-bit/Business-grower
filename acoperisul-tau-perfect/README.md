@@ -5,7 +5,7 @@ Texts for the Facebook page, Instagram account and WhatsApp Business profile of 
 **The idea behind the texts:** the name promises a roof done properly, with nothing left to worry about. The texts describe what a good roof is and how easy it is to ask for a quote; they never promise prices, years in business or guarantees.
 
 **Before publishing:**
-- Area: București și Ilfov (confirmed by Toma, 13 Nov 2026).
+- Area: **the whole of Romania** (Toma, 18 Nov 2026; was București și Ilfov until then).
 - Customer number: 0728 636 383 (confirmed by Toma, 13 Nov 2026).
 - Remove any service he doesn't offer (check *mansarde*, *dulgherie*, *termoizolație*).
 
@@ -40,7 +40,7 @@ Files are in `brand/` (`sursa-brand.html` regenerates them):
 | Category | Roofing Service (Serviciu de acoperișuri), plus Contractor |
 | Username | `acoperisultauperfect` (if taken: `acoperisul.tau.perfect`) |
 | Bio (max 101 characters) | `Acoperișul tău perfect: montaj, reparații, jgheaburi. Sunați pentru ofertă: 0728 636 383` |
-| Service area | București și Ilfov |
+| Service area | Romania (entire country) |
 | Button | Call now (*Sunați acum*), number 0728 636 383 |
 
 **Details / About:**
@@ -60,7 +60,7 @@ Cum cereți o ofertă:
 
 Preferați să scrieți? Trimiteți-ne poze pe WhatsApp: wa.me/40728636383
 
-Zona: București și Ilfov.
+Lucrăm în toată țara.
 ```
 
 ## Instagram
@@ -77,7 +77,7 @@ Zona: București și Ilfov.
 ```
 🏠 Acoperișul casei, făcut cum trebuie
 Montaj · Reparații · Jgheaburi · Mansarde
-📍 București și Ilfov
+📍 Lucrăm în toată România
 📞 Sunați pentru ofertă: 0728 636 383
 ```
 
@@ -140,7 +140,7 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
    - `Acoperiș nou sau înlocuire`
    - `Reparație la acoperiș`
    - `Jgheaburi și burlane`
-2. Prefill: **Full name**, **Phone number**. Nothing else (the ads target București și Ilfov; ask the address on the call).
+2. Prefill: **Full name**, **Phone number**, **City** (*Oraș*). The ads run in the whole country, so the town is needed; it is prefilled, so it costs no typing.
 
 **Privacy policy:** text `Politica de confidențialitate`, link `https://ctoma0915-bit.github.io/Business-grower/acoperisul-tau-perfect/confidentialitate/`
 
@@ -197,4 +197,4 @@ Use only his real photos and jobs. Don't invent numbers, years or guarantees.
 1. He creates the Facebook page, Instagram account and WhatsApp Business profile with these texts, then adds Toma as a page admin. Alternatively, Toma creates them and gives him access.
 2. Upload `brand/profil-1080.png` as the profile picture and `brand/coperta-facebook-1640x624.png` as the Facebook cover.
 3. Lead form and ads: follow `../playbooks/meta-lead-form.md`.
-4. **Overlap:** other roofing clients already advertise in București and Ilfov. If he works there too, Toma decides how to split the area.
+4. **Overlap:** other roofing clients advertise in București and Ilfov, and one works nationally. Since 18 Nov he works in the whole country (Toma's decision).
