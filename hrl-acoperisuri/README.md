@@ -139,6 +139,20 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
 
 After publishing, send the **form ID**: the ads can't be built without it.
 
+## Ads
+
+Images are in `reclame/` (1080×1350; `sursa.html` regenerates them). All five use his own job photos (`foto-*.jpg`), which Toma confirmed can be used in ads. Customer photos from reviews are **not** used until those customers agree.
+
+| # | Image | Photo | Headline on image |
+|---|---|---|---|
+| 1 | `reclama-1-acoperis-nou.png` | Metal tile and grey trapezoidal sheet roof | Acoperiș nou în Oradea sau în Bihor? |
+| 2 | `reclama-2-iarna.png` | Brown metal tile roof | Schimbați acoperișul înainte de iarnă. |
+| 3 | `reclama-3-sarpante.png` | Timber roof trusses | Șarpante din lemn, de la zero. |
+| 4 | `reclama-4-bihor.png` | Team laying red tiles | Acoperișuri noi, în tot județul Bihor. |
+| 5 | `reclama-5-lemn-terase.png` | Timber structure being built | Construcții din lemn și terase. |
+
+No modular-house ad yet: there is no photo of one. Add it when he sends one.
+
 ## First 3 posts (before any ads, so the page doesn't look empty)
 
 Use only his real photos and jobs. Don't invent numbers, years or guarantees. Fill the brackets from what he tells you about each job.
