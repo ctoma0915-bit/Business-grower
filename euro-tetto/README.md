@@ -8,18 +8,46 @@ EURO TETTO S.R.L. (CUI 45421905), Boldești-Scăeni, Prahova: metal roof tiles, 
 - Images: Toma confirmed (24 Nov 2026) that the photos from eurotetto.eu may be used in the ads.
 - Claims: only what his site says ("distribuitor autorizat Caretta", "livrare rapidă", "garanție extinsă").
 
-## Facebook page
+## Facebook page (new, made by Toma)
 
-He already has one: **"Euro Tetto"**, page ID 103983255618115, with earlier ads. Don't create a second page (it would split his followers and reviews). Toma only needs access to it (Business Suite → Settings → Partners).
+He asked Toma (24 Nov 2026) to make a fresh Facebook page and Instagram account. His old page "Euro Tetto" (103983255618115) stays as it is; ask him later whether to keep it, hide it or let it be.
 
-## Instagram (create only if he has none)
+**Create it:** from Toma's Facebook profile → **Pagini → Creați o pagină nouă**. Then add the page to the business partner's Business Suite, so it can be used with ad account 1448702690687230. Once he has a Facebook account of his own, add him as admin too, so the page is also his.
 
-The account must be his, made with his email or phone (Instagram sends a code there).
+| Field | Text |
+|---|---|
+| Page name | Euro Tetto |
+| Category | Roofing Service (*Serviciu de acoperișuri*), plus Building Materials Store and Contractor |
+| Username | `eurotetto` (if taken: `eurotetto.ro`, then `eurotetto.prahova`) |
+| Bio (max 101 characters; this one is 98) | `Țiglă metalică, garduri metalice și jgheaburi, cu montaj. Distribuitor autorizat Caretta. Prahova.` |
+| Address | Showroom on DN1A, Boldești-Scăeni, Prahova (ask him for the exact number) |
+| Phone | 0766 378 899 |
+| Website | https://eurotetto.eu/ |
+| Email | contact@eurotetto.eu |
+| Button | Send WhatsApp message (*Trimiteți mesaj pe WhatsApp*), number 0766 378 899 |
 
-1. In the Instagram app: **Creați un cont nou**, with contact@eurotetto.eu (or his phone).
+**Details / About:**
+```
+Euro Tetto: țiglă metalică, garduri metalice și sisteme de jgheaburi, cu montaj.
+
+Ce facem:
+• Țiglă metalică pentru acoperiș
+• Garduri metalice
+• Sisteme de jgheaburi și burlane
+• Montaj acoperiș și gard
+
+Distribuitor autorizat Caretta.
+Showroom: DN1A, Boldești-Scăeni, Prahova.
+
+Cereți o ofertă pe WhatsApp: wa.me/40766378899
+```
+
+## Instagram (new, made by Toma)
+
+1. In the Instagram app: **Creați un cont nou**. Use an email Toma controls for now (Instagram sends a code), or contact@eurotetto.eu if he passes on the code. Change it to his email when you hand it over.
 2. Settings → **Tip de cont și instrumente → Treceți la un cont profesional → Afacere**, category **Roofing Service**.
-3. Link it to the page: Meta Business Suite → Settings → **Conturi Instagram → Conectați** (or in the Facebook page: Settings → Linked accounts → Instagram).
-4. If Toma already has page access, also share the Instagram account with the same partner.
+3. Link it to the new page: Business Suite → Settings → **Conturi Instagram → Conectați**.
+4. Check that it appears for the ad account (Claude can check with the ads tools).
 
 | Field | Text |
 |---|---|
