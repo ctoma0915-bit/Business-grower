@@ -8,6 +8,21 @@ EURO TETTO S.R.L. (CUI 45421905), Boldești-Scăeni, Prahova: metal roof tiles, 
 - Images: Toma confirmed (24 Nov 2026) that the photos from eurotetto.eu may be used in the ads.
 - Claims: only what his site says ("distribuitor autorizat Caretta", "livrare rapidă", "garanție extinsă").
 
+## Brand
+
+Files are in `brand/`. `sursa-brand.html` is the source; render it with Playwright (screenshot of `#logo .logo`, `#logoalb .logo`, `#profil`, `#coperta`).
+
+| File | Use |
+|---|---|
+| `profil-1080.png` | Profile picture on Facebook, Instagram and WhatsApp Business (1080×1080, safe for the round crop) |
+| `coperta-facebook-1640x624.png` | Facebook cover (text kept in the centre for the mobile crop) |
+| `logo.png` / `logo-alb.png` | Logo for light / dark backgrounds, transparent |
+| `simbol.svg` / `simbol-fundal-inchis.svg` | The symbol alone, as a vector |
+
+**The symbol:** a roof line over a fence: his two products in one mark. Drawn as shapes, so the SVGs need no font.
+
+**Colours:** graphite `#1F2A33`; brick red `#A3241C` on light backgrounds, `#E0533F` on dark ones; white. **Font:** Archivo (Black 900 for "EURO TETTO", Bold 700 for "ACOPERIȘURI · GARDURI").
+
 ## Facebook page (new, made by Toma)
 
 He asked Toma (24 Nov 2026) to make a fresh Facebook page and Instagram account. His old page "Euro Tetto" (103983255618115) stays as it is; ask him later whether to keep it, hide it or let it be.

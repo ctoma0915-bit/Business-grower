@@ -1,0 +1,26 @@
+<!doctype html><html lang="ro"><head><meta charset="utf-8">
+<!-- Sursa kitului de brand Euro Tetto. Randat cu Playwright (vezi README). -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;box-sizing:border-box}body{background:transparent;font-family:"Archivo",sans-serif}
+.logo{display:inline-flex;align-items:center;gap:30px;padding:16px 18px 22px}
+.logo svg{height:160px;width:auto}
+.w1{font-size:104px;font-weight:900;letter-spacing:3px;line-height:1;white-space:nowrap}
+.w2{font-size:34px;font-weight:700;letter-spacing:4px;line-height:1;margin-top:16px;white-space:nowrap}
+.dark .w1{color:#1F2A33}.dark .w2{color:#A3241C}
+.light .w1{color:#fff}.light .w2{color:#E0533F}
+#profil{width:1080px;height:1080px;background:#1F2A33;display:flex;align-items:center;justify-content:center}
+#profil svg{width:640px}
+#coperta{width:1640px;height:624px;background:#1F2A33;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;position:relative;overflow:hidden}
+#coperta::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:#E0533F}
+#coperta .tag{font-size:36px;font-weight:600;color:#D6DCE0;margin-top:26px;text-align:center;line-height:1.35}
+</style></head><body>
+<div id="logo"><div class="logo dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" role="img" aria-label="Euro Tetto"><polyline points="4,44 60,8 116,44" fill="none" stroke="#A3241C" stroke-width="11" stroke-linejoin="miter" stroke-linecap="butt"/><rect x="22" y="54" width="10" height="38" fill="#1F2A33"/><rect x="38" y="54" width="10" height="38" fill="#1F2A33"/><rect x="54" y="54" width="10" height="38" fill="#1F2A33"/><rect x="70" y="54" width="10" height="38" fill="#1F2A33"/><rect x="86" y="54" width="10" height="38" fill="#1F2A33"/><rect x="16" y="64" width="86" height="6" fill="#1F2A33"/></svg><div><div class="w1">EURO TETTO</div><div class="w2">ACOPERIȘURI · GARDURI</div></div></div></div><br>
+<div id="logoalb"><div class="logo light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" role="img" aria-label="Euro Tetto"><polyline points="4,44 60,8 116,44" fill="none" stroke="#E0533F" stroke-width="11" stroke-linejoin="miter" stroke-linecap="butt"/><rect x="22" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="38" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="54" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="70" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="86" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="16" y="64" width="86" height="6" fill="#FFFFFF"/></svg><div><div class="w1">EURO TETTO</div><div class="w2">ACOPERIȘURI · GARDURI</div></div></div></div>
+<div id="profil"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" role="img" aria-label="Euro Tetto"><polyline points="4,44 60,8 116,44" fill="none" stroke="#E0533F" stroke-width="11" stroke-linejoin="miter" stroke-linecap="butt"/><rect x="22" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="38" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="54" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="70" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="86" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="16" y="64" width="86" height="6" fill="#FFFFFF"/></svg></div>
+<div id="coperta"><div class="logo light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" role="img" aria-label="Euro Tetto"><polyline points="4,44 60,8 116,44" fill="none" stroke="#E0533F" stroke-width="11" stroke-linejoin="miter" stroke-linecap="butt"/><rect x="22" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="38" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="54" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="70" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="86" y="54" width="10" height="38" fill="#FFFFFF"/><rect x="16" y="64" width="86" height="6" fill="#FFFFFF"/></svg><div><div class="w1">EURO TETTO</div><div class="w2">ACOPERIȘURI · GARDURI</div></div></div><div class="tag">Țiglă metalică · Garduri metalice · Jgheaburi<br>Distribuitor autorizat Caretta · Prahova</div></div>
+<script>
+document.fonts.ready.then(()=>{for(const l of document.querySelectorAll('.logo')){const a=l.querySelector('.w1'),c=l.querySelector('.w2'),r=document.createRange();
+const tw=x=>{r.selectNodeContents(x);return r.getBoundingClientRect().width};const ls=parseFloat(getComputedStyle(c).letterSpacing);
+const d=(tw(a)-parseFloat(getComputedStyle(a).letterSpacing))-(tw(c)-ls);c.style.letterSpacing=(ls+d/(c.textContent.length-1))+'px';}document.body.dataset.ready=1;});
+</script></body></html>
