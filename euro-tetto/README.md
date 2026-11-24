@@ -8,6 +8,35 @@ EURO TETTO S.R.L. (CUI 45421905), Boldești-Scăeni, Prahova: metal roof tiles, 
 - Images: Toma confirmed (24 Nov 2026) that the photos from eurotetto.eu may be used in the ads.
 - Claims: only what his site says ("distribuitor autorizat Caretta", "livrare rapidă", "garanție extinsă").
 
+## Facebook page
+
+He already has one: **"Euro Tetto"**, page ID 103983255618115, with earlier ads. Don't create a second page (it would split his followers and reviews). Toma only needs access to it (Business Suite → Settings → Partners).
+
+## Instagram (create only if he has none)
+
+The account must be his, made with his email or phone (Instagram sends a code there).
+
+1. In the Instagram app: **Creați un cont nou**, with contact@eurotetto.eu (or his phone).
+2. Settings → **Tip de cont și instrumente → Treceți la un cont profesional → Afacere**, category **Roofing Service**.
+3. Link it to the page: Meta Business Suite → Settings → **Conturi Instagram → Conectați** (or in the Facebook page: Settings → Linked accounts → Instagram).
+4. If Toma already has page access, also share the Instagram account with the same partner.
+
+| Field | Text |
+|---|---|
+| Name | Euro Tetto |
+| Username | `eurotetto` (if taken: `euro.tetto`, then `eurotetto.ro`) |
+| Category | Roofing Service |
+| Profile picture | his logo (ask him for it) |
+| Link | `https://wa.me/40766378899`, titled `Cereți ofertă pe WhatsApp` (second link: `https://eurotetto.eu/`) |
+
+**Bio** (max 150 characters; this one is 134):
+```
+🏠 Țiglă metalică · Garduri metalice · Jgheaburi
+🔧 Montaj acoperiș și gard
+✅ Distribuitor autorizat Caretta
+📍 Boldești-Scăeni, Prahova
+```
+
 ## Meta lead form (Instant Form)
 
 Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.com → All tools → Instant forms → Create form**, on the **Euro Tetto** page (Toma can do it once the page is shared with his business partner). Accept the Lead Ads Terms if Meta asks.
