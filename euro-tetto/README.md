@@ -136,3 +136,9 @@ Images are in `reclame/` (1080×1350; `sursa.html` regenerates them). The photos
 | 2 | `reclama-2-asortate.png` | Brown roof, horizontal fence | Gardul și acoperișul, în aceeași culoare. |
 | 3 | `reclama-3-acoperis-nou.png` | Red roof | Acoperiș nou din țiglă metalică. |
 | 4 | `reclama-4-montaj.png` | Dark roof, vertical fence | De la acoperiș până la gard. |
+
+**In Meta (25 Nov 2026), staged as a draft in Ads Manager, not published:**
+- Campaign `Euro Tetto · Formular · Toată țara` (120249832161660133): Leads, 15 lei/day at campaign level.
+- Ad set `Euro Tetto · România · Formular` (120249832163070133): all of Romania, 25+, Advantage+ audience and placements, optimized for leads on the form, page 1412430991961574 + Instagram `eurotetto.ro`.
+- Ads (button "Obțineți ofertă" → form 2967181710302655): ET 1 Acoperiș și gard (120249832176240133), ET 2 Asortate (120249832176480133), ET 3 Acoperiș nou (120249832176750133), ET 4 Montaj (120249832177020133).
+- Publish only with Toma's OK.
