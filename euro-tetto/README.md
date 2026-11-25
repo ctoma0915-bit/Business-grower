@@ -119,9 +119,20 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
   (Switch to "astăzi" only if he really calls the same day.)
 - Button: **Call business**, text `Sunați-ne acum`, number `+40 738 049 791`
 
-After publishing, send the **form ID**: the ads can't be built without it.
+**Form ID: 2967181710302655** (published by Toma, 25 Nov 2026).
 
 **Ad text ending** (same promise as the form):
 ```
 👉 Apăsați „Obțineți ofertă”: numele și telefonul se completează singure. Durează 5 secunde, gratuit și fără obligații.
 ```
+
+## Ads
+
+Images are in `reclame/` (1080×1350; `sursa.html` regenerates them). The photos are from eurotetto.eu (Caretta product images); Toma confirmed on 24 Nov 2026 that they may be used. Replace them with his own job photos when he sends some.
+
+| # | Image | Photo | Headline on image |
+|---|---|---|---|
+| 1 | `reclama-1-acoperis-si-gard.png` | Roof tiles and fence panels | Acoperiș și gard, de la același furnizor. |
+| 2 | `reclama-2-asortate.png` | Brown roof, horizontal fence | Gardul și acoperișul, în aceeași culoare. |
+| 3 | `reclama-3-acoperis-nou.png` | Red roof | Acoperiș nou din țiglă metalică. |
+| 4 | `reclama-4-montaj.png` | Dark roof, vertical fence | De la acoperiș până la gard. |
