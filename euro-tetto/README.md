@@ -6,7 +6,7 @@ EURO TETTO S.R.L. (CUI 45421905), Boldești-Scăeni, Prahova: metal roof tiles, 
 - Phone: 0766 378 899 is used below (confirmed on his site). The site also shows 0766 368 899 once; confirm with him.
 - Area: **all of Romania** (Toma, 25 Nov 2026). Budget: **15 lei/day** (Toma, 25 Nov 2026).
 - Overlap: Acoperișul tău perfect and HRL also target all of Romania. Split by type of work: Euro Tetto ads are about metal tiles, fences and gutters (new work), not leaks or repairs.
-- Phone for the form and ads: Toma's number (to be filled in).
+- Phone on the lead form (ending text and call button): **Toma's number, 0738 049 791** (Toma, 25 Nov 2026), so leads reach Toma first. The page, Instagram and WhatsApp links keep his own 0766 378 899.
 - Images: Toma confirmed (24 Nov 2026) that the photos from eurotetto.eu may be used in the ads.
 - Claims: only what his site says ("distribuitor autorizat Caretta", "livrare rapidă", "garanție extinsă").
 
@@ -71,7 +71,7 @@ Cereți o ofertă pe WhatsApp: wa.me/40766378899
 | Field | Text |
 |---|---|
 | Name | Euro Tetto |
-| Username | `eurotetto` (if taken: `euro.tetto`, then `eurotetto.ro`) |
+| Username | **`eurotetto.ro`** (created 25 Nov 2026; `eurotetto` and `euro.tetto` were taken) |
 | Category | Roofing Service |
 | Profile picture | his logo (ask him for it) |
 | Link | `https://wa.me/40766378899`, titled `Cereți ofertă pe WhatsApp` (second link: `https://eurotetto.eu/`) |
@@ -115,9 +115,9 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
 
 **Ending screen:**
 - Headline: `Gata! Am primit cererea ✅`
-- Description: `Vă sunăm noi în cel mai scurt timp, de pe 0766 378 899. Nu mai trebuie să faceți nimic.`
+- Description: `Vă sunăm noi în cel mai scurt timp, de pe 0738 049 791. Nu mai trebuie să faceți nimic.`
   (Switch to "astăzi" only if he really calls the same day.)
-- Button: **Call business**, text `Sunați-ne acum`, number `+40 766 378 899`
+- Button: **Call business**, text `Sunați-ne acum`, number `+40 738 049 791`
 
 After publishing, send the **form ID**: the ads can't be built without it.
 
