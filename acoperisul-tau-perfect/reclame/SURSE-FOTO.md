@@ -9,3 +9,5 @@ Stock photos used only as illustrations. They are **not** the client's jobs: nev
 | `foto-stoc-3-tigla-rosie.jpg` | Pexels (sent by Toma, 17 Nov 2026; Pexels license, free for commercial use) | Pexels License |
 | `foto-stoc-4-echipa-tabla.jpg` | Free stock photo sent by Toma, 18 Nov 2026 (he confirmed it is free to use) | Free licence |
 | `foto-stoc-5-montaj-tabla.jpg` | Free stock photo sent by Toma, 18 Nov 2026 (he confirmed it is free to use) | Free licence |
+| `foto-stoc-6-termoizolatie-mansarda.jpg` | [Installing installation in an attic (9337).jpg](https://commons.wikimedia.org/wiki/File:Installing_installation_in_an_attic_(9337).jpg), Wikimedia Commons | CC0 (public domain) |
+| `foto-stoc-7-termoizolatie-pod.jpg` | [Insulating attic (49525467656).jpg](https://commons.wikimedia.org/wiki/File:Insulating_attic_(49525467656).jpg), Wikimedia Commons | Public domain |

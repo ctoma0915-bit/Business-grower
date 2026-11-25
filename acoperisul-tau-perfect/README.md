@@ -7,7 +7,7 @@ Texts for the Facebook page, Instagram account and WhatsApp Business profile of 
 **Before publishing:**
 - Area: **the whole of Romania** (Toma, 18 Nov 2026; was București și Ilfov until then).
 - Customer number: 0728 636 383 (confirmed by Toma, 13 Nov 2026).
-- Remove any service he doesn't offer (check *mansarde*, *dulgherie*, *termoizolație*).
+- Services confirmed: roofs, repairs, gutters and **thermal insulation (termoizolații)** (Toma, 25 Nov 2026). Still check *mansarde* and *dulgherie*.
 
 ## Brand
 
@@ -39,7 +39,7 @@ Files are in `brand/` (`sursa-brand.html` regenerates them):
 | Page name | Acoperișul tău perfect |
 | Category | Roofing Service (Serviciu de acoperișuri), plus Contractor |
 | Username | `acoperisultauperfect` (if taken: `acoperisul.tau.perfect`) |
-| Bio (max 101 characters) | `Acoperișul tău perfect: montaj, reparații, jgheaburi. Sunați pentru ofertă: 0728 636 383` |
+| Bio (max 101 characters) | `Acoperișul tău perfect: montaj, reparații, jgheaburi, termoizolații. Ofertă: 0728 636 383` |
 | Service area | Romania (entire country) |
 | Button | Call now (*Sunați acum*), number 0728 636 383 |
 
@@ -51,7 +51,8 @@ Ce facem:
 • Acoperișuri noi și înlocuiri de acoperiș
 • Reparații și infiltrații
 • Jgheaburi și burlane
-• Mansarde, dulgherie, termoizolație
+• Termoizolații: pod, mansardă, acoperiș
+• Mansarde, dulgherie
 
 Cum cereți o ofertă:
 1. Sunați-ne la 0728 636 383
@@ -76,9 +77,9 @@ Lucrăm în toată țara.
 **Bio** (max 150 characters):
 ```
 🏠 Acoperișul casei, făcut cum trebuie
-Montaj · Reparații · Jgheaburi · Mansarde
+Montaj · Reparații · Jgheaburi · Termoizolații
 📍 Lucrăm în toată România
-📞 Sunați pentru ofertă: 0728 636 383
+📞 Ofertă: 0728 636 383
 ```
 
 ## WhatsApp Business
@@ -98,7 +99,7 @@ In the WhatsApp Business app, the short link (`wa.me/message/…`) can carry a d
 ```
 Bună ziua! Aș dori o ofertă pentru acoperiș.
 📍 Localitatea:
-🔧 Lucrarea (reparație / acoperiș nou / jgheaburi / altceva):
+🔧 Lucrarea (reparație / acoperiș nou / jgheaburi / termoizolație / altceva):
 📷 Atașez mai jos 2–3 poze.
 ```
 
@@ -121,7 +122,7 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
 
 | Setting | Value |
 |---|---|
-| Form name | `Acoperișul tău perfect · Ofertă rapidă` |
+| Form name | `Acoperișul tău perfect · Ofertă rapidă · România` (copy of the first form, with City and Termoizolație added) |
 | Type | **More volume** (*Volum mai mare*) |
 | Intro | Off. If Meta insists: ad image + headline `Ofertă gratuită în 5 secunde`, no description |
 | Language | Romanian |
@@ -140,6 +141,7 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
    - `Acoperiș nou sau înlocuire`
    - `Reparație la acoperiș`
    - `Jgheaburi și burlane`
+   - `Termoizolație (pod, mansardă)`
 2. Prefill: **Full name**, **Phone number**, **City** (*Oraș*). The ads run in the whole country, so the town is needed; it is prefilled, so it costs no typing.
 
 **Privacy policy:** text `Politica de confidențialitate`, link `https://ctoma0915-bit.github.io/Business-grower/acoperisul-tau-perfect/confidentialitate/`
@@ -162,6 +164,8 @@ Images in `reclame/` (1080×1350; `sursa.html` and `sursa-foto.html` regenerate 
 | 3 | `reclama-3-iarna.png` | Pregătiți acoperișul pentru iarnă. |
 | 4 | `reclama-4-foto-acoperis-nou.png` | Acoperiș nou sau reparații? |
 | 5 | `reclama-5-foto-iarna.png` | Schimbați acoperișul înainte de iarnă. |
+| 11 | `reclama-11-foto-termoizolatie-frig.png` | Vă e frig în casă iarna? (termoizolație) |
+| 12 | `reclama-12-foto-termoizolatie-pod.png` | Termoizolație pentru pod și mansardă. |
 
 **Primary texts:**
 - Leak: `Vă intră apa în casă? Trimiteți-ne cererea și vă spunem ce e de făcut la acoperiș.`
@@ -176,7 +180,7 @@ Use only his real photos and jobs. Don't invent numbers, years or guarantees.
 
 1. **Introduction:** a photo of his team or of a finished roof, plus:
    ```
-   Acoperișul tău perfect: ne ocupăm de tot ce ține de acoperișul casei, de la prima evaluare până la ultimul detaliu. Montaj, reparații, jgheaburi, mansarde. Sunați-ne la 0728 636 383 și vă spunem ce e de făcut.
+   Acoperișul tău perfect: ne ocupăm de tot ce ține de acoperișul casei, de la prima evaluare până la ultimul detaliu. Montaj, reparații, jgheaburi, termoizolații, mansarde. Sunați-ne la 0728 636 383 și vă spunem ce e de făcut.
    ```
 2. **What "perfect" means:** a photo of a roof in progress, plus:
    ```
