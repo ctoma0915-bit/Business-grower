@@ -25,6 +25,8 @@ Files are in `brand/`. `sursa-brand.html` is the source; render it with Playwrig
 
 ## Facebook page (new, made by Toma)
 
+**Created 25 Nov 2026: "Euro Tetto", page ID 1412430991961574.** Toma is the only admin; the page is visible to the ad tools.
+
 He asked Toma (24 Nov 2026) to make a fresh Facebook page and Instagram account. His old page "Euro Tetto" (103983255618115) stays as it is; ask him later whether to keep it, hide it or let it be.
 
 **Create it:** from Toma's Facebook profile → **Pagini → Creați o pagină nouă**. Then add the page to the business partner's Business Suite, so it can be used with ad account 1448702690687230. Once he has a Facebook account of his own, add him as admin too, so the page is also his.
