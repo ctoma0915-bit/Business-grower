@@ -4,7 +4,9 @@ EURO TETTO S.R.L. (CUI 45421905), Boldești-Scăeni, Prahova: metal roof tiles, 
 
 **Before publishing:**
 - Phone: 0766 378 899 is used below (confirmed on his site). The site also shows 0766 368 899 once; confirm with him.
-- Area: not decided yet (Prahova only, or more). Local client, so the form doesn't ask for the town.
+- Area: **all of Romania** (Toma, 25 Nov 2026). Budget: **15 lei/day** (Toma, 25 Nov 2026).
+- Overlap: Acoperișul tău perfect and HRL also target all of Romania. Split by type of work: Euro Tetto ads are about metal tiles, fences and gutters (new work), not leaks or repairs.
+- Phone for the form and ads: Toma's number (to be filled in).
 - Images: Toma confirmed (24 Nov 2026) that the photos from eurotetto.eu may be used in the ads.
 - Claims: only what his site says ("distribuitor autorizat Caretta", "livrare rapidă", "garanție extinsă").
 
@@ -107,7 +109,7 @@ Built from `../playbooks/meta-lead-form.md`. Create it in **business.facebook.co
    - `Gard metalic`
    - `Acoperiș și gard`
    - `Jgheaburi și burlane`
-2. Prefill: **Full name**, **Phone number**. Nothing else (local client: the ad targeting covers the area; ask for the address on the call).
+2. Prefill: **Full name**, **Phone number**, **City** (*Oraș*). He works nationally, so the town matters; it is prefilled, so it costs no typing. Nothing else.
 
 **Privacy policy:** text `Politica de confidențialitate`, link `https://ctoma0915-bit.github.io/Business-grower/euro-tetto/confidentialitate/`
 
